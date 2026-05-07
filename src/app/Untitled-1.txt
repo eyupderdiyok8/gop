@@ -1,0 +1,205 @@
+[Features](https://wasenderapi.com/?section=features)
+[How It Works](https://wasenderapi.com/?section=how-it-works)
+[Pricing](https://wasenderapi.com/?section=pricing)
+[FAQ](https://wasenderapi.com/?section=faq)
+[Documentation](https://wasenderapi.com/api-docs)
+[Help](https://wasenderapi.com/help)
+[Login](https://wasenderapi.com/login)
+[Get Started](https://wasenderapi.com/register)
+
+## API Documentation
+
+WasenderApi WhatsApp API
+
+### Getting Started
+[Getting Started with WasenderAPI](https://wasenderapi.com/api-docs/getting-started/getting-started-with-wasenderapi)
+[Using Our API with Postman](https://wasenderapi.com/api-docs/getting-started/using-our-api-with-postman)
+[How To Receive Messages and Media From Wasenderapi](https://wasenderapi.com/api-docs/getting-started/how-to-receive-messages-and-media-from-wasenderapi)
+[Model Context Protocol (MCP) Integration](https://wasenderapi.com/api-docs/getting-started/model-context-protocol-mcp-integration)
+[Using ProxiesNew](https://wasenderapi.com/api-docs/getting-started/using-proxies)
+[n8n Integration (Community Node)New](https://wasenderapi.com/api-docs/getting-started/n8n-integration-community-node)
+
+### Developer SDKs
+[Official SDKs – Node.js, Python & Laravel](https://wasenderapi.com/api-docs/developer-sdks/official-sdks-nodejs-python-laravel)
+
+### Authentication
+[How to Authenticate API Requests Using Personal Access Token](https://wasenderapi.com/api-docs/authentication/how-to-authenticate-api-requests-using-personal-access-token)
+[How to Authenticate API Requests Using Bearer Tokens](https://wasenderapi.com/api-docs/authentication/how-to-authenticate-api-requests-using-bearer-tokens)
+
+### Sessions
+[Get All WhatsApp Sessions](https://wasenderapi.com/api-docs/sessions/get-all-whatsapp-sessions)
+[Create WhatsApp Session](https://wasenderapi.com/api-docs/sessions/create-whatsapp-session)
+[Get WhatsApp Session Details](https://wasenderapi.com/api-docs/sessions/get-whatsapp-session-details)
+[Update WhatsApp Session](https://wasenderapi.com/api-docs/sessions/update-whatsapp-session)
+[Get WhatsApp Session Status](https://wasenderapi.com/api-docs/sessions/get-whatsapp-session-status)
+[Delete WhatsApp Session](https://wasenderapi.com/api-docs/sessions/delete-whatsapp-session)
+[Restart WhatsApp Session](https://wasenderapi.com/api-docs/sessions/restart-whatsapp-session)
+[Connect WhatsApp Session](https://wasenderapi.com/api-docs/sessions/connect-whatsapp-session)
+[Get Message Logs](https://wasenderapi.com/api-docs/sessions/get-message-logs)
+[Get WhatsApp Session QR Code](https://wasenderapi.com/api-docs/sessions/get-whatsapp-session-qr-code)
+[Get Session Logs](https://wasenderapi.com/api-docs/sessions/get-session-logs)
+[Disconnect WhatsApp Session](https://wasenderapi.com/api-docs/sessions/disconnect-whatsapp-session)
+[Get Session User Info](https://wasenderapi.com/api-docs/sessions/get-session-user-info)
+[Check if a number is on WhatsApp](https://wasenderapi.com/api-docs/sessions/check-if-a-number-is-on-whatsapp)
+[Regenerate API Key](https://wasenderapi.com/api-docs/sessions/regenerate-api-key)
+[Send Presence Update](https://wasenderapi.com/api-docs/sessions/send-presence-update)
+
+### Messages
+[Decrypt Media File](https://wasenderapi.com/api-docs/messages/decrypt-media-file)
+[Upload Media File](https://wasenderapi.com/api-docs/messages/upload-media-file)
+[Send Text Message](https://wasenderapi.com/api-docs/messages/send-text-message)
+[Send Image Message](https://wasenderapi.com/api-docs/messages/send-image-message)
+[Send Video Message](https://wasenderapi.com/api-docs/messages/send-video-message)
+[Send Document Message](https://wasenderapi.com/api-docs/messages/send-document-message)
+[Send Audio Message](https://wasenderapi.com/api-docs/messages/send-audio-message)
+[Send Sticker Message](https://wasenderapi.com/api-docs/messages/send-sticker-message)
+[Send Contact Card](https://wasenderapi.com/api-docs/messages/send-contact-card)
+[Send Location](https://wasenderapi.com/api-docs/messages/send-location)
+[Resend Failed Message](https://wasenderapi.com/api-docs/messages/resend-failed-message)
+[Send Poll Message](https://wasenderapi.com/api-docs/messages/send-poll-message)
+[Send Quoted Message](https://wasenderapi.com/api-docs/messages/send-quoted-message)
+[Edit a Message](https://wasenderapi.com/api-docs/messages/edit-a-message)
+[Get Message Info](https://wasenderapi.com/api-docs/messages/get-message-info)
+[Delete a Message](https://wasenderapi.com/api-docs/messages/delete-a-message)
+[Mark Message as ReadNew](https://wasenderapi.com/api-docs/messages/mark-message-as-read)
+[Send View Once Message](https://wasenderapi.com/api-docs/messages/send-view-once-message)
+
+### Contacts
+[Get Contact Info](https://wasenderapi.com/api-docs/contacts/get-contact-info)
+[Get All Contacts](https://wasenderapi.com/api-docs/contacts/get-all-contacts)
+[Get Contact Profile Picture](https://wasenderapi.com/api-docs/contacts/get-contact-profile-picture)
+[Block Contact](https://wasenderapi.com/api-docs/contacts/block-contact)
+[Unblock Contact](https://wasenderapi.com/api-docs/contacts/unblock-contact)
+[Create or Update Contact](https://wasenderapi.com/api-docs/contacts/create-or-update-contact)
+[Get LID from Phone Number](https://wasenderapi.com/api-docs/contacts/get-lid-from-phone-number)
+[Get Phone Number from LID](https://wasenderapi.com/api-docs/contacts/get-phone-number-from-lid)
+
+### Groups
+[Create a New Group](https://wasenderapi.com/api-docs/groups/create-a-new-group)
+[Get All Groups](https://wasenderapi.com/api-docs/groups/get-all-groups)
+[Get Group Metadata](https://wasenderapi.com/api-docs/groups/get-group-metadata)
+[Send Group Message](https://wasenderapi.com/api-docs/groups/send-group-message)
+[Update Group Participants](https://wasenderapi.com/api-docs/groups/update-group-participants)
+[Get Group Participants](https://wasenderapi.com/api-docs/groups/get-group-participants)
+[Send Message with Mentions](https://wasenderapi.com/api-docs/groups/send-message-with-mentions)
+[Add Group Participants](https://wasenderapi.com/api-docs/groups/add-group-participants)
+[Remove Group Participants](https://wasenderapi.com/api-docs/groups/remove-group-participants)
+[Get Group Profile Picture](https://wasenderapi.com/api-docs/groups/get-group-profile-picture)
+[Update Group Settings](https://wasenderapi.com/api-docs/groups/update-group-settings)
+[Get Group Invite Link](https://wasenderapi.com/api-docs/groups/get-group-invite-link)
+[Get Group Invite Info](https://wasenderapi.com/api-docs/groups/get-group-invite-info)
+[Accept Group Invite](https://wasenderapi.com/api-docs/groups/accept-group-invite)
+[Leave Group](https://wasenderapi.com/api-docs/groups/leave-group)
+
+### Channels (Communities)
+[Send Channel Message](https://wasenderapi.com/api-docs/channels-communities/send-channel-message)
+
+### Webhooks
+[Webhook Setup](https://wasenderapi.com/api-docs/webhooks/webhook-setup)
+[Webhook: Contact Update](https://wasenderapi.com/api-docs/webhooks/webhook-contact-update)
+[Webhook: Contact Upsert](https://wasenderapi.com/api-docs/webhooks/webhook-contact-upsert)
+[Webhook: Group Participants Update](https://wasenderapi.com/api-docs/webhooks/webhook-group-participants-update)
+[Webhook: Group Update](https://wasenderapi.com/api-docs/webhooks/webhook-group-update)
+[Webhook: Chat Update](https://wasenderapi.com/api-docs/webhooks/webhook-chat-update)
+[Webhook: Message Sent](https://wasenderapi.com/api-docs/webhooks/webhook-message-sent)
+[Webhook: Group Upsert](https://wasenderapi.com/api-docs/webhooks/webhook-group-upsert)
+[Webhook: Session Status](https://wasenderapi.com/api-docs/webhooks/webhook-session-status)
+[Webhook: Chat Delete](https://wasenderapi.com/api-docs/webhooks/webhook-chat-delete)
+[Webhook: Chat Upsert](https://wasenderapi.com/api-docs/webhooks/webhook-chat-upsert)
+[Webhook: QR Code Updated](https://wasenderapi.com/api-docs/webhooks/webhook-qrcode-updated)
+[Webhook: Message Upsert](https://wasenderapi.com/api-docs/webhooks/webhook-message-upsert)
+[Webhook: Message Received](https://wasenderapi.com/api-docs/webhooks/webhook-message-received)
+[Webhook: Message Status Update](https://wasenderapi.com/api-docs/webhooks/webhook-message-update)
+[Webhook: Group Message Received](https://wasenderapi.com/api-docs/webhooks/webhook-group-message-received)
+[Webhook: Message Deleted](https://wasenderapi.com/api-docs/webhooks/webhook-message-deleted)
+[Webhook: Newsletter Message Received](https://wasenderapi.com/api-docs/webhooks/webhook-newsletter-message-received)
+[Webhook: Personal Message Received](https://wasenderapi.com/api-docs/webhooks/webhook-personal-message-received)
+[Webhook: Message Receipt Update](https://wasenderapi.com/api-docs/webhooks/webhook-message-receipt-update)
+[Webhook: Call Received](https://wasenderapi.com/api-docs/webhooks/webhook-call-received)
+[Webhook: Message Reaction](https://wasenderapi.com/api-docs/webhooks/webhook-message-reaction)
+[Webhook: Poll Results](https://wasenderapi.com/api-docs/webhooks/webhook-poll-results)
+
+### Responses & Errors
+[Response Headers](https://wasenderapi.com/api-docs/responses-errors/response-headers)
+[Error Responses](https://wasenderapi.com/api-docs/responses-errors/error-responses)
+
+### Rate Limits
+[Understanding Rate Limits](https://wasenderapi.com/api-docs/rate-limits/understanding-rate-limits)
+
+### Resources
+[Dashboard](https://wasenderapi.com/dashboard)
+[Help Center](https://wasenderapi.com/help)
+
+# Get All WhatsApp Sessions
+Sessions
+
+```
+/api/whatsapp-sessions
+```
+
+Retrieves a list of all WhatsApp sessions available to the authenticated user.
+
+# Get All WhatsApp Sessions
+Retrieves a list of all WhatsApp sessions available to the authenticated user.
+This endpoint requires an access token to be included in the Authorization header. You can get the token from [here](https://wasenderapi.com/settings/tokens).
+
+#### Code Examples
+
+```
+curl "https://www.wasenderapi.com/api/whatsapp-sessions" -H "Authorization: Bearer YOUR_PERSONAL_ACCESS_TOKEN"
+```
+
+
+```
+curl "https://www.wasenderapi.com/api/whatsapp-sessions" -H "Authorization: Bearer YOUR_PERSONAL_ACCESS_TOKEN"
+```
+
+
+#### Response Examples
+
+```
+{ "success": true, "data": [ { "id": 1, "name": "Business WhatsApp", "phone_number": "+1234567890", "status": "connected", "account_protection": true, "log_messages": true, "webhook_url": "https:\/\/example.com\/webhook", "webhook_enabled": true, "webhook_events": [ "message", "group_update" ], "created_at": "2025-04-01T12:00:00Z", "updated_at": "2025-05-08T15:30:00Z" }, { "id": 2, "name": "Support WhatsApp", "phone_number": "+9876543210", "status": "DISCONNECTED", "account_protection": false, "log_messages": false, "webhook_url": null, "webhook_enabled": false, "webhook_events": null, "created_at": "2025-04-15T09:45:00Z", "updated_at": "2025-05-07T11:20:00Z" } ] }
+```
+
+
+```
+{ "success": true, "data": [ { "id": 1, "name": "Business WhatsApp", "phone_number": "+1234567890", "status": "connected", "account_protection": true, "log_messages": true, "webhook_url": "https:\/\/example.com\/webhook", "webhook_enabled": true, "webhook_events": [ "message", "group_update" ], "created_at": "2025-04-01T12:00:00Z", "updated_at": "2025-05-08T15:30:00Z" }, { "id": 2, "name": "Support WhatsApp", "phone_number": "+9876543210", "status": "DISCONNECTED", "account_protection": false, "log_messages": false, "webhook_url": null, "webhook_enabled": false, "webhook_events": null, "created_at": "2025-04-15T09:45:00Z", "updated_at": "2025-05-07T11:20:00Z" } ] }
+```
+
+[PreviousHow to Authenticate API Requests Using Bearer Tokens](https://wasenderapi.com/api-docs/authentication/how-to-authenticate-api-requests-using-bearer-tokens)
+[NextCreate WhatsApp Session](https://wasenderapi.com/api-docs/sessions/create-whatsapp-session)
+The most powerful WhatsApp API platform for businesses of all sizes. Send unlimited messages with no per-message fees.
+[Review us Trustpilot](https://www.trustpilot.com/review/wasenderapi.com)
+Review us
+
+### Product
+- [Features](https://wasenderapi.com/#features)
+- [Pricing](https://wasenderapi.com/#pricing)
+- [Documentation](https://wasenderapi.com/api-docs)
+- [API Status](https://wasenderapi.com/status)
+[Features](https://wasenderapi.com/#features)
+[Pricing](https://wasenderapi.com/#pricing)
+[Documentation](https://wasenderapi.com/api-docs)
+[API Status](https://wasenderapi.com/status)
+
+### Company
+- [About Us](https://wasenderapi.com/about)
+- [Blog](https://wasenderapi.com/blog)
+- [Contact](https://wasenderapi.com/contact)
+[About Us](https://wasenderapi.com/about)
+[Blog](https://wasenderapi.com/blog)
+[Contact](https://wasenderapi.com/contact)
+
+### Resources
+- [Help Center](https://wasenderapi.com/help)
+- [Terms of Service](https://wasenderapi.com/terms)
+- [Privacy Policy](https://wasenderapi.com/privacy)
+- [Refund Policy](https://wasenderapi.com/refund-policy)
+- [Partner Program](https://wasenderapi.com/partner)
+[Help Center](https://wasenderapi.com/help)
+[Terms of Service](https://wasenderapi.com/terms)
+[Privacy Policy](https://wasenderapi.com/privacy)
+[Refund Policy](https://wasenderapi.com/refund-policy)
+[Partner Program](https://wasenderapi.com/partner)
+[[email protected]](https://wasenderapi.com/cdn-cgi/l/email-protection)
+© 2026 WASenderApi. All rights reserved.
