@@ -124,7 +124,7 @@ export function Footer() {
               <h4 className="font-heading font-semibold text-white mb-3 text-sm uppercase tracking-wider">Sosyal Medya</h4>
               <div className="flex gap-3">
                 <a
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/suaritmateknikservis34"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-9 h-9 rounded-lg bg-white/10 hover:bg-brand-aqua flex items-center justify-center transition-colors"

@@ -31,7 +31,7 @@ const testimonials: Testimonial[] = [
     text: "Daha önce damacana kullanıyordum. Bu sistemi aldıktan sonra hem daha sağlıklı su içiyoruz hem de aylık masrafımız azaldı. Tavsiye ederim.",
     date: "Şubat 2026",
     mediaType: "image",
-    mediaSrc: "/testimonials/yorum1.jpg",
+    mediaSrc: "/testimonials/su-aritma-servisi-musteri-yorumlari1.jpeg",
   },
   {
     name: "Mehmet Demir",
@@ -41,7 +41,7 @@ const testimonials: Testimonial[] = [
     date: "Mart 2026",
     mediaType: "video",
     mediaSrc: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    mediaThumb: "/testimonials/video1-thumb.jpg",
+    mediaThumb: "/testimonials/su-aritma-servisi-musteri-yorumlari2.jpeg",
   },
   {
     name: "Selin Arslan",
@@ -50,7 +50,7 @@ const testimonials: Testimonial[] = [
     text: "Ofisimiz için 2 adet aldık. Damacana dönemini kapattık. Ekip her konuda yardımcı oldu, bakım hatırlatmaları da çok iş görüyor.",
     date: "Mart 2026",
     mediaType: "image",
-    mediaSrc: "/testimonials/yorum2.jpg",
+    mediaSrc: "/testimonials/su-aritma-servisi-musteri-yorumlari2.jpeg",
   },
   {
     name: "Hasan Çelik",
@@ -66,7 +66,7 @@ const testimonials: Testimonial[] = [
     text: "Fiyat almak için aradım, çok detaylı bilgi verdiler. Satışa odaklanmak yerine gerçekten neye ihtiyacım olduğunu sordular. Güven veriyor.",
     date: "Nisan 2026",
     mediaType: "image",
-    mediaSrc: "/testimonials/yorum3.jpg",
+    mediaSrc: "/testimonials/su-aritma-servisi-musteri-yorumlari3.jpeg",
   },
 ];
 
