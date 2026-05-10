@@ -21,7 +21,7 @@ const contactItems = [
   {
     icon: MapPin,
     label: "Adres",
-    value: "Sarıgöl Mah. Mehmetçik Cad. No:8, Gaziosmanpaşa / İstanbul",
+    value: "Bağlarbaşı Mh. Adsız Nefer Cd. No:62, Gaziosmanpaşa / İstanbul",
     href: null,
   },
   {

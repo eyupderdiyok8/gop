@@ -3,9 +3,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { FilterPlan } from "@/lib/types";
-import { Filter, AlertTriangle, Clock, CheckCircle, Plus, Bell, Edit2 } from "lucide-react";
+import { Filter, AlertTriangle, Clock, CheckCircle, Plus, Bell, Edit2, Trash2 } from "lucide-react";
 import { format, differenceInDays, parseISO } from "date-fns";
 import { tr } from "date-fns/locale";
+import { Button } from "@/components/ui/button";
 
 type FilterWithRelations = FilterPlan & {
   devices: {
@@ -75,6 +76,13 @@ export default function FiltreTablimiPage() {
       bildirim_gonderildi_1: false,
     }).eq("id", plan.id);
     fetchPlans();
+  };
+
+  const deletePlan = async (id: string) => {
+    if (!confirm("Bu filtre değişim planını silmek istediğinizden emin misiniz?")) return;
+    const supabase = createClient();
+    const { error } = await supabase.from("filter_plans").delete().eq("id", id);
+    if (!error) fetchPlans();
   };
 
   const filtered = plans.filter((p) => {
@@ -208,6 +216,13 @@ export default function FiltreTablimiPage() {
                       className="p-2 rounded-lg bg-brand-aqua/10 text-brand-aqua hover:bg-brand-aqua/20 transition text-xs"
                     >
                       <CheckCircle className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => deletePlan(plan.id)}
+                      title="Planı Sil"
+                      className="p-2 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/20 transition text-xs"
+                    >
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 </div>

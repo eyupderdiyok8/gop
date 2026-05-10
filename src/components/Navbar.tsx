@@ -44,7 +44,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-20 lg:h-24">
           {/* Logo */}
           <Link href="/" className="flex items-center group">
-            <img src="/logo.png" alt="SuArıtmaServis34" className="h-16 lg:h-20 w-auto transition-transform group-hover:scale-105 duration-300" />
+            <img src="/logo.png" alt="SuArıtmaServis34" className="h-12 lg:h-16 w-auto transition-transform group-hover:scale-105 duration-300" />
           </Link>
 
           {/* Desktop Nav */}
@@ -98,7 +98,7 @@ export function Navbar() {
               <div className="p-6 border-b border-white/10">
                 <div className="flex items-center justify-between">
                   <Link href="/" onClick={() => setOpen(false)} className="">
-                    <img src="/logo.png" alt="SuArıtmaServis34" className="h-16 w-auto" />
+                    <img src="/logo.png" alt="SuArıtmaServis34" className="h-12 w-auto" />
                   </Link>
                 </div>
               </div>

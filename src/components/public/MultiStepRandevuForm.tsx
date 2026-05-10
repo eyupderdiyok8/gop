@@ -8,7 +8,7 @@ import { tr } from "date-fns/locale";
 
 const HIZMET_TURLERI = [
   "Filtre Değişimi", "Arıza Giderme",
-  "Kurulum", "Bakım Sözleşmesi"
+  "Kurulum"
 ];
 
 const OTP_ENABLED = false; // Geçici olarak OTP deaktif edildi

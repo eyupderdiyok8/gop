@@ -37,7 +37,7 @@ export function FinansListesi({ modalOnly = false }: { modalOnly?: boolean }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  
+
   const [tur, setTur] = useState<"gelir" | "gider">("gelir");
   const [kategori, setKategori] = useState("");
   const [tutar, setTutar] = useState("");
@@ -79,13 +79,13 @@ export function FinansListesi({ modalOnly = false }: { modalOnly?: boolean }) {
       if (error) throw error;
 
       setOpen(false);
-      
+
       // Reset form
       setKategori("");
       setTutar("");
       setAciklama("");
       setCustomerId("none");
-      
+
       router.refresh();
     } catch (err: any) {
       console.error(err.message);
@@ -125,7 +125,7 @@ export function FinansListesi({ modalOnly = false }: { modalOnly?: boolean }) {
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div className="space-y-2">
               <Label className="text-slate-600">Durum</Label>
               <Select value={durum} onValueChange={(val: any) => setDurum(val)}>
@@ -135,7 +135,7 @@ export function FinansListesi({ modalOnly = false }: { modalOnly?: boolean }) {
                 <SelectContent className="bg-white border-slate-200 text-slate-900">
                   <SelectItem value="odendi">Ödendi (Kasaya Girdi)</SelectItem>
                   {tur === "gelir" && (
-                     <SelectItem value="bekliyor">Veresiye / Açık Hesap</SelectItem>
+                    <SelectItem value="bekliyor">Veresiye / Açık Hesap</SelectItem>
                   )}
                 </SelectContent>
               </Select>
@@ -173,7 +173,7 @@ export function FinansListesi({ modalOnly = false }: { modalOnly?: boolean }) {
 
           <div className="space-y-2">
             <Label className="text-slate-600">Tutar (TL)</Label>
-            <Input 
+            <Input
               required
               type="number"
               step="0.01"
@@ -186,7 +186,7 @@ export function FinansListesi({ modalOnly = false }: { modalOnly?: boolean }) {
 
           <div className="space-y-2">
             <Label className="text-slate-600">Açıklama (Opsiyonel)</Label>
-            <Input 
+            <Input
               placeholder="Detaylı notlar..."
               className="bg-white border-slate-200 placeholder:text-slate-400"
               value={aciklama}
@@ -195,9 +195,9 @@ export function FinansListesi({ modalOnly = false }: { modalOnly?: boolean }) {
           </div>
 
           <div className="flex gap-3 justify-end pt-2">
-            <Button 
-              type="button" 
-              variant="ghost" 
+            <Button
+              type="button"
+              variant="ghost"
               className="hover:bg-slate-100 text-slate-500 hover:text-slate-900"
               onClick={() => setOpen(false)}
             >

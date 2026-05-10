@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Customer } from "@/lib/types";
-import { Plus, Search, Users, Phone, Mail, MapPin, ChevronRight, Edit2, Trash2, LayoutGrid, List, Wallet, UserCheck, Calendar } from "lucide-react";
+import { Plus, Search, Users, Phone, Mail, MapPin, ChevronRight, Edit2, Trash2, LayoutGrid, List, Wallet, UserCheck, Calendar, Wrench } from "lucide-react";
 import Link from "next/link";
 import { MusteriFormModal } from "@/components/admin/musteriler/MusteriFormModal";
 import { format } from "date-fns";
@@ -32,13 +32,23 @@ export default function MusterilerPage() {
 
     // Process data to calculate totals
     const processed = (data ?? []).map(c => {
-      const paid = c.transactions
+      // Calculate from transactions table
+      let paid = c.transactions
         ?.filter((t: any) => t.tur === "gelir" && t.durum === "odendi")
-        .reduce((sum: number, t: any) => sum + Number(t.tutar), 0) || 0;
+        .reduce((sum: number, t: any) => sum + (Number(t.tutar) || 0), 0) || 0;
       
-      const remaining = c.transactions
+      let remaining = c.transactions
         ?.filter((t: any) => t.tur === "gelir" && t.durum === "bekliyor")
-        .reduce((sum: number, t: any) => sum + Number(t.tutar), 0) || 0;
+        .reduce((sum: number, t: any) => sum + (Number(t.tutar) || 0), 0) || 0;
+
+      // Fallback: If no transactions but customer has an islem_tutari
+      if (paid === 0 && remaining === 0 && c.islem_tutari > 0) {
+        if (c.odeme_yontemi === "Borç") {
+          remaining = Number(c.islem_tutari);
+        } else {
+          paid = Number(c.islem_tutari);
+        }
+      }
 
       return {
         ...c,
@@ -72,8 +82,7 @@ export default function MusterilerPage() {
   const filtered = customers.filter(
     (c) =>
       c.ad.toLowerCase().includes(search.toLowerCase()) ||
-      c.telefon.includes(search) ||
-      (c.email ?? "").toLowerCase().includes(search.toLowerCase())
+      c.telefon.includes(search)
   );
 
   return (
@@ -177,14 +186,14 @@ export default function MusterilerPage() {
                   <span className="flex items-center gap-1.5 text-xs text-slate-500">
                     <Phone className="w-3 h-3" /> {c.telefon}
                   </span>
-                  {c.email && (
-                    <span className="flex items-center gap-1.5 text-xs text-slate-500">
-                      <Mail className="w-3 h-3" /> {c.email}
-                    </span>
-                  )}
                   {c.adres && (
                     <span className="flex items-center gap-1.5 text-xs text-slate-500 truncate max-w-xs">
                       <MapPin className="w-3 h-3 flex-shrink-0" /> {c.adres}
+                    </span>
+                  )}
+                  {c.islem_1 && (
+                    <span className="flex items-center gap-1.5 text-xs font-medium text-brand-aqua bg-brand-aqua/5 px-2 py-0.5 rounded border border-brand-aqua/10">
+                      <Wrench className="w-3 h-3 flex-shrink-0" /> {c.islem_1} {c.islem_tarihi ? `- ${format(new Date(c.islem_tarihi), "d MMM", { locale: tr })}` : ""}
                     </span>
                   )}
                 </div>
@@ -261,10 +270,17 @@ export default function MusterilerPage() {
                   </div>
 
                   {/* Badges */}
-                  <div className="flex gap-2 mb-6">
+                  <div className="flex gap-2 mb-6 flex-wrap">
                     <span className="px-3 py-1 bg-blue-500/10 text-blue-400 rounded-lg text-xs font-medium border border-blue-500/10 flex items-center gap-1.5">
                       <Users className="w-3 h-3" /> Bireysel
                     </span>
+                    {c.islem_1 && (
+                      <span className="px-3 py-1 bg-brand-aqua/10 text-brand-aqua rounded-lg text-xs font-medium border border-brand-aqua/20 flex items-center gap-1.5 truncate max-w-[180px]" title={[c.islem_1, c.islem_2].filter(Boolean).join(", ")}>
+                        <Wrench className="w-3 h-3 flex-shrink-0" /> 
+                        <span className="truncate">{c.islem_1}</span>
+                        {c.islem_tarihi && <span className="opacity-70 whitespace-nowrap">({format(new Date(c.islem_tarihi), "d MMM", { locale: tr })})</span>}
+                      </span>
+                    )}
                   </div>
 
                   {/* Contact Info */}

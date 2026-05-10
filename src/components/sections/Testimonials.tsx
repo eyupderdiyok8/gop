@@ -203,14 +203,14 @@ export function Testimonials() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="max-w-3xl w-full max-h-[80vh]"
+              className="max-w-4xl w-full flex items-center justify-center"
               onClick={e => e.stopPropagation()}
             >
               {lightbox.type === "image" ? (
                 <img
                   src={lightbox.src}
                   alt="Müşteri yorumu"
-                  className="w-full h-full object-contain rounded-2xl"
+                  className="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl"
                 />
               ) : (
                 <div className="relative w-full" style={{ paddingTop: "56.25%" }}>

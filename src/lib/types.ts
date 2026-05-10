@@ -7,9 +7,17 @@ export interface Customer {
   id: string;
   ad: string;
   telefon: string;
+  telefon2: string | null;
   email: string | null;
   adres: string | null;
   notlar: string | null;
+  islem_1: string | null;
+  islem_2: string | null;
+  islem_3: string | null;
+  odeme_yontemi: string | null;
+  islem_tarihi: string | null;
+  sonraki_islem_gun: number | null;
+  islem_tutari: number | null;
   created_at: string;
   updated_at: string;
 }

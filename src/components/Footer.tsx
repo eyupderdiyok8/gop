@@ -40,7 +40,7 @@ export function Footer() {
           {/* Brand */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-block mb-2">
-              <img src="/logo.png" alt="SuArıtmaServis34" className="h-28 w-auto -ml-4" />
+              <img src="/logo.png" alt="SuArıtmaServis34" className="h-20 w-auto -ml-2" />
             </Link>
             <p className="text-white/60 text-sm leading-relaxed mb-6 max-w-xs">
               Gaziosmanpaşa ve çevre ilçelerde güvenilir su arıtma çözümleri. İstanbul'un sert suyuna karşı sağlıklı ve temiz suya ulaşmak artık çok kolay.
@@ -48,7 +48,7 @@ export function Footer() {
             <div className="flex flex-col gap-3 text-sm text-white/60">
               <div className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-brand-aqua mt-0.5 flex-shrink-0" />
-                <span>Sarıgöl Mah. Mehmetçik Cad. No:8<br />Gaziosmanpaşa / İstanbul</span>
+                <span>Bağlarbaşı Mh. Adsız Nefer Cd. No:62<br />Gaziosmanpaşa / İstanbul</span>
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-brand-aqua flex-shrink-0" />
@@ -132,12 +132,22 @@ export function Footer() {
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
                 </a>
                 <a
-                  href="https://facebook.com"
+                  href="https://www.facebook.com/suaritmaistabulavrupa"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-9 h-9 rounded-lg bg-white/10 hover:bg-brand-aqua flex items-center justify-center transition-colors"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                </a>
+                <a
+                  href="https://share.google/GFjeps99t7x2pgmNx"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-9 h-9 rounded-lg bg-white/10 hover:bg-brand-aqua flex items-center justify-center transition-colors"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
+                  </svg>
                 </a>
                 <a
                   href="https://wa.me/905304794722"

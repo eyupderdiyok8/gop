@@ -144,6 +144,35 @@ export default function CustomerDashboard() {
           </div>
         </div>
 
+        {/* Son İşlem Bilgisi */}
+        {(customer.islem_1 || customer.islem_tarihi) && (
+          <div className="bg-brand-aqua/10 border border-brand-aqua/20 rounded-2xl p-6 flex flex-col sm:flex-row items-center gap-6">
+            <div className="w-16 h-16 rounded-full bg-brand-aqua flex items-center justify-center flex-shrink-0 shadow-lg shadow-brand-aqua/20">
+              <History className="w-8 h-8 text-white" />
+            </div>
+            <div className="flex-1 text-center sm:text-left">
+              <h3 className="text-lg font-bold text-slate-900 mb-1">Son Gerçekleşen İşlem</h3>
+              <p className="text-slate-600 text-sm mb-3">
+                {[customer.islem_1, customer.islem_2, customer.islem_3].filter(Boolean).join(", ") || "Belirtilmemiş"}
+              </p>
+              <div className="flex flex-wrap gap-3 justify-center sm:justify-start">
+                {customer.islem_tarihi && (
+                  <Badge className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 px-3 py-1 text-xs">
+                    <Calendar className="w-3.5 h-3.5 mr-1.5 text-brand-aqua" />
+                    İşlem Tarihi: {format(new Date(customer.islem_tarihi), "d MMM yyyy", { locale: tr })}
+                  </Badge>
+                )}
+                {customer.sonraki_islem_gun > 0 && customer.islem_tarihi && (
+                  <Badge className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 px-3 py-1 text-xs">
+                    <History className="w-3.5 h-3.5 mr-1.5 text-amber-500" />
+                    Sonraki İşlem: {format(addDays(new Date(customer.islem_tarihi), customer.sonraki_islem_gun), "d MMM yyyy", { locale: tr })}
+                  </Badge>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Devices Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {devices.map((device) => {
