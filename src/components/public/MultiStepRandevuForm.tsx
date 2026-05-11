@@ -42,24 +42,31 @@ export function MultiStepRandevuForm() {
       .catch(() => {});
   }, []);
 
-  // Generate next 7 days starting from today, filtering out fully blocked days
-  const dates = Array.from({ length: 7 }).map((_, i) => {
-    const d = addDays(new Date(), i); // Bugünden itibaren 7 gün
+  const todayStr = format(new Date(), "yyyy-MM-dd");
+  const tomorrowStr = format(addDays(new Date(), 1), "yyyy-MM-dd");
+
+  // Sonraki 14 günü oluşturup, Pazar günlerini ve engellenen günleri filtreleyip ilk 7 günü alıyoruz
+  const dates = Array.from({ length: 14 }).map((_, i) => {
+    const d = addDays(new Date(), i);
+    const valStr = format(d, "yyyy-MM-dd");
+    
     let label = "";
-    if (i === 0) label = `Bugün (${d.getDate()} ${format(d, "MMM", { locale: tr })})`;
-    else if (i === 1) label = `Yarın (${d.getDate()} ${format(d, "MMM", { locale: tr })})`;
+    if (valStr === todayStr) label = `Bugün (${d.getDate()} ${format(d, "MMM", { locale: tr })})`;
+    else if (valStr === tomorrowStr) label = `Yarın (${d.getDate()} ${format(d, "MMM", { locale: tr })})`;
     else label = format(d, "d MMM EEE", { locale: tr });
     
     return {
-      value: format(d, "yyyy-MM-dd"),
-      label
+      value: valStr,
+      label,
+      dateObj: d
     };
-  }).filter(d => !blockedDays.includes(d.value));
+  })
+  .filter(d => !blockedDays.includes(d.value) && d.dateObj.getDay() !== 0)
+  .slice(0, 7);
 
   const allSlots = [
-    "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00",
-    "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00",
-    "16:00", "17:00", "18:00", "19:00", "20:00", "21:00"
+    "08:00", "09:00", "10:00", "11:00", "12:00", 
+    "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"
   ];
 
   const isToday = tarih === format(new Date(), "yyyy-MM-dd");

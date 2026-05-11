@@ -18,6 +18,8 @@ export interface Customer {
   islem_tarihi: string | null;
   sonraki_islem_gun: number | null;
   islem_tutari: number | null;
+  teknisyen: string | null;
+  sonraki_islem_tarihi: string | null;
   created_at: string;
   updated_at: string;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -20,7 +20,9 @@ const schema = z.object({
   islem_3: z.string().optional(),
   odeme_yontemi: z.string().optional(),
   sonraki_islem_gun: z.coerce.number().optional().or(z.literal(0)),
+  sonraki_islem_tarihi: z.string().optional(),
   islem_tutari: z.coerce.number().optional().or(z.literal(0)),
+  teknisyen: z.string().optional(),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -43,6 +45,12 @@ const GUN_OPTIONS = [
 export function MusteriFormModal({ item, onClose, onSaved }: Props) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [teknisyenler, setTeknisyenler] = useState<any[]>([]);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.from("technicians").select("*").eq("aktif", true).order("ad_soyad").then(({ data }) => setTeknisyenler(data ?? []));
+  }, []);
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema) as any,
@@ -59,7 +67,9 @@ export function MusteriFormModal({ item, onClose, onSaved }: Props) {
         odeme_yontemi: item.odeme_yontemi || "",
         sonraki_islem_gun: item.sonraki_islem_gun || 0,
         islem_tutari: item.islem_tutari || 0,
-      }
+        teknisyen: item.teknisyen || "",
+        sonraki_islem_tarihi: item.sonraki_islem_tarihi || "",
+      } as any
       : {
         ad: "",
         telefon: "",
@@ -72,6 +82,8 @@ export function MusteriFormModal({ item, onClose, onSaved }: Props) {
         odeme_yontemi: "",
         sonraki_islem_gun: 0,
         islem_tutari: 0,
+        teknisyen: "",
+        sonraki_islem_tarihi: "",
       },
   });
 
@@ -90,6 +102,7 @@ export function MusteriFormModal({ item, onClose, onSaved }: Props) {
       odeme_yontemi: data.odeme_yontemi || null,
       sonraki_islem_gun: data.sonraki_islem_gun || null,
       islem_tutari: data.islem_tutari || null,
+      sonraki_islem_tarihi: data.sonraki_islem_tarihi || null,
     };
 
     const supabase = createClient();
@@ -105,14 +118,18 @@ export function MusteriFormModal({ item, onClose, onSaved }: Props) {
       return;
     }
 
-    // YENİ Müşteri ise ve tutar girilmişse finans tablosuna Gelir olarak ekle
-    if (!item && data.islem_tutari && data.islem_tutari > 0 && savedCustomer) {
+    // Tutar girilmişse finans tablosuna Gelir olarak ekle (Yeni kayıt veya tutar değişikliği)
+    const shouldAddTransaction = !item 
+      ? (data.islem_tutari && data.islem_tutari > 0) 
+      : (data.islem_tutari && data.islem_tutari > 0 && Number(data.islem_tutari) !== Number(item.islem_tutari));
+
+    if (shouldAddTransaction && savedCustomer) {
       await supabase.from("transactions").insert({
         tur: "gelir",
         kategori: data.islem_1 || "Diğer",
         tutar: data.islem_tutari,
         tarih: data.islem_tarihi || new Date().toISOString().split("T")[0],
-        aciklama: `${data.ad} - Yeni Müşteri Kaydı`,
+        aciklama: `${data.ad} - ${item ? 'Ödeme Güncelleme' : 'Yeni Müşteri Kaydı'}`,
         durum: data.odeme_yontemi === "Borç" ? "bekliyor" : "odendi",
         customer_id: savedCustomer.id
       });
@@ -186,6 +203,18 @@ export function MusteriFormModal({ item, onClose, onSaved }: Props) {
                 <div className="md:col-span-2">
                   <Field label="Adres" name="adres" placeholder="Gaziosmanpaşa, İstanbul" />
                 </div>
+                <div className="md:col-span-2">
+                  <label className="text-xs font-medium text-slate-500 mb-1.5 block">Teknisyen (Sorumlu)</label>
+                  <select
+                    {...register("teknisyen")}
+                    className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-brand-aqua/50 focus:ring-1 focus:ring-brand-aqua/20 transition appearance-none"
+                  >
+                    <option value="">Seçiniz...</option>
+                    {teknisyenler.map((t) => (
+                      <option key={t.id} value={t.ad_soyad}>{t.ad_soyad}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
 
@@ -194,7 +223,7 @@ export function MusteriFormModal({ item, onClose, onSaved }: Props) {
               <h3 className="text-sm font-semibold text-brand-navy mb-4 border-b pb-2">İşlem & Ödeme Bilgileri</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Field label="İşlem Tarihi" name="islem_tarihi" type="date" />
-                <SelectField label="Sonraki İşlem (Gün)" name="sonraki_islem_gun" options={GUN_OPTIONS} />
+                <Field label="Sonraki İşlem Tarihi" name="sonraki_islem_tarihi" type="date" />
                 
                 <SelectField label="1. İşlem" name="islem_1" options={ISLEM_OPTIONS} />
                 <SelectField label="2. İşlem" name="islem_2" options={ISLEM_OPTIONS} />

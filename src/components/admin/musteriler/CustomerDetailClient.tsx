@@ -40,7 +40,7 @@ const statusLabels: Record<string, string> = {
 type Tab = "cihazlar" | "servis" | "randevular" | "notlar";
 
 export function CustomerDetailClient({ customer, devices, appointments, notes: initialNotes, totalIncome = 0 }: Props) {
-  const [tab, setTab] = useState<Tab>("cihazlar");
+  const [tab, setTab] = useState<Tab>("servis");
   const [editModal, setEditModal] = useState(false);
   const [hizliIslemModal, setHizliIslemModal] = useState(false);
   const [cihazModal, setCihazModal] = useState<{ open: boolean; device?: any }>({ open: false });
@@ -77,7 +77,6 @@ export function CustomerDetailClient({ customer, devices, appointments, notes: i
   };
 
   const tabs: { id: Tab; label: string; icon: any; count?: number }[] = [
-    { id: "cihazlar", label: "Cihazlar", icon: Cpu, count: devices.length },
     { id: "servis", label: "Servis Geçmişi", icon: Wrench, count: allServiceRecords.length },
     { id: "randevular", label: "Randevular", icon: CalendarDays, count: appointments.length },
     { id: "notlar", label: "Notlar", icon: MessageSquare, count: notes.length },
@@ -162,20 +161,6 @@ export function CustomerDetailClient({ customer, devices, appointments, notes: i
           </div>
 
           <div className="flex items-center gap-2">
-            {!hasAccount && (
-              <button
-                onClick={handleProvision}
-                disabled={provisioning}
-                className="flex items-center gap-2 px-4 py-2 bg-brand-aqua/10 hover:bg-brand-aqua/20 text-brand-aqua border border-brand-aqua/20 rounded-xl text-xs font-bold transition disabled:opacity-50"
-              >
-                {provisioning ? (
-                  <div className="w-3.5 h-3.5 border-2 border-brand-aqua/20 border-t-brand-aqua rounded-full animate-spin" />
-                ) : (
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                )}
-                Panel Oluştur
-              </button>
-            )}
             <button
               onClick={() => setHizliIslemModal(true)}
               className="flex items-center gap-2 px-4 py-2 bg-brand-aqua hover:bg-brand-aqua/90 text-white rounded-xl text-xs font-bold transition shadow-lg shadow-brand-aqua/20"
@@ -216,10 +201,8 @@ export function CustomerDetailClient({ customer, devices, appointments, notes: i
         {/* Özet İstatistikler */}
         <div className="flex gap-10 mt-6 pt-6 border-t border-white/10">
           {[
-            { label: "Cihaz", value: devices.length },
             { label: "Servis Kaydı", value: allServiceRecords.length },
             { label: "Randevu", value: appointments.length },
-            { label: "Toplam Gelir", value: `₺${totalIncome.toLocaleString('tr-TR')}` },
           ].map((s) => (
             <div key={s.label}>
               <p className="text-2xl font-bold text-white leading-none mb-1">{s.value}</p>
@@ -253,67 +236,6 @@ export function CustomerDetailClient({ customer, devices, appointments, notes: i
 
       {/* Tab İçerikleri */}
       <div className="min-h-[400px]">
-        {tab === "cihazlar" && (
-          <div className="space-y-4">
-            <div className="flex justify-end">
-              <button
-                onClick={() => setCihazModal({ open: true })}
-                className="flex items-center gap-2 px-4 py-2 bg-brand-aqua text-white hover:bg-brand-aqua/90 rounded-xl text-sm font-semibold transition shadow-md"
-              >
-                <Plus className="w-4 h-4" /> Cihaz Ekle
-              </button>
-            </div>
-            {devices.length === 0 ? (
-              <div className="bg-slate-50 border border-slate-200 border-dashed rounded-2xl py-16 text-center">
-                <Cpu className="w-12 h-12 text-slate-200 mx-auto mb-3" />
-                <p className="text-slate-400 text-sm font-medium">Kayıtlı cihaz yok</p>
-              </div>
-            ) : (
-              devices.map((d) => (
-                <div key={d.id} className="bg-white border border-slate-200 rounded-2xl p-6 hover:shadow-md transition group">
-                  <div className="flex items-start justify-between">
-                    <div className="flex gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-brand-aqua/10 group-hover:text-brand-aqua transition">
-                        <Cpu className="w-6 h-6" />
-                      </div>
-                      <div>
-                        <p className="font-bold text-slate-900 text-lg leading-tight">{d.marka} {d.model}</p>
-                        <div className="flex items-center gap-3 mt-2">
-                          {d.seri_no && (
-                            <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-mono">
-                              S/N: {d.seri_no}
-                            </span>
-                          )}
-                          {d.satin_alma_tarihi && (
-                            <span className="text-xs text-slate-400 flex items-center gap-1">
-                              <CalendarDays className="w-3 h-3" />
-                              Satın Alım: {format(new Date(d.satin_alma_tarihi), "d MMM yyyy", { locale: tr })}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-6 text-right">
-                      <div className="text-center">
-                        <p className="text-lg font-bold text-slate-900 leading-none">{d.service_records?.length ?? 0}</p>
-                        <p className="text-[10px] uppercase font-bold text-slate-400 mt-1">Servis</p>
-                      </div>
-                      {d.filter_plans?.[0] && (
-                        <div className="text-center px-4 py-2 bg-amber-50 rounded-xl border border-amber-100">
-                          <p className="text-sm text-amber-600 font-bold leading-none">
-                            {format(new Date(d.filter_plans[0].sonraki_degisim), "d MMM", { locale: tr })}
-                          </p>
-                          <p className="text-[10px] uppercase font-bold text-amber-500/70 mt-1">Sonraki Filtre</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        )}
-
         {tab === "servis" && (
           <div className="space-y-3">
             {allServiceRecords.length === 0 ? (
@@ -442,14 +364,6 @@ export function CustomerDetailClient({ customer, devices, appointments, notes: i
         <HizliIslemModal
           customer={customer}
           onClose={() => setHizliIslemModal(false)}
-        />
-      )}
-      {cihazModal.open && (
-        <CihazFormModal
-          customerId={customer.id}
-          device={cihazModal.device}
-          onClose={() => setCihazModal({ open: false })}
-          onSaved={() => { setCihazModal({ open: false }); window.location.reload(); }}
         />
       )}
     </div>

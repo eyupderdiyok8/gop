@@ -14,6 +14,7 @@ const schema = z.object({
   durum: z.enum(["bekliyor", "devam_ediyor", "tamamlandi", "iptal"]),
   teknisyen: z.string().optional(),
   servis_tarihi: z.string().min(1, "Tarih girin"),
+  sonraki_servis_tarihi: z.string().optional(),
   notlar: z.string().optional(),
 });
 
@@ -56,11 +57,33 @@ export function ServisFormModal({ item, onClose, onSaved }: Props) {
     setError(null);
     const payload = { ...data, teknisyen: data.teknisyen || null, notlar: data.notlar || null };
     const supabase = createClient();
-    const { error: err } = item
-      ? await supabase.from("service_records").update(payload).eq("id", item.id)
-      : await supabase.from("service_records").insert(payload);
+    const { data: savedRecord, error: err } = item
+      ? await supabase.from("service_records").update(payload).eq("id", item.id).select().single()
+      : await supabase.from("service_records").insert(payload).select().single();
+    
+    if (err) { setError(err.message); setSaving(false); return; }
+
+    // Sync with filter_plans
+    if (data.sonraki_servis_tarihi && savedRecord) {
+      const periyot = Math.max(1, Math.round((new Date(data.sonraki_servis_tarihi).getTime() - new Date(data.servis_tarihi).getTime()) / (1000 * 60 * 60 * 24)));
+      
+      const { data: existingPlan } = await supabase.from("filter_plans").select("id").eq("device_id", data.device_id).single();
+      
+      if (existingPlan) {
+        await supabase.from("filter_plans").update({
+          son_degisim_tarihi: data.servis_tarihi,
+          periyot_gun: periyot
+        }).eq("id", existingPlan.id);
+      } else {
+        await supabase.from("filter_plans").insert({
+          device_id: data.device_id,
+          son_degisim_tarihi: data.servis_tarihi,
+          periyot_gun: periyot
+        });
+      }
+    }
+
     setSaving(false);
-    if (err) { setError(err.message); return; }
     onSaved();
   };
 
@@ -142,6 +165,16 @@ export function ServisFormModal({ item, onClose, onSaved }: Props) {
                 <option key={t.id} value={t.ad_soyad}>{t.ad_soyad}</option>
               ))}
             </select>
+          </div>
+
+          <div>
+            <label className="text-xs font-medium text-slate-500 mb-1.5 block">Sonraki İşlem Tarihi (Filtre Takvimi İçin)</label>
+            <input
+              type="date"
+              {...register("sonraki_servis_tarihi")}
+              className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-brand-aqua/50 focus:ring-1 focus:ring-brand-aqua/20 transition"
+            />
+            <p className="text-[10px] text-slate-400 mt-1">Bu tarih seçildiğinde cihazın filtre değişim takvimi güncellenecektir.</p>
           </div>
 
           <div>

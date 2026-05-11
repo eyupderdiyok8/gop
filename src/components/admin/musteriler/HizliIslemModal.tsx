@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { X, Save, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,12 @@ export function HizliIslemModal({ customer, onClose }: Props) {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [teknisyenler, setTeknisyenler] = useState<any[]>([]);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.from("technicians").select("*").eq("aktif", true).order("ad_soyad").then(({ data }) => setTeknisyenler(data ?? []));
+  }, []);
 
   const [formData, setFormData] = useState({
     islem_tarihi: new Date().toISOString().split("T")[0],
@@ -34,6 +40,8 @@ export function HizliIslemModal({ customer, onClose }: Props) {
     islem_3: "",
     odeme_yontemi: "",
     islem_tutari: "",
+    teknisyen: customer.teknisyen || "",
+    sonraki_islem_tarihi: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -51,6 +59,8 @@ export function HizliIslemModal({ customer, onClose }: Props) {
       islem_3: formData.islem_3 || null,
       odeme_yontemi: formData.odeme_yontemi || null,
       islem_tutari: tutar || null,
+      teknisyen: formData.teknisyen || null,
+      sonraki_islem_tarihi: formData.sonraki_islem_tarihi || null,
     };
 
     const supabase = createClient();
@@ -77,7 +87,7 @@ export function HizliIslemModal({ customer, onClose }: Props) {
         aciklama: `${customer.ad} - Hizli İşlem (${formData.islem_1 || ''} ${formData.islem_2 || ''})`,
         durum: formData.odeme_yontemi === "Borç" ? "bekliyor" : "odendi",
         customer_id: customer.id,
-        yapan_kullanici: "Admin"
+        yapan_kullanici: formData.teknisyen || "Admin"
       });
     }
 
@@ -125,15 +135,27 @@ export function HizliIslemModal({ customer, onClose }: Props) {
               </div>
               
               <div>
-                <label className="text-xs font-medium text-slate-500 mb-1.5 block">Sonraki İşlem (Gün)</label>
+                <label className="text-xs font-medium text-slate-500 mb-1.5 block">Sonraki İşlem Tarihi</label>
+                <input
+                  type="date"
+                  name="sonraki_islem_tarihi"
+                  value={formData.sonraki_islem_tarihi}
+                  onChange={handleChange}
+                  className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm focus:border-brand-aqua/50 outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-medium text-slate-500 mb-1.5 block">Teknisyen</label>
                 <select
-                  name="sonraki_islem_gun"
-                  value={formData.sonraki_islem_gun}
+                  name="teknisyen"
+                  value={formData.teknisyen}
                   onChange={handleChange}
                   className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm focus:border-brand-aqua/50 outline-none"
                 >
-                  {GUN_OPTIONS.map((opt, i) => (
-                    <option key={i} value={opt.value}>{opt.label}</option>
+                  <option value="">Seçiniz...</option>
+                  {teknisyenler.map((t) => (
+                    <option key={t.id} value={t.ad_soyad}>{t.ad_soyad}</option>
                   ))}
                 </select>
               </div>
