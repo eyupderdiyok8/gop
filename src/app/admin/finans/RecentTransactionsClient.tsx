@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { FileText, Trash2, Loader2 } from "lucide-react";
+import { FileText, Trash2, Loader2, Download } from "lucide-react";
+import { exportToExcel } from "@/lib/exportUtils";
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
 import { FinansListesi } from "./FinansListesi";
@@ -37,6 +38,19 @@ export function RecentTransactionsClient({ initialTransactions }: Props) {
       setDeletingId(null);
     }
   };
+  const handleExport = () => {
+    const data = transactions.map(tx => ({
+      'Tarih': new Date(tx.tarih).toLocaleDateString('tr-TR'),
+      'Tür': tx.tur === 'gelir' ? 'Gelir' : 'Gider',
+      'Kategori': tx.kategori,
+      'Açıklama': tx.aciklama || '-',
+      'Müşteri': tx.customers?.ad || '-',
+      'Kimin Yaptığı': tx.yapan_kullanici || 'Admin',
+      'Tutar': tx.tutar,
+      'Durum': tx.durum === 'odendi' ? 'Kasada' : tx.durum === 'bekliyor' ? 'Açık Hesap' : 'İptal'
+    }));
+    exportToExcel(data, "Finans_Raporu");
+  };
 
   return (
     <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
@@ -45,7 +59,15 @@ export function RecentTransactionsClient({ initialTransactions }: Props) {
           <FileText className="w-5 h-5 text-slate-400" />
           <h2 className="text-lg font-semibold text-slate-900">Son İşlemler</h2>
         </div>
-        <FinansListesi />
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleExport}
+            className="flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl text-xs sm:text-sm font-medium transition-all shadow-sm"
+          >
+            <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> <span className="hidden xs:inline">Dışa Aktar</span><span className="xs:hidden">Excel</span>
+          </button>
+          <FinansListesi />
+        </div>
       </div>
       
       <div className="overflow-x-auto">

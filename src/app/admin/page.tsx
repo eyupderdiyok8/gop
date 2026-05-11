@@ -20,19 +20,28 @@ async function getDashboardData() {
     { count: customerCount },
     { count: serviceCount },
     { data: lowStock },
-    { data: upcomingFilters },
+    { data: devicePlans },
+    { data: customerPlans },
     { data: pendingAppointments },
     { data: recentServices },
   ] = await Promise.all([
     supabase.from("customers").select("*", { count: "exact", head: true }),
     supabase.from("service_records").select("*", { count: "exact", head: true }).eq("durum", "bekliyor"),
-    supabase.from("inventory").select("id, urun_adi, adet, min_stok_esigi").filter("adet", "lte", "min_stok_esigi"),
+    supabase.from("inventory").select("id, urun_adi, adet, min_stok_esigi"),
     supabase
       .from("filter_plans")
       .select("id, sonraki_degisim, devices(marka, model, customers(ad))")
       .gte("sonraki_degisim", new Date().toISOString().split("T")[0])
       .lte("sonraki_degisim", new Date(Date.now() + 14 * 86400000).toISOString().split("T")[0])
       .order("sonraki_degisim", { ascending: true })
+      .limit(5),
+    supabase
+      .from("customers")
+      .select("id, ad, sonraki_islem_tarihi")
+      .not("sonraki_islem_tarihi", "is", null)
+      .gte("sonraki_islem_tarihi", new Date().toISOString().split("T")[0])
+      .lte("sonraki_islem_tarihi", new Date(Date.now() + 14 * 86400000).toISOString().split("T")[0])
+      .order("sonraki_islem_tarihi", { ascending: true })
       .limit(5),
     supabase.from("appointments").select("*", { count: "exact", head: false }).eq("durum", "bekliyor").limit(5).order("randevu_tarihi", { ascending: true }),
     supabase
@@ -42,11 +51,28 @@ async function getDashboardData() {
       .limit(5),
   ]);
 
+  const criticalStock = (lowStock ?? []).filter((item: any) => item.adet <= item.min_stok_esigi);
+
+  const unifiedUpcoming = [
+    ...((devicePlans as any[]) ?? []).map(p => ({
+      id: p.id,
+      customer_name: p.devices?.customers?.ad,
+      device_info: p.devices?.marka,
+      next_date: p.sonraki_degisim
+    })),
+    ...((customerPlans as any[]) ?? []).map(c => ({
+      id: c.id,
+      customer_name: c.ad,
+      device_info: "Genel Servis",
+      next_date: c.sonraki_islem_tarihi
+    }))
+  ].sort((a, b) => new Date(a.next_date).getTime() - new Date(b.next_date).getTime()).slice(0, 5);
+
   return {
     customerCount: customerCount ?? 0,
     serviceCount: serviceCount ?? 0,
-    lowStock: lowStock ?? [],
-    upcomingFilters: upcomingFilters ?? [],
+    lowStock: criticalStock,
+    upcomingFilters: unifiedUpcoming,
     pendingAppointments: pendingAppointments ?? [],
     recentServices: recentServices ?? [],
   };
@@ -80,14 +106,6 @@ export default async function AdminDashboard() {
       href: "/admin/musteriler",
     },
     {
-      label: "Bekleyen Servis",
-      value: serviceCount,
-      icon: Wrench,
-      color: "text-amber-600",
-      bg: "bg-amber-50",
-      href: "/admin/servis",
-    },
-    {
       label: "Kritik Stok",
       value: lowStock.length,
       icon: Package,
@@ -116,7 +134,7 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {stats.map((stat) => (
           <Link
             key={stat.label}
@@ -216,12 +234,12 @@ export default async function AdminDashboard() {
                 upcomingFilters.map((fp: any) => (
                   <div key={fp.id} className="px-5 py-3">
                     <p className="text-xs text-slate-700 truncate">
-                      {fp.devices?.customers?.ad} — {fp.devices?.marka}
+                      {fp.customer_name} — {fp.device_info}
                     </p>
                     <div className="flex items-center gap-1.5 mt-1">
                       <Clock className="w-3 h-3 text-amber-400" />
                       <p className="text-xs text-amber-400 font-medium">
-                        {format(new Date(fp.sonraki_degisim), "d MMM yyyy", { locale: tr })}
+                        {format(new Date(fp.next_date), "d MMM yyyy", { locale: tr })}
                       </p>
                     </div>
                   </div>

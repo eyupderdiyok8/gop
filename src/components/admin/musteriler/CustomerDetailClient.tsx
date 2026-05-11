@@ -76,8 +76,8 @@ export function CustomerDetailClient({ customer, devices, appointments, notes: i
   };
 
   const tabs: { id: Tab; label: string; icon: any; count?: number }[] = [
-    { id: "servis", label: "Servis Geçmişi", icon: Wrench, count: allServiceRecords.length },
-    { id: "randevular", label: "Randevular", icon: CalendarDays, count: appointments.length },
+    { id: "servis", label: "Servisler", icon: Wrench, count: allServiceRecords.length },
+    { id: "randevular", label: "Randevu", icon: CalendarDays, count: appointments.length },
     { id: "notlar", label: "Notlar", icon: MessageSquare, count: notes.length },
   ];
 
@@ -115,7 +115,7 @@ export function CustomerDetailClient({ customer, devices, appointments, notes: i
   };
 
   return (
-    <div className="p-8 space-y-6 max-w-5xl">
+    <div className="p-4 md:p-8 space-y-6 max-w-5xl mx-auto">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm text-slate-400">
         <Link href="/admin/musteriler" className="flex items-center gap-1.5 hover:text-brand-navy transition">
@@ -134,13 +134,13 @@ export function CustomerDetailClient({ customer, devices, appointments, notes: i
           </div>
         )}
 
-        <div className="flex items-start justify-between">
+        <div className="flex flex-col sm:flex-row items-start justify-between gap-6">
           <div className="flex items-start gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-aqua to-brand-aqua flex items-center justify-center text-white font-bold text-xl shadow-lg">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-brand-aqua to-brand-aqua flex items-center justify-center text-white font-bold text-lg sm:text-xl shadow-lg flex-shrink-0">
               {customer.ad.slice(0, 1).toUpperCase()}
             </div>
             <div>
-              <h1 className="text-2xl font-heading font-bold text-white">{customer.ad}</h1>
+              <h1 className="text-xl sm:text-2xl font-heading font-bold text-white">{customer.ad}</h1>
               <div className="flex flex-wrap gap-4 mt-2">
                 <a href={`tel:${customer.telefon}`} className="flex items-center gap-1.5 text-sm text-white/80 hover:text-white transition">
                   <Phone className="w-3.5 h-3.5 text-brand-aqua" /> {customer.telefon}
@@ -159,10 +159,10 @@ export function CustomerDetailClient({ customer, devices, appointments, notes: i
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 w-full sm:w-auto">
             <button
               onClick={() => setHizliIslemModal(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-brand-aqua hover:bg-brand-aqua/90 text-white rounded-xl text-xs font-bold transition shadow-lg shadow-brand-aqua/20"
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-brand-aqua hover:bg-brand-aqua/90 text-white rounded-xl text-xs font-bold transition shadow-lg shadow-brand-aqua/20"
             >
               <Plus className="w-3.5 h-3.5" /> Yeni İşlem Ekle
             </button>
@@ -212,7 +212,7 @@ export function CustomerDetailClient({ customer, devices, appointments, notes: i
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 bg-slate-100 p-1 rounded-xl w-fit">
+      <div className="flex gap-1 bg-slate-100 p-1 rounded-xl w-full overflow-x-auto no-scrollbar scroll-smooth">
         {tabs.map((t) => (
           <button
             key={t.id}
@@ -222,10 +222,10 @@ export function CustomerDetailClient({ customer, devices, appointments, notes: i
               : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
               }`}
           >
-            <t.icon className="w-3.5 h-3.5" />
-            {t.label}
+            <t.icon className="w-3.5 h-3.5 flex-shrink-0" />
+            <span className="whitespace-nowrap">{t.label}</span>
             {t.count !== undefined && (
-              <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${tab === t.id ? "bg-brand-aqua/10 text-brand-aqua" : "bg-slate-200 text-slate-500"}`}>
+              <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold flex-shrink-0 ${tab === t.id ? "bg-brand-aqua/10 text-brand-aqua" : "bg-slate-200 text-slate-500"}`}>
                 {t.count}
               </span>
             )}
@@ -244,27 +244,32 @@ export function CustomerDetailClient({ customer, devices, appointments, notes: i
               </div>
             ) : (
               allServiceRecords.map((s: any) => (
-                <div key={s.id} className="bg-white border border-slate-200 rounded-xl p-5 hover:border-slate-300 transition">
-                  <div className="flex items-start justify-between gap-4">
+                <div key={s.id} className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 hover:border-slate-300 transition">
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 sm:gap-4">
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
                         {s.device ? `${s.device.marka} ${s.device.model}` : customer.ad}
                       </p>
-                      <p className="text-slate-900 font-medium">{s.aciklama}</p>
-                      {s.teknisyen && <p className="text-xs text-slate-500 mt-1.5 flex items-center gap-1">
+                      <p className="text-sm sm:text-base text-slate-900 font-medium">{s.aciklama}</p>
+                      {s.notlar && (
+                        <p className="text-[10px] sm:text-xs text-slate-500 mt-1 bg-slate-50 px-2 py-1 rounded inline-block border border-slate-100 italic">
+                          {s.notlar}
+                        </p>
+                      )}
+                      {s.teknisyen && <p className="text-[10px] sm:text-xs text-slate-500 mt-1.5 flex items-center gap-1">
                         <ShieldCheck className="w-3 h-3 text-brand-aqua" /> Teknisyen: {s.teknisyen}
                       </p>}
                       {s.sonraki_servis_tarihi && (
-                        <p className="text-xs text-brand-aqua font-medium mt-1.5 flex items-center gap-1">
+                        <p className="text-[10px] sm:text-xs text-brand-aqua font-medium mt-1.5 flex items-center gap-1">
                           <CalendarDays className="w-3 h-3" /> Sonraki: {format(new Date(s.sonraki_servis_tarihi), "d MMM yyyy", { locale: tr })}
                         </p>
                       )}
                     </div>
-                    <div className="flex items-center gap-3 flex-shrink-0">
-                      <span className={`text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full border ${statusColors[s.durum]}`}>
+                    <div className="flex items-center justify-between sm:justify-end gap-3 flex-shrink-0 pt-3 sm:pt-0 border-t sm:border-0 border-slate-50">
+                      <span className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full border ${statusColors[s.durum]}`}>
                         {statusLabels[s.durum]}
                       </span>
-                      <span className="text-xs text-slate-400 font-medium">
+                      <span className="text-[10px] sm:text-xs text-slate-400 font-medium">
                         {format(new Date(s.servis_tarihi), "d MMM yyyy", { locale: tr })}
                       </span>
                     </div>
@@ -284,17 +289,17 @@ export function CustomerDetailClient({ customer, devices, appointments, notes: i
               </div>
             ) : (
               appointments.map((a) => (
-                <div key={a.id} className="bg-white border border-slate-200 rounded-xl p-5 hover:border-slate-300 transition">
-                  <div className="flex items-start justify-between">
+                <div key={a.id} className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 hover:border-slate-300 transition">
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 sm:gap-4">
                     <div>
-                      <p className="text-slate-900 font-bold">{a.hizmet_turu}</p>
-                      {a.teknisyen && <p className="text-xs text-slate-500 mt-1">Teknisyen: {a.teknisyen}</p>}
+                      <p className="text-sm sm:text-base text-slate-900 font-bold">{a.hizmet_turu}</p>
+                      {a.teknisyen && <p className="text-[10px] sm:text-xs text-slate-500 mt-1">Teknisyen: {a.teknisyen}</p>}
                     </div>
-                    <div className="flex items-center gap-3">
-                      <span className={`text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full border ${statusColors[a.durum]}`}>
+                    <div className="flex items-center justify-between sm:justify-end gap-3 flex-shrink-0 pt-3 sm:pt-0 border-t sm:border-0 border-slate-50">
+                      <span className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full border ${statusColors[a.durum]}`}>
                         {statusLabels[a.durum]}
                       </span>
-                      <span className="text-sm font-semibold text-slate-700">
+                      <span className="text-[10px] sm:text-sm font-semibold text-slate-700">
                         {format(new Date(a.randevu_tarihi), "d MMM yyyy HH:mm", { locale: tr })}
                       </span>
                     </div>
@@ -333,19 +338,19 @@ export function CustomerDetailClient({ customer, devices, appointments, notes: i
               </div>
             ) : (
               notes.map((n) => (
-                <div key={n.id} className="group bg-white border border-slate-200 rounded-xl p-5 hover:border-brand-aqua/30 transition shadow-sm">
+                <div key={n.id} className="group bg-white border border-slate-200 rounded-xl p-4 sm:p-5 hover:border-brand-aqua/30 transition shadow-sm">
                   <div className="flex items-start justify-between gap-3">
-                    <p className="text-sm text-slate-700 leading-relaxed flex-1 whitespace-pre-wrap">{n.icerik}</p>
+                    <p className="text-xs sm:text-sm text-slate-700 leading-relaxed flex-1 whitespace-pre-wrap">{n.icerik}</p>
                     <button
                       onClick={() => deleteNote(n.id)}
-                      className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 transition opacity-0 group-hover:opacity-100 rounded-lg"
+                      className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 transition sm:opacity-0 group-hover:opacity-100 rounded-lg flex-shrink-0"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                   <div className="flex items-center gap-2 mt-4 pt-4 border-t border-slate-50">
                     <CalendarDays className="w-3 h-3 text-slate-300" />
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                    <p className="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                       {format(new Date(n.created_at), "d MMM yyyy HH:mm", { locale: tr })}
                     </p>
                   </div>

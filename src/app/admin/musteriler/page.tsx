@@ -3,7 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Customer } from "@/lib/types";
-import { Plus, Search, Users, Phone, Mail, MapPin, ChevronRight, Edit2, Trash2, LayoutGrid, List, Wallet, UserCheck, Calendar, Wrench } from "lucide-react";
+import { Plus, Search, Users, Phone, Mail, MapPin, ChevronRight, Edit2, Trash2, LayoutGrid, List, Wallet, UserCheck, Calendar, Wrench, Download } from "lucide-react";
+import { exportToExcel } from "@/lib/exportUtils";
 import Link from "next/link";
 import { MusteriFormModal } from "@/components/admin/musteriler/MusteriFormModal";
 import { format } from "date-fns";
@@ -15,11 +16,12 @@ export default function MusterilerPage() {
   const [search, setSearch] = useState("");
   const [viewMode, setViewMode] = useState<"list" | "grid">("grid");
   const [formModal, setFormModal] = useState<{ open: boolean; item?: Customer | null }>({ open: false });
+  const [fullText, setFullText] = useState<string | null>(null);
 
   const fetchCustomers = useCallback(async () => {
     setLoading(true);
     const supabase = createClient();
-    
+
     // Fetch customers with their devices and transactions
     const { data } = await supabase
       .from("customers")
@@ -36,7 +38,7 @@ export default function MusterilerPage() {
       let paid = c.transactions
         ?.filter((t: any) => t.tur === "gelir" && t.durum === "odendi")
         .reduce((sum: number, t: any) => sum + (Number(t.tutar) || 0), 0) || 0;
-      
+
       let remaining = c.transactions
         ?.filter((t: any) => t.tur === "gelir" && t.durum === "bekliyor")
         .reduce((sum: number, t: any) => sum + (Number(t.tutar) || 0), 0) || 0;
@@ -78,6 +80,19 @@ export default function MusterilerPage() {
     await supabase.from("customers").delete().eq("id", id);
     fetchCustomers();
   };
+  const handleExport = () => {
+    const data = filtered.map(c => ({
+      'Ad Soyad': c.ad,
+      'Telefon': c.telefon,
+      'Adres': c.adres || '-',
+      'İşlem 1': c.islem_1 || '-',
+      'İşlem Tarihi': c.islem_tarihi || '-',
+      'Ödenen': c.paid,
+      'Kalan': c.remaining,
+      'Kayıt Tarihi': format(new Date(c.created_at), "d MMM yyyy", { locale: tr })
+    }));
+    exportToExcel(data, "Musteri_Listesi");
+  };
 
   const filtered = customers.filter(
     (c) =>
@@ -93,21 +108,27 @@ export default function MusterilerPage() {
           <h1 className="text-2xl font-heading font-bold text-slate-900">Müşteriler</h1>
           <p className="text-slate-500 text-sm mt-1">{customers.length} müşteri kayıtlı</p>
         </div>
-        <button
-          onClick={() => setFormModal({ open: true, item: null })}
-          className="flex items-center gap-2 px-4 py-2.5 bg-brand-aqua hover:bg-brand-aqua text-slate-900 rounded-xl text-sm font-medium transition-colors"
-        >
-          <Plus className="w-4 h-4" /> Yeni Müşteri
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleExport}
+            className="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl text-xs sm:text-sm font-medium transition-colors"
+          >
+            <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> <span className="hidden xs:inline">Dışa Aktar</span><span className="xs:hidden">Excel</span>
+          </button>
+          <button
+            onClick={() => setFormModal({ open: true, item: null })}
+            className="flex items-center gap-2 px-4 py-2.5 bg-brand-aqua hover:bg-brand-aqua text-slate-900 rounded-xl text-sm font-medium transition-colors"
+          >
+            <Plus className="w-4 h-4" /> Yeni Müşteri
+          </button>
+        </div>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {[
           { label: "Toplam Müşteri", value: customers.length, icon: Users, color: "text-blue-400", bg: "bg-blue-500/10" },
           { label: "Bu Ay Yeni Kayıt", value: customers.filter(c => new Date(c.created_at).getMonth() === new Date().getMonth()).length, icon: Calendar, color: "text-brand-aqua", bg: "bg-brand-aqua/10" },
-          { label: "Cihaz Sayısı", value: customers.reduce((acc, c) => acc + (c.deviceCount || 0), 0), icon: UserCheck, color: "text-brand-aqua", bg: "bg-brand-aqua/10" },
-          { label: "Toplam Alacak", value: new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(customers.reduce((acc, c) => acc + (c.remaining || 0), 0)), icon: Wallet, color: "text-amber-400", bg: "bg-amber-500/10" },
         ].map((stat, i) => (
           <div key={i} className="bg-white border border-slate-200 rounded-2xl p-4 flex items-center gap-4">
             <div className={`w-12 h-12 rounded-xl ${stat.bg} ${stat.color} flex items-center justify-center`}>
@@ -196,6 +217,11 @@ export default function MusterilerPage() {
                       <Wrench className="w-3 h-3 flex-shrink-0" /> {c.islem_1} {c.islem_tarihi ? `- ${format(new Date(c.islem_tarihi), "d MMM", { locale: tr })}` : ""}
                     </span>
                   )}
+                  {c.sonraki_islem_tarihi && (
+                    <span className="flex items-center gap-1.5 text-xs font-medium text-amber-500 bg-amber-500/5 px-2 py-0.5 rounded border border-amber-500/10">
+                      <Calendar className="w-3 h-3 flex-shrink-0" /> Sonraki: {format(new Date(c.sonraki_islem_tarihi), "d MMM yyyy", { locale: tr })}
+                    </span>
+                  )}
                 </div>
               </div>
 
@@ -260,10 +286,16 @@ export default function MusterilerPage() {
                       <div>
                         <h3 className="text-slate-900 font-bold text-lg leading-tight group-hover:text-brand-aqua transition-colors">{c.ad}</h3>
                         <p className="text-slate-400 text-xs font-mono mt-1">M-{c.id.slice(0, 4).toUpperCase()}</p>
+                        {c.sonraki_islem_tarihi && (
+                          <span className="px-3 py-1 bg-amber-500/10 text-amber-500 rounded-lg text-xs font-medium border border-amber-500/20 flex items-center gap-1.5">
+                            <Calendar className="w-3 h-3 flex-shrink-0" />
+                            Sonraki: {format(new Date(c.sonraki_islem_tarihi), "d MMM yyyy", { locale: tr })}
+                          </span>
+                        )}
                       </div>
                     </div>
                     <div className="flex flex-col items-end gap-2">
-                       <span className="px-3 py-1 bg-brand-aqua/10 text-brand-aqua rounded-full text-[10px] font-bold uppercase tracking-wider border border-brand-aqua/20">
+                      <span className="px-3 py-1 bg-brand-aqua/10 text-brand-aqua rounded-full text-[10px] font-bold uppercase tracking-wider border border-brand-aqua/20">
                         Aktif
                       </span>
                     </div>
@@ -271,15 +303,16 @@ export default function MusterilerPage() {
 
                   {/* Badges */}
                   <div className="flex gap-2 mb-6 flex-wrap">
-                    <span className="px-3 py-1 bg-blue-500/10 text-blue-400 rounded-lg text-xs font-medium border border-blue-500/10 flex items-center gap-1.5">
-                      <Users className="w-3 h-3" /> Bireysel
-                    </span>
+
                     {c.islem_1 && (
-                      <span className="px-3 py-1 bg-brand-aqua/10 text-brand-aqua rounded-lg text-xs font-medium border border-brand-aqua/20 flex items-center gap-1.5 truncate max-w-[180px]" title={[c.islem_1, c.islem_2].filter(Boolean).join(", ")}>
-                        <Wrench className="w-3 h-3 flex-shrink-0" /> 
+                      <button
+                        onClick={() => setFullText([c.islem_1, c.islem_2, c.islem_3].filter(Boolean).join(", "))}
+                        className="px-3 py-1 bg-brand-aqua/10 text-brand-aqua rounded-lg text-xs font-medium border border-brand-aqua/20 flex items-center gap-1.5 truncate max-w-[180px] hover:bg-brand-aqua/20 transition-colors"
+                      >
+                        <Wrench className="w-3 h-3 flex-shrink-0" />
                         <span className="truncate">{c.islem_1}</span>
                         {c.islem_tarihi && <span className="opacity-70 whitespace-nowrap">({format(new Date(c.islem_tarihi), "d MMM", { locale: tr })})</span>}
-                      </span>
+                      </button>
                     )}
                   </div>
 
@@ -300,19 +333,9 @@ export default function MusterilerPage() {
                   </div>
 
                   {/* Mini Stats */}
-                  <div className="grid grid-cols-3 gap-2 p-4 bg-slate-50 rounded-2xl border border-slate-100 mb-6">
-                    <div className="text-center">
-                      <p className="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Cihaz</p>
-                      <p className="text-sm font-bold text-slate-900">{c.deviceCount}</p>
-                    </div>
-                    <div className="text-center border-x border-slate-200">
-                      <p className="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Ödenen</p>
-                      <p className="text-sm font-bold text-emerald-600">₺{c.paid.toLocaleString('tr-TR')}</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-[10px] uppercase tracking-wider text-slate-400 mb-1">Kalan</p>
-                      <p className={`text-sm font-bold ${c.remaining > 0 ? 'text-rose-600' : 'text-slate-400'}`}>₺{c.remaining.toLocaleString('tr-TR')}</p>
-                    </div>
+                  <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100 mb-6">
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Toplam Ödenen</p>
+                    <p className="text-base font-bold text-emerald-600">₺{c.paid.toLocaleString('tr-TR')}</p>
                   </div>
 
                   {/* Actions */}
@@ -331,7 +354,7 @@ export default function MusterilerPage() {
                       <Edit2 className="w-4 h-4" />
                     </button>
                     <button
-                       onClick={() => deleteCustomer(c.id)}
+                      onClick={() => deleteCustomer(c.id)}
                       className="p-2.5 bg-slate-50 hover:bg-rose-100 text-slate-400 hover:text-rose-600 rounded-xl transition-all border border-slate-200"
                       title="Sil"
                     >
@@ -351,6 +374,26 @@ export default function MusterilerPage() {
           onClose={() => setFormModal({ open: false })}
           onSaved={() => { setFormModal({ open: false }); fetchCustomers(); }}
         />
+      )}
+
+      {fullText && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" onClick={() => setFullText(null)}>
+          <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl border border-slate-200" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-brand-aqua/10 flex items-center justify-center">
+                <Wrench className="w-5 h-5 text-brand-aqua" />
+              </div>
+              <h3 className="font-bold text-slate-900">İşlem Detayları</h3>
+            </div>
+            <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-wrap">{fullText}</p>
+            <button
+              onClick={() => setFullText(null)}
+              className="w-full mt-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-bold transition-all"
+            >
+              Kapat
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );

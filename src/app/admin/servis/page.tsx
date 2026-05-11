@@ -3,7 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { ServiceRecord } from "@/lib/types";
-import { Plus, Search, Wrench, Edit2, Trash2, ChevronDown } from "lucide-react";
+import { Plus, Search, Wrench, Edit2, Trash2, ChevronDown, Download } from "lucide-react";
+import { exportToExcel } from "@/lib/exportUtils";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
 import { ServisFormModal } from "@/components/admin/servis/ServisFormModal";
@@ -50,6 +51,16 @@ export default function ServisPage() {
     await supabase.from("service_records").delete().eq("id", id);
     fetchRecords();
   };
+  const handleExport = () => {
+    const data = filtered.map(r => ({
+      'Müşteri': r.devices?.customers?.ad || r.customers?.ad || '-',
+      'Açıklama': r.aciklama,
+      'Teknisyen': r.teknisyen || '-',
+      'Tarih': format(new Date(r.servis_tarihi), "d MMM yyyy", { locale: tr }),
+      'Durum': STATUS_LABELS[r.durum]
+    }));
+    exportToExcel(data, "Servis_Kayitlari");
+  };
 
   const filtered = records.filter((r) => {
     const term = search.toLowerCase();
@@ -75,12 +86,20 @@ export default function ServisPage() {
           <h1 className="text-2xl font-heading font-bold text-slate-900">Servis Kayıtları</h1>
           <p className="text-slate-500 text-sm mt-1">{records.length} kayıt</p>
         </div>
-        <button
-          onClick={() => setFormModal({ open: true })}
-          className="flex items-center gap-2 px-4 py-2.5 bg-brand-aqua hover:bg-brand-aqua text-white rounded-xl text-sm font-medium transition shadow-lg shadow-brand-aqua/20"
-        >
-          <Plus className="w-4 h-4" /> Yeni Kayıt
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleExport}
+            className="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl text-xs sm:text-sm font-medium transition shadow-sm"
+          >
+            <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> <span className="hidden xs:inline">Dışa Aktar</span><span className="xs:hidden">Excel</span>
+          </button>
+          <button
+            onClick={() => setFormModal({ open: true })}
+            className="flex items-center gap-2 px-4 py-2.5 bg-brand-aqua hover:bg-brand-aqua text-white rounded-xl text-sm font-medium transition shadow-lg shadow-brand-aqua/20"
+          >
+            <Plus className="w-4 h-4" /> Yeni Kayıt
+          </button>
+        </div>
       </div>
 
       {/* Durum filtreleri */}
@@ -94,11 +113,10 @@ export default function ServisPage() {
           <button
             key={f.key}
             onClick={() => setStatusFilter(f.key)}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all border ${
-              statusFilter === f.key
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all border ${statusFilter === f.key
                 ? "bg-brand-aqua/10 text-brand-aqua border-brand-aqua"
                 : "bg-white text-slate-500 border-slate-200 hover:bg-slate-50"
-            }`}
+              }`}
           >
             {f.label}
             <span className={`px-1.5 py-0.5 rounded-full text-xs ${statusFilter === f.key ? "bg-brand-aqua/20" : "bg-slate-50"}`}>
@@ -151,8 +169,9 @@ export default function ServisPage() {
                         {r.devices ? `${r.devices.marka} ${r.devices.model}` : "Genel Servis"}
                       </p>
                     </td>
-                    <td className="px-6 py-4 max-w-xs">
-                      <p className="text-slate-700 truncate">{r.aciklama}</p>
+                    <td className="px-6 py-4 min-w-[200px]">
+                      <p className="text-slate-700 text-sm whitespace-normal leading-relaxed">{r.aciklama}</p>
+                      {r.notlar && <p className="text-[10px] text-slate-400 italic mt-1 whitespace-normal">{r.notlar}</p>}
                     </td>
                     <td className="px-6 py-4 text-slate-500">{r.teknisyen ?? "—"}</td>
                     <td className="px-6 py-4 text-slate-500 text-xs">
