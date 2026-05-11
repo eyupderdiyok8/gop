@@ -38,11 +38,13 @@ export interface Device {
 
 export interface ServiceRecord {
   id: string;
-  device_id: string;
+  customer_id: string | null;
+  device_id: string | null;
   aciklama: string;
   durum: ServiceStatus;
   teknisyen: string | null;
   servis_tarihi: string;
+  sonraki_servis_tarihi: string | null;
   notlar: string | null;
   created_at: string;
   updated_at: string;

@@ -115,11 +115,19 @@ export default function FiltreTablimiPage() {
     fetchPlans();
   };
 
-  const deletePlan = async (id: string) => {
-    if (!confirm("Bu filtre değişim planını silmek istediğinizden emin misiniz?")) return;
+  const deletePlan = async (plan: any) => {
+    if (!confirm("Bu filtre değişim planını takvimden kaldırmak istediğinizden emin misiniz?")) return;
     const supabase = createClient();
-    const { error } = await supabase.from("filter_plans").delete().eq("id", id);
-    if (!error) fetchPlans();
+    
+    if (plan.type === 'customer') {
+      // Müşteri bazlı ise sadece tarih alanını temizle
+      const { error } = await supabase.from("customers").update({ sonraki_islem_tarihi: null }).eq("id", plan.id);
+      if (!error) fetchPlans();
+    } else {
+      // Cihaz bazlı ise planı sil
+      const { error } = await supabase.from("filter_plans").delete().eq("id", plan.id);
+      if (!error) fetchPlans();
+    }
   };
 
   const filtered = plans.filter((p) => {
@@ -260,7 +268,7 @@ export default function FiltreTablimiPage() {
                       </button>
                     )}
                     <button
-                      onClick={() => deletePlan(plan.id)}
+                      onClick={() => deletePlan(plan)}
                       title="Planı Sil"
                       className="p-2 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/20 transition text-xs"
                     >

@@ -34,7 +34,7 @@ export default function ServisPage() {
     const supabase = createClient();
     let query = supabase
       .from("service_records")
-      .select("*, devices(marka, model, seri_no, customers(ad, telefon))")
+      .select("*, devices(marka, model, seri_no, customers(ad, telefon)), customers(ad)")
       .order("created_at", { ascending: false });
     if (statusFilter !== "tumu") query = query.eq("durum", statusFilter);
     const { data } = await query;
@@ -55,6 +55,7 @@ export default function ServisPage() {
     const term = search.toLowerCase();
     return (
       (r.devices?.customers?.ad ?? "").toLowerCase().includes(term) ||
+      (r.customers?.ad ?? "").toLowerCase().includes(term) ||
       r.aciklama.toLowerCase().includes(term) ||
       (r.teknisyen ?? "").toLowerCase().includes(term)
     );
@@ -143,8 +144,12 @@ export default function ServisPage() {
                 filtered.map((r) => (
                   <tr key={r.id} className="hover:bg-white/3 transition">
                     <td className="px-6 py-4">
-                      <p className="text-slate-900 font-medium">{r.devices?.customers?.ad ?? "—"}</p>
-                      <p className="text-xs text-slate-400 mt-0.5">{r.devices?.marka} {r.devices?.model}</p>
+                      <p className="text-slate-900 font-medium">
+                        {r.devices?.customers?.ad || r.customers?.ad || "—"}
+                      </p>
+                      <p className="text-xs text-slate-400 mt-0.5">
+                        {r.devices ? `${r.devices.marka} ${r.devices.model}` : "Genel Servis"}
+                      </p>
                     </td>
                     <td className="px-6 py-4 max-w-xs">
                       <p className="text-slate-700 truncate">{r.aciklama}</p>

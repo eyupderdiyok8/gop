@@ -21,6 +21,7 @@ interface Props {
   devices: (Device & { service_records: any[]; filter_plans: any[] })[];
   appointments: Appointment[];
   notes: CustomerNote[];
+  serviceRecords: any[];
   totalIncome?: number;
 }
 
@@ -39,7 +40,7 @@ const statusLabels: Record<string, string> = {
 
 type Tab = "cihazlar" | "servis" | "randevular" | "notlar";
 
-export function CustomerDetailClient({ customer, devices, appointments, notes: initialNotes, totalIncome = 0 }: Props) {
+export function CustomerDetailClient({ customer, devices, appointments, notes: initialNotes, serviceRecords, totalIncome = 0 }: Props) {
   const [tab, setTab] = useState<Tab>("servis");
   const [editModal, setEditModal] = useState(false);
   const [hizliIslemModal, setHizliIslemModal] = useState(false);
@@ -49,12 +50,10 @@ export function CustomerDetailClient({ customer, devices, appointments, notes: i
   const [addingNote, setAddingNote] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
 
-  const allServiceRecords = devices.flatMap((d) =>
-    (d.service_records ?? []).map((s: any) => ({
-      ...s,
-      device: d,
-    }))
-  ).sort((a, b) => new Date(b.servis_tarihi).getTime() - new Date(a.servis_tarihi).getTime());
+  const allServiceRecords = serviceRecords.map((s) => ({
+    ...s,
+    device: s.devices || null,
+  })).sort((a, b) => new Date(b.servis_tarihi).getTime() - new Date(a.servis_tarihi).getTime());
 
   const addNote = async () => {
     if (!newNote.trim()) return;
@@ -249,12 +248,17 @@ export function CustomerDetailClient({ customer, devices, appointments, notes: i
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
-                        {s.device?.marka} {s.device?.model}
+                        {s.device ? `${s.device.marka} ${s.device.model}` : customer.ad}
                       </p>
                       <p className="text-slate-900 font-medium">{s.aciklama}</p>
                       {s.teknisyen && <p className="text-xs text-slate-500 mt-1.5 flex items-center gap-1">
                         <ShieldCheck className="w-3 h-3 text-brand-aqua" /> Teknisyen: {s.teknisyen}
                       </p>}
+                      {s.sonraki_servis_tarihi && (
+                        <p className="text-xs text-brand-aqua font-medium mt-1.5 flex items-center gap-1">
+                          <CalendarDays className="w-3 h-3" /> Sonraki: {format(new Date(s.sonraki_servis_tarihi), "d MMM yyyy", { locale: tr })}
+                        </p>
+                      )}
                     </div>
                     <div className="flex items-center gap-3 flex-shrink-0">
                       <span className={`text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full border ${statusColors[s.durum]}`}>

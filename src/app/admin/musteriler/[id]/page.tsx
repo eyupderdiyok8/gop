@@ -24,6 +24,7 @@ export default async function CustomerDetailPage({ params }: Props) {
     { data: appointments },
     { data: notes },
     { data: transactions },
+    { data: serviceRecords },
   ] = await Promise.all([
     supabase.from("customers").select("*").eq("id", id).single(),
     supabase
@@ -47,7 +48,12 @@ export default async function CustomerDetailPage({ params }: Props) {
       .select("tutar")
       .eq("customer_id", id)
       .eq("tur", "gelir")
-      .eq("durum", "odendi")
+      .eq("durum", "odendi"),
+    supabase
+      .from("service_records")
+      .select("*, devices(*)")
+      .eq("customer_id", id)
+      .order("servis_tarihi", { ascending: false })
   ]);
 
   if (!customer) notFound();
@@ -60,6 +66,7 @@ export default async function CustomerDetailPage({ params }: Props) {
       devices={devices ?? []}
       appointments={appointments ?? []}
       notes={notes ?? []}
+      serviceRecords={serviceRecords ?? []}
       totalIncome={totalIncome}
     />
   );

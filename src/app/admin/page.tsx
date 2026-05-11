@@ -37,7 +37,7 @@ async function getDashboardData() {
     supabase.from("appointments").select("*", { count: "exact", head: false }).eq("durum", "bekliyor").limit(5).order("randevu_tarihi", { ascending: true }),
     supabase
       .from("service_records")
-      .select("id, aciklama, durum, servis_tarihi, devices(marka, model, customers(ad))")
+      .select("id, aciklama, durum, servis_tarihi, devices(marka, model, customers(ad)), customers(ad)")
       .order("created_at", { ascending: false })
       .limit(5),
   ]);
@@ -157,7 +157,10 @@ export default async function AdminDashboard() {
                 <div key={s.id} className="px-6 py-4 flex items-center gap-4">
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-slate-900 font-medium truncate">
-                      {s.devices?.customers?.ad ?? "—"} — {s.devices?.marka} {s.devices?.model}
+                      {s.devices?.customers?.ad || s.customers?.ad || "—"} 
+                      <span className="text-slate-400 font-normal">
+                        {s.devices ? ` — ${s.devices.marka} ${s.devices.model}` : " — Genel Servis"}
+                      </span>
                     </p>
                     <p className="text-xs text-slate-400 truncate mt-0.5">{s.aciklama}</p>
                   </div>

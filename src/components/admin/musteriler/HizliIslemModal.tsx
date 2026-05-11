@@ -12,7 +12,6 @@ interface Props {
   onClose: () => void;
 }
 
-const ISLEM_OPTIONS = ["", "Cihaz satışı", "Filtre değişimi", "Bakım", "Diğer"];
 const ODEME_OPTIONS = ["", "Kredi Kartı", "Havale", "Nakit", "Borç"];
 const GUN_OPTIONS = [
   { label: "Seçiniz", value: 0 },
@@ -91,6 +90,17 @@ export function HizliIslemModal({ customer, onClose }: Props) {
       });
     }
 
+    // 3. Servis Kaydı oluştur
+    await supabase.from("service_records").insert({
+      customer_id: customer.id,
+      servis_tarihi: formData.islem_tarihi || new Date().toISOString().split("T")[0],
+      sonraki_servis_tarihi: formData.sonraki_islem_tarihi || null,
+      aciklama: `${[formData.islem_1, formData.islem_2, formData.islem_3].filter(Boolean).join(", ")}`,
+      durum: "tamamlandi",
+      teknisyen: formData.teknisyen || null,
+      notlar: formData.odeme_yontemi ? `Ödeme: ${formData.odeme_yontemi} - ${tutar} TL` : null
+    });
+
     setSaving(false);
     onClose();
     router.refresh();
@@ -162,23 +172,38 @@ export function HizliIslemModal({ customer, onClose }: Props) {
 
               <div>
                 <label className="text-xs font-medium text-slate-500 mb-1.5 block">1. İşlem</label>
-                <select name="islem_1" value={formData.islem_1} onChange={handleChange} className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm focus:border-brand-aqua/50 outline-none">
-                  {ISLEM_OPTIONS.map((opt, i) => <option key={i} value={opt}>{opt || "Seçiniz"}</option>)}
-                </select>
+                <input
+                  type="text"
+                  name="islem_1"
+                  placeholder="Örn: Filtre Değişimi"
+                  value={formData.islem_1}
+                  onChange={handleChange}
+                  className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm focus:border-brand-aqua/50 outline-none"
+                />
               </div>
               
               <div>
                 <label className="text-xs font-medium text-slate-500 mb-1.5 block">2. İşlem</label>
-                <select name="islem_2" value={formData.islem_2} onChange={handleChange} className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm focus:border-brand-aqua/50 outline-none">
-                  {ISLEM_OPTIONS.map((opt, i) => <option key={i} value={opt}>{opt || "Seçiniz"}</option>)}
-                </select>
+                <input
+                  type="text"
+                  name="islem_2"
+                  placeholder="Örn: Bakım"
+                  value={formData.islem_2}
+                  onChange={handleChange}
+                  className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm focus:border-brand-aqua/50 outline-none"
+                />
               </div>
               
               <div>
                 <label className="text-xs font-medium text-slate-500 mb-1.5 block">3. İşlem</label>
-                <select name="islem_3" value={formData.islem_3} onChange={handleChange} className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm focus:border-brand-aqua/50 outline-none">
-                  {ISLEM_OPTIONS.map((opt, i) => <option key={i} value={opt}>{opt || "Seçiniz"}</option>)}
-                </select>
+                <input
+                  type="text"
+                  name="islem_3"
+                  placeholder="Diğer..."
+                  value={formData.islem_3}
+                  onChange={handleChange}
+                  className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm focus:border-brand-aqua/50 outline-none"
+                />
               </div>
               
               <div>

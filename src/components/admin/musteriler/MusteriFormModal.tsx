@@ -33,7 +33,6 @@ interface Props {
   onSaved: () => void;
 }
 
-const ISLEM_OPTIONS = ["", "Cihaz satışı", "Filtre değişimi", "Bakım", "Diğer"];
 const ODEME_OPTIONS = ["", "Kredi Kartı", "Havale", "Nakit", "Borç"];
 const GUN_OPTIONS = [
   { label: "Seçiniz", value: 0 },
@@ -135,6 +134,19 @@ export function MusteriFormModal({ item, onClose, onSaved }: Props) {
       });
     }
 
+    // Yeni servis kaydı oluştur (Eğer yeni müşteri ise veya yeni işlem girilmişse)
+    if (shouldAddTransaction && savedCustomer) {
+      await supabase.from("service_records").insert({
+        customer_id: savedCustomer.id,
+        servis_tarihi: data.islem_tarihi || new Date().toISOString().split("T")[0],
+        sonraki_servis_tarihi: data.sonraki_islem_tarihi || null,
+        aciklama: `${[data.islem_1, data.islem_2, data.islem_3].filter(Boolean).join(", ") || 'Yeni Müşteri Kaydı'}`,
+        durum: "tamamlandi",
+        teknisyen: data.teknisyen || null,
+        notlar: data.odeme_yontemi ? `Ödeme: ${data.odeme_yontemi} - ${data.islem_tutari} TL` : null
+      });
+    }
+
     setSaving(false);
     onSaved();
   };
@@ -225,9 +237,9 @@ export function MusteriFormModal({ item, onClose, onSaved }: Props) {
                 <Field label="İşlem Tarihi" name="islem_tarihi" type="date" />
                 <Field label="Sonraki İşlem Tarihi" name="sonraki_islem_tarihi" type="date" />
                 
-                <SelectField label="1. İşlem" name="islem_1" options={ISLEM_OPTIONS} />
-                <SelectField label="2. İşlem" name="islem_2" options={ISLEM_OPTIONS} />
-                <SelectField label="3. İşlem" name="islem_3" options={ISLEM_OPTIONS} />
+                <Field label="1. İşlem" name="islem_1" placeholder="Örn: Cihaz satışı" />
+                <Field label="2. İşlem" name="islem_2" placeholder="Örn: Filtre değişimi" />
+                <Field label="3. İşlem" name="islem_3" placeholder="Örn: Bakım" />
                 
                 <div className="flex gap-4">
                   <div className="flex-1">
