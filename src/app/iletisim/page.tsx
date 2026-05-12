@@ -93,7 +93,7 @@ export default function IletisimPage() {
             {/* Map embed */}
             <div className="rounded-2xl overflow-hidden border border-border h-56">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d47965.73640782768!2d27.468892!3d40.977989!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14b5f0f5f5f5f5f5%3A0x0!2zVGVraXJkYcSf!5e0!3m2!1str!2str!4v1650000000000!5m2!1str!2str"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d192697.7932762524!2d28.8477596!3d41.0052331!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14caa7040068086b%3A0xe1cc1e01f4ca1567!2zSXPPhGFuYnVs!5e0!3m2!1str!2str!4v1650000000000!5m2!1str!2str"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}

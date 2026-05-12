@@ -110,7 +110,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                            </div>
                            <div>
                               <p className="text-xs font-bold text-brand-navy">Ücretsiz Montaj</p>
-                              <p className="text-[10px] text-muted-foreground leading-none mt-0.5">Tekirdağ & Çorlu</p>
+                              <p className="text-[10px] text-muted-foreground leading-none mt-0.5">Tüm İstanbul</p>
                            </div>
                         </div>
                         <div className="bg-muted/30 p-4 rounded-2xl border border-border flex items-center gap-3">

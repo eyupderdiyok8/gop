@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Upload, X, Loader2, Image as ImageIcon } from "lucide-react";
+import { getSeoFileName } from "@/lib/slugify";
 
 interface ImageUploadProps {
   bucket: string;
@@ -27,8 +28,7 @@ export function ImageUpload({ bucket, folder = "products", value, onChange, mult
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+      const fileName = getSeoFileName(file.name);
       const filePath = folder ? `${folder}/${fileName}` : fileName;
 
       const { data, error } = await supabase.storage

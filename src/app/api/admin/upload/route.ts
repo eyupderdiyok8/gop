@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
-import { v4 as uuidv4 } from "uuid";
+import { getSeoFileName } from "@/lib/slugify";
 
 export async function POST(req: Request) {
   try {
@@ -19,8 +19,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Dosya bulunamadı" }, { status: 400 });
     }
 
-    const fileExt = file.name.split(".").pop();
-    const fileName = `${uuidv4()}.${fileExt}`;
+    const fileName = getSeoFileName(file.name);
     const filePath = `blog/${fileName}`;
 
     // Upload to 'blog_images' bucket
