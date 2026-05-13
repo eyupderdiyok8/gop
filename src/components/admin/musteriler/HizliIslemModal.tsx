@@ -5,7 +5,6 @@ import { createClient } from "@/lib/supabase/client";
 import { X, Save, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Customer } from "@/lib/types";
-import { useRouter } from "next/navigation";
 
 interface Props {
   customer: Customer;
@@ -21,7 +20,6 @@ const GUN_OPTIONS = [
 ];
 
 export function HizliIslemModal({ customer, onClose }: Props) {
-  const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [teknisyenler, setTeknisyenler] = useState<any[]>([]);
@@ -103,7 +101,7 @@ export function HizliIslemModal({ customer, onClose }: Props) {
 
     setSaving(false);
     onClose();
-    router.refresh();
+    window.location.reload();
   };
 
   const handleChange = (e: any) => {
