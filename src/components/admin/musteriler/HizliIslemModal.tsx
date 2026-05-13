@@ -93,7 +93,7 @@ export function HizliIslemModal({ customer, onClose }: Props) {
       customer_id: customer.id,
       servis_tarihi: formData.islem_tarihi || new Date().toISOString().split("T")[0],
       sonraki_servis_tarihi: formData.sonraki_islem_tarihi || null,
-      aciklama: `${[formData.islem_1, formData.islem_2, formData.islem_3].filter(Boolean).join(", ")}`,
+      aciklama: `${[formData.islem_1, formData.islem_2, formData.islem_3].filter(Boolean).join(", ") || 'Genel Servis / Bakım'}`,
       durum: "tamamlandi",
       teknisyen: formData.teknisyen || null,
       notlar: formData.odeme_yontemi ? `Ödeme: ${formData.odeme_yontemi} - ${tutar} TL` : null

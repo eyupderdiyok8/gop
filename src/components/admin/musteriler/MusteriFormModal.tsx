@@ -117,12 +117,10 @@ export function MusteriFormModal({ item, onClose, onSaved }: Props) {
       return;
     }
 
-    // Tutar girilmişse finans tablosuna Gelir olarak ekle (Yeni kayıt veya tutar değişikliği)
-    const shouldAddTransaction = !item 
-      ? (data.islem_tutari && data.islem_tutari > 0) 
-      : (data.islem_tutari && data.islem_tutari > 0 && Number(data.islem_tutari) !== Number(item.islem_tutari));
+    // Tutar girilmişse finans tablosuna Gelir olarak ekle
+    const isNewTransaction = data.islem_tutari && data.islem_tutari > 0 && (!item || Number(data.islem_tutari) !== Number(item.islem_tutari));
 
-    if (shouldAddTransaction && savedCustomer) {
+    if (isNewTransaction && savedCustomer) {
       await supabase.from("transactions").insert({
         tur: "gelir",
         kategori: data.islem_1 || "Diğer",
@@ -134,13 +132,22 @@ export function MusteriFormModal({ item, onClose, onSaved }: Props) {
       });
     }
 
-    // Yeni servis kaydı oluştur (Eğer yeni müşteri ise veya yeni işlem girilmişse)
-    if (shouldAddTransaction && savedCustomer) {
+    // Yeni servis kaydı oluştur 
+    // Yeni müşteri ise HER ZAMAN, düzenleme ise servis bilgileri girilmişse
+    const hasServiceInfo = data.islem_1 || data.islem_2 || data.islem_3;
+    const shouldAddServiceRecord = !item || (hasServiceInfo && (
+      data.islem_1 !== item.islem_1 || 
+      data.islem_2 !== item.islem_2 || 
+      data.islem_3 !== item.islem_3 || 
+      data.islem_tarihi !== item.islem_tarihi
+    ));
+
+    if (shouldAddServiceRecord && savedCustomer) {
       await supabase.from("service_records").insert({
         customer_id: savedCustomer.id,
         servis_tarihi: data.islem_tarihi || new Date().toISOString().split("T")[0],
         sonraki_servis_tarihi: data.sonraki_islem_tarihi || null,
-        aciklama: `${[data.islem_1, data.islem_2, data.islem_3].filter(Boolean).join(", ") || 'Yeni Müşteri Kaydı'}`,
+        aciklama: `${[data.islem_1, data.islem_2, data.islem_3].filter(Boolean).join(", ") || 'Genel Servis / Kayıt'}`,
         durum: "tamamlandi",
         teknisyen: data.teknisyen || null,
         notlar: data.odeme_yontemi ? `Ödeme: ${data.odeme_yontemi} - ${data.islem_tutari} TL` : null
