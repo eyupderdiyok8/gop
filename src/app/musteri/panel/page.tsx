@@ -139,7 +139,7 @@ export default function CustomerDashboard() {
           </div>
           <div className="flex gap-3">
             <Button asChild variant="outline" className="rounded-2xl border-slate-200 bg-white hover:bg-slate-50 text-slate-700 h-12 px-6 shadow-sm">
-              <a href="tel:+905304794722"><PhoneCall className="w-4 h-4 mr-2" /> Destek Hattı</a>
+              <a href="tel:+905531142734"><PhoneCall className="w-4 h-4 mr-2" /> Destek Hattı</a>
             </Button>
           </div>
         </div>

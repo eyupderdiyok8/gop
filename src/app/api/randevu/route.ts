@@ -95,7 +95,7 @@ export async function POST(req: Request) {
             <p><strong>Hizmet:</strong> ${hizmet_turu}</p>
             <p><strong>Tarih/Saat:</strong> ${tarih}</p>
           </div>
-          <p>Sorularınız için: <a href="tel:+905304794722">0530 479 47 22</a></p>
+          <p>Sorularınız için: <a href="tel:+905531142734">0553 114 27 34</a></p>
           <p style="color:#999;font-size:12px;margin-top:24px">SuArıtmaServis34 Teknik Servis</p>
         </div>`,
       }),

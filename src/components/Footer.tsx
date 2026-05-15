@@ -52,7 +52,7 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-brand-aqua flex-shrink-0" />
-                <a href="tel:+905304794722" className="hover:text-white transition-colors">0530 479 47 22</a>
+                <a href="tel:+905531142734" className="hover:text-white transition-colors">0553 114 27 34</a>
               </div>
               <div className="flex items-center gap-3">
                 <Clock className="w-4 h-4 text-brand-aqua flex-shrink-0" />
@@ -150,7 +150,7 @@ export function Footer() {
                   </svg>
                 </a>
                 <a
-                  href="https://wa.me/905304794722"
+                  href="https://wa.me/905531142734"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-9 h-9 rounded-lg bg-white/10 hover:bg-brand-aqua flex items-center justify-center transition-colors"
@@ -175,7 +175,7 @@ export function Footer() {
 
       {/* WhatsApp FAB */}
       <a
-        href="https://wa.me/905304794722?text=Merhaba,%20su%20arıtma%20hakkında%20bilgi%20almak%20istiyorum."
+        href="https://wa.me/905531142734?text=Merhaba,%20su%20arıtma%20hakkında%20bilgi%20almak%20istiyorum."
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 z-50"

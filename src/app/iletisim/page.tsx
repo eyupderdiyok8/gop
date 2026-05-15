@@ -9,14 +9,14 @@ const contactItems = [
   {
     icon: Phone,
     label: "Telefon",
-    value: "0530 479 47 22",
-    href: "tel:+905304794722",
+    value: "0553 114 27 34",
+    href: "tel:+905531142734",
   },
   {
     icon: MessageCircle,
     label: "WhatsApp",
-    value: "0530 479 47 22",
-    href: "https://wa.me/905304794722",
+    value: "0553 114 27 34",
+    href: "https://wa.me/905531142734",
   },
   {
     icon: MapPin,

@@ -60,7 +60,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                   <span className="text-xs font-bold text-brand-navy truncate max-w-[200px]">{product.name}</span>
                </div>
                <Button asChild size="sm" className="gradient-teal text-white border-0">
-                  <a href={`https://wa.me/905304794722?text=Merhaba, ${product.name} ürünü hakkında bilgi almak istiyorum.`}>
+                  <a href={`https://wa.me/905531142734?text=Merhaba, ${product.name} ürünü hakkında bilgi almak istiyorum.`}>
                      Hızlı Teklif
                   </a>
                </Button>
@@ -162,7 +162,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                               <Button asChild size="lg" className="w-full bg-brand-aqua hover:bg-brand-aqua text-white border-0 h-14 rounded-2xl font-bold">
-                                 <a href={`https://wa.me/905304794722?text=Merhaba, ${product.name} ürünü hakkında bilgi almak istiyorum.`}>
+                                 <a href={`https://wa.me/905531142734?text=Merhaba, ${product.name} ürünü hakkında bilgi almak istiyorum.`}>
                                     <MessageCircle className="w-5 h-5 mr-2" /> WhatsApp'tan Sor
                                  </a>
                               </Button>

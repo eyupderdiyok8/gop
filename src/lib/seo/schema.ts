@@ -8,7 +8,7 @@ export function generateLocalBusinessSchema(locationName: string, serviceName?: 
     "image": "https://www.suaritmaservis34.com/og-image.jpg",
     "description": `${locationName} bölgesinde güvenilir, 7/24 hizmetinizde su arıtma çözümleri. Gaziosmanpaşa ve tüm İstanbul'a aynı gün servis.`,
     "url": "https://www.suaritmaservis34.com",
-    "telephone": "+905304794722",
+    "telephone": "+905531142734",
     "priceRange": "₺₺",
     "address": {
       "@type": "PostalAddress",
@@ -63,7 +63,7 @@ export function generateServiceSchema(serviceName: string, serviceDesc: string, 
     "provider": {
       "@type": "LocalBusiness",
       "name": providerName,
-      "telephone": "+905304794722",
+      "telephone": "+905531142734",
       "url": "https://www.suaritmaservis34.com"
     },
     "areaServed": {

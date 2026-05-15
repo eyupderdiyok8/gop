@@ -35,7 +35,7 @@ export default function HizmetlerPage() {
               <Link href="/iletisim">Servis Talep Et <ArrowRight className="ml-2 w-4 h-4" /></Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10 bg-transparent h-12">
-              <a href="tel:+905304794722"><Phone className="mr-2 w-4 h-4" /> 0530 479 47 22</a>
+              <a href="tel:+905531142734"><Phone className="mr-2 w-4 h-4" /> 0553 114 27 34</a>
             </Button>
           </div>
         </div>

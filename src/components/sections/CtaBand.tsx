@@ -49,9 +49,9 @@ export function CtaBand() {
               variant="outline"
               className="border-white/40 text-white hover:bg-white/10 hover:border-white/60 bg-transparent h-12 px-8 backdrop-blur-sm"
             >
-              <a href="tel:+905304794722">
+              <a href="tel:+905531142734">
                 <Phone className="mr-2 w-4 h-4" />
-                0530 479 47 22
+                0553 114 27 34
               </a>
             </Button>
             <Button
@@ -60,7 +60,7 @@ export function CtaBand() {
               className="bg-[#25D366] text-white hover:bg-[#20bd5a] shadow-lg font-semibold h-12 px-8 border-0"
             >
               <a
-                href="https://wa.me/905304794722?text=Merhaba,%20su%20arıtma%20hakkında%20bilgi%20almak%20istiyorum."
+                href="https://wa.me/905531142734?text=Merhaba,%20su%20arıtma%20hakkında%20bilgi%20almak%20istiyorum."
                 target="_blank"
                 rel="noopener noreferrer"
               >

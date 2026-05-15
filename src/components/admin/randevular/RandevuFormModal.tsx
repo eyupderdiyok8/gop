@@ -134,7 +134,7 @@ export function RandevuFormModal({ item, onClose, onSaved }: Props) {
 
           {[
             { label: "Müşteri Adı *", name: "musteri_adi", type: "text", placeholder: "Ahmet Yılmaz" },
-            { label: "Telefon *", name: "musteri_telefon", type: "tel", placeholder: "0530 479 47 22" },
+            { label: "Telefon *", name: "musteri_telefon", type: "tel", placeholder: "0553 114 27 34" },
             { label: "E-posta", name: "musteri_email", type: "email", placeholder: "ahmet@email.com" },
             { label: "Adres", name: "musteri_adres", type: "text", placeholder: "Mahalle, sokak..." },
           ].map(({ label, name, type, placeholder }) => (

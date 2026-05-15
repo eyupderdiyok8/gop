@@ -68,14 +68,14 @@ export function Navbar() {
           {/* CTA */}
           <div className="hidden lg:flex items-center gap-3">
             <a
-              href="tel:+905304794722"
+              href="tel:+905531142734"
               className={cn(
                 "flex items-center gap-2 text-sm font-medium transition-colors",
                 isSolid ? "text-white/80 hover:text-white" : "text-white/80 hover:text-white"
               )}
             >
               <Phone className="w-4 h-4" />
-              0530 479 47 22
+              0553 114 27 34
             </a>
             <Button
               asChild
@@ -129,13 +129,13 @@ export function Navbar() {
               <div className="p-6 border-t border-white/10 bg-black/20">
                 <div className="flex flex-col gap-4">
                   <a
-                    href="tel:+905304794722"
+                    href="tel:+905531142734"
                     className="flex items-center gap-3 px-4 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white font-medium shadow-sm active:scale-[0.98] transition-all"
                   >
                     <div className="w-8 h-8 rounded-lg gradient-teal flex items-center justify-center">
                       <Phone className="w-4 h-4 text-white" />
                     </div>
-                    0530 479 47 22
+                    0553 114 27 34
                   </a>
 
                   <div className="flex items-center justify-between px-2">

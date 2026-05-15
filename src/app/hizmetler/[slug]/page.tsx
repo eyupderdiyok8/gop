@@ -70,7 +70,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                   <Link href="/iletisim">Hemen Teklif Al <ArrowRight className="ml-2 w-4 h-4" /></Link>
                 </Button>
                 <Button asChild size="lg" variant="outline" className="border-white/20 text-white bg-transparent h-14 px-8 hover:bg-white/10">
-                  <a href="tel:+905304794722"><Phone className="mr-2 w-4 h-4" /> Bizi Arayın</a>
+                  <a href="tel:+905531142734"><Phone className="mr-2 w-4 h-4" /> Bizi Arayın</a>
                 </Button>
               </div>
             </div>
@@ -142,13 +142,13 @@ export default async function ServiceDetailPage({ params }: Props) {
                   Gaziosmanpaşa ve tüm çevre ilçelerde 7/24 Teknik Destek ve Hemen bizi arayın.
                 </p>
                 <div className="space-y-4 relative z-10">
-                  <a href="tel:+905304794722" className="flex items-center gap-4 p-4 bg-white/10 rounded-2xl hover:bg-brand-aqua transition-all group">
+                  <a href="tel:+905531142734" className="flex items-center gap-4 p-4 bg-white/10 rounded-2xl hover:bg-brand-aqua transition-all group">
                     <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20">
                       <Phone className="w-5 h-5 text-white" />
                     </div>
-                    <span className="font-bold text-lg">0530 479 47 22</span>
+                    <span className="font-bold text-lg">0553 114 27 34</span>
                   </a>
-                  <a href="https://wa.me/905304794722" className="flex items-center gap-4 p-4 bg-[#25D366]/10 rounded-2xl hover:bg-[#25D366] transition-all group">
+                  <a href="https://wa.me/905531142734" className="flex items-center gap-4 p-4 bg-[#25D366]/10 rounded-2xl hover:bg-[#25D366] transition-all group">
                     <div className="w-10 h-10 rounded-full bg-[#25D366]/20 flex items-center justify-center group-hover:bg-white/20">
                       <MessageCircle className="w-5 h-5 text-white" />
                     </div>

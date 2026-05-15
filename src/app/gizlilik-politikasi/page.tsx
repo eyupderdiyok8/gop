@@ -111,7 +111,7 @@ export default function GizlilikPolitikasiPage() {
                 </div>
                 <div className="flex flex-col">
                   <span className="font-semibold text-brand-navy">Telefon:</span>
-                  <a href="tel:+905304794722" className="text-brand-aqua hover:underline">0530 479 47 22</a>
+                  <a href="tel:+905531142734" className="text-brand-aqua hover:underline">0553 114 27 34</a>
                 </div>
               </div>
             </div>
