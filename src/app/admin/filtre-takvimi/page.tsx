@@ -17,7 +17,7 @@ type FilterWithRelations = FilterPlan & {
   } | null;
 };
 
-type View = "tumu" | "yaklasan" | "gecmis";
+type View = "tumu" | "yaklasan";
 
 function urgencyLevel(sonraki: string) {
   const days = differenceInDays(parseISO(sonraki), new Date());
@@ -83,7 +83,9 @@ export default function FiltreTablimiPage() {
         teknisyen: c.teknisyen,
         raw: c
       }))
-    ].sort((a, b) => new Date(a.next_date).getTime() - new Date(b.next_date).getTime());
+    ]
+    .filter(p => differenceInDays(parseISO(p.next_date), new Date()) >= 0)
+    .sort((a, b) => new Date(a.next_date).getTime() - new Date(b.next_date).getTime());
 
     setPlans(unifiedPlans);
     setLoading(false);
@@ -132,7 +134,6 @@ export default function FiltreTablimiPage() {
 
   const filtered = plans.filter((p) => {
     const u = urgencyLevel(p.next_date);
-    if (view === "gecmis") return u === "gecmis";
     if (view === "yaklasan") return u === "kritik" || u === "yaklasan";
     return true;
   });
@@ -140,7 +141,6 @@ export default function FiltreTablimiPage() {
   const counts = {
     tumu: plans.length,
     yaklasan: plans.filter((p) => ["kritik", "yaklasan"].includes(urgencyLevel(p.next_date))).length,
-    gecmis: plans.filter((p) => urgencyLevel(p.next_date) === "gecmis").length,
   };
 
   return (
@@ -152,11 +152,10 @@ export default function FiltreTablimiPage() {
       </div>
 
       {/* Özet */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 gap-4">
         {[
           { id: "tumu" as View, label: "Tüm Planlar", count: counts.tumu, icon: Filter, color: "text-brand-aqua bg-brand-aqua/10" },
           { id: "yaklasan" as View, label: "Yaklaşan (≤14 gün)", count: counts.yaklasan, icon: Clock, color: "text-amber-400 bg-amber-500/10" },
-          { id: "gecmis" as View, label: "Süre Aşımı", count: counts.gecmis, icon: AlertTriangle, color: "text-red-400 bg-red-500/10" },
         ].map((s) => (
           <button
             key={s.id}
@@ -180,7 +179,7 @@ export default function FiltreTablimiPage() {
       <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
           <h2 className="text-sm font-semibold text-slate-900">
-            {view === "tumu" ? "Tüm Planlar" : view === "yaklasan" ? "Yaklaşan Değişimler" : "Süresi Geçmiş"}
+            {view === "tumu" ? "Tüm Planlar" : "Yaklaşan Değişimler"}
           </h2>
           <span className="text-xs text-slate-400">{filtered.length} kayıt</span>
         </div>
@@ -203,50 +202,55 @@ export default function FiltreTablimiPage() {
               const sending = sendingId === plan.id;
  
               return (
-                <div key={plan.id} className="px-6 py-4 flex items-center gap-4 hover:bg-white/3 transition">
-                  {/* Urgency Indicator */}
-                  <div className={`w-1.5 h-12 rounded-full flex-shrink-0 ${
-                    u === "gecmis" ? "bg-red-500" : u === "kritik" ? "bg-brand-aqua" : u === "yaklasan" ? "bg-amber-500" : "bg-brand-aqua"
-                  }`} />
- 
-                  {/* Info */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <p className="text-slate-900 font-medium truncate">
-                        {plan.customer_name ?? "—"}
+                <div key={plan.id} className="px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center gap-4 hover:bg-slate-50 transition">
+                  {/* Urgency Indicator & Info Wrapper for Mobile */}
+                  <div className="flex w-full sm:w-auto flex-1 min-w-0 gap-4">
+                    {/* Urgency Indicator */}
+                    <div className={`w-1.5 h-12 rounded-full flex-shrink-0 mt-1 sm:mt-0 ${
+                      u === "kritik" ? "bg-brand-aqua" : u === "yaklasan" ? "bg-amber-500" : "bg-brand-aqua"
+                    }`} />
+  
+                    {/* Info */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <p className="text-slate-900 font-medium break-words">
+                          {plan.customer_name ?? "—"}
+                        </p>
+                        <span className={`text-xs px-2 py-0.5 rounded-full border ${cfg.color}`}>
+                          {cfg.label}
+                        </span>
+                        {plan.type === 'customer' && (
+                          <span className="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded uppercase font-bold">Müşteri Bazlı</span>
+                        )}
+                      </div>
+                      <p className="text-slate-500 text-sm mt-0.5 break-words">
+                        {plan.device_info}
                       </p>
-                      <span className={`text-xs px-2 py-0.5 rounded-full border ${cfg.color}`}>
-                        {cfg.label}
-                      </span>
-                      {plan.type === 'customer' && (
-                        <span className="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded uppercase font-bold">Müşteri Bazlı</span>
-                      )}
-                    </div>
-                    <p className="text-slate-500 text-sm mt-0.5">
-                      {plan.device_info}
-                    </p>
-                    <div className="flex items-center gap-4 mt-1">
-                      <span className="text-xs text-slate-400">
-                        Son işlem: {plan.last_date ? format(parseISO(plan.last_date), "d MMM yyyy", { locale: tr }) : "—"}
-                      </span>
-                      {plan.periyot > 0 && <span className="text-xs text-slate-400">Periyot: {plan.periyot} gün</span>}
-                      {plan.teknisyen && <span className="text-xs text-slate-400 flex items-center gap-1"><CheckCircle className="w-3 h-3 text-brand-aqua" /> {plan.teknisyen}</span>}
+                      <div className="flex flex-wrap items-center gap-4 mt-1">
+                        <span className="text-xs text-slate-400">
+                          Son işlem: {plan.last_date ? format(parseISO(plan.last_date), "d MMM yyyy", { locale: tr }) : "—"}
+                        </span>
+                        {plan.periyot > 0 && <span className="text-xs text-slate-400">Periyot: {plan.periyot} gün</span>}
+                        {plan.teknisyen && <span className="text-xs text-slate-400 flex items-center gap-1"><CheckCircle className="w-3 h-3 text-brand-aqua" /> {plan.teknisyen}</span>}
+                      </div>
                     </div>
                   </div>
  
-                  {/* Tarih */}
-                  <div className="text-right flex-shrink-0">
-                    <p className={`text-sm font-bold ${u === "gecmis" ? "text-red-400" : u === "kritik" ? "text-brand-aqua" : "text-slate-900"}`}>
-                      {format(parseISO(plan.next_date), "d MMM yyyy", { locale: tr })}
-                    </p>
-                    <p className={`text-xs mt-0.5 ${days < 0 ? "text-red-400" : "text-slate-400"}`}>
-                      {days < 0 ? `${Math.abs(days)} gün önce geçti` : days === 0 ? "Bugün!" : `${days} gün kaldı`}
-                    </p>
-                  </div>
- 
-                  {/* Actions */}
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    <button
+                  {/* Tarih & Actions Wrapper for Mobile */}
+                  <div className="flex w-full sm:w-auto items-center justify-between sm:justify-end gap-4 mt-2 sm:mt-0 pl-5 sm:pl-0 border-t sm:border-0 border-slate-100 pt-3 sm:pt-0">
+                    {/* Tarih */}
+                    <div className="text-left sm:text-right flex-shrink-0">
+                      <p className={`text-sm font-bold ${u === "kritik" ? "text-brand-aqua" : "text-slate-900"}`}>
+                        {format(parseISO(plan.next_date), "d MMM yyyy", { locale: tr })}
+                      </p>
+                      <p className={`text-xs mt-0.5 ${days === 0 ? "text-brand-aqua font-bold" : "text-slate-400"}`}>
+                        {days === 0 ? "Bugün!" : `${days} gün kaldı`}
+                      </p>
+                    </div>
+  
+                    {/* Actions */}
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <button
                       onClick={() => sendNotification(plan)}
                       disabled={sending || isSent}
                       title="Bildirim Gönder"
@@ -274,6 +278,7 @@ export default function FiltreTablimiPage() {
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
+                  </div>
                   </div>
                 </div>
               );
