@@ -70,7 +70,7 @@ export function Hero() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="border-white/30 text-white hover:bg-white/10 hover:border-white/50 bg-transparent h-12 px-6 backdrop-blur-sm"
+                className="border-white/30 text-white hover:text-white hover:bg-white/10 hover:border-white/50 bg-transparent h-12 px-6 backdrop-blur-sm"
               >
                 <a href="tel:+905531142734">
                   <Phone className="mr-2 w-4 h-4" />

@@ -68,12 +68,12 @@ export function ProductListClient({ initialProducts, categories }: ProductListCl
                   }`}
                 >
                   {/* Image Area */}
-                  <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+                  <div className="relative aspect-square overflow-hidden bg-white">
                     {product.main_image ? (
                       <img 
                         src={product.main_image} 
                         alt={product.name}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                        className="w-full h-full object-contain p-8 group-hover:scale-110 transition-transform duration-700"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-muted-foreground/20">

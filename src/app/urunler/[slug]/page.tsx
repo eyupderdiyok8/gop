@@ -17,6 +17,7 @@ import {
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CtaBand } from "@/components/sections/CtaBand";
+import { ProductImageGallery } from "@/components/public/urunler/ProductImageGallery";
 
 interface ProductPageProps {
    params: Promise<{ slug: string }>;
@@ -59,7 +60,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                   <div className="h-4 w-px bg-border" />
                   <span className="text-xs font-bold text-brand-navy truncate max-w-[200px]">{product.name}</span>
                </div>
-               <Button asChild size="sm" className="gradient-teal text-white border-0">
+               <Button asChild size="sm" className="gradient-teal text-white border-0 hover:opacity-90">
                   <a href={`https://wa.me/905531142734?text=Merhaba, ${product.name} ürünü hakkında bilgi almak istiyorum.`}>
                      Hızlı Teklif
                   </a>
@@ -73,35 +74,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
                   {/* Left: Gallery */}
                   <div className="space-y-6">
-                     <div className="aspect-square rounded-[3rem] overflow-hidden bg-muted border border-border group relative">
-                        <img
-                           src={product.main_image || "https://placeholder.com/800x800"}
-                           alt={product.name}
-                           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                        />
-                        <div className="absolute top-8 left-8 flex flex-col gap-2">
-                           {product.is_highlight && (
-                              <Badge className="bg-amber-500 text-white border-0 px-4 py-1.5 text-xs font-bold uppercase tracking-wider shadow-lg">
-                                 Günün Fırsatı
-                              </Badge>
-                           )}
-                           {product.badge && (
-                              <Badge className={`${product.badge_color || 'bg-brand-aqua'} text-white border-0 px-4 py-1.5 text-xs font-bold uppercase tracking-wider shadow-lg`}>
-                                 {product.badge}
-                              </Badge>
-                           )}
-                        </div>
-                     </div>
-
-                     {gallery.length > 1 && (
-                        <div className="grid grid-cols-4 sm:grid-cols-5 gap-4">
-                           {gallery.map((img: string, i: number) => (
-                              <div key={i} className="aspect-square rounded-2xl overflow-hidden border border-border cursor-pointer hover:border-brand-aqua transition-all">
-                                 <img src={img} alt={`${product.name} - ${i}`} className="w-full h-full object-cover" />
-                              </div>
-                           ))}
-                        </div>
-                     )}
+                     <ProductImageGallery product={product} gallery={gallery} />
 
                      <div className="grid grid-cols-2 gap-4">
                         <div className="bg-muted/30 p-4 rounded-2xl border border-border flex items-center gap-3">
@@ -161,7 +134,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                            </div>
 
                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                              <Button asChild size="lg" className="w-full bg-brand-aqua hover:bg-brand-aqua text-white border-0 h-14 rounded-2xl font-bold">
+                              <Button asChild size="lg" className="w-full bg-brand-aqua hover:bg-brand-aqua/80 text-white border-0 h-14 rounded-2xl font-bold transition-colors">
                                  <a href={`https://wa.me/905531142734?text=Merhaba, ${product.name} ürünü hakkında bilgi almak istiyorum.`}>
                                     <MessageCircle className="w-5 h-5 mr-2" /> WhatsApp'tan Sor
                                  </a>

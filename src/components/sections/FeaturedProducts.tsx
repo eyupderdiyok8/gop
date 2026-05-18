@@ -43,20 +43,20 @@ export async function FeaturedProducts() {
             >
               <div className="relative group/card overflow-hidden">
                 {/* Product Image Section */}
-                <div className={`relative aspect-[4/3] overflow-hidden ${product.is_highlight ? "gradient-navy" : "bg-muted"}`}>
+                <div className="relative aspect-square overflow-hidden bg-white">
                   <div className="absolute inset-0 bg-dots opacity-20 pointer-events-none" />
                   {product.main_image ? (
                     <img
                       src={product.main_image}
                       alt={product.name}
-                      className="w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-700"
+                      className="w-full h-full object-contain p-8 group-hover/card:scale-110 transition-transform duration-700"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center opacity-20">
                        <Droplets className="w-16 h-16 text-white" />
                     </div>
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
 
                   {/* Icon & Badge Overlay */}
                   <div className="absolute top-6 left-6 right-6 flex items-start justify-between z-10">
