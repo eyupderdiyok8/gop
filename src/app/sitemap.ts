@@ -50,28 +50,36 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = await (await import('@/lib/supabase/server')).createClient();
   
   const [{ data: blogs }, { data: products }] = await Promise.all([
-    supabase.from('blogs').select('slug, published_at').eq('is_published', true),
-    supabase.from('products').select('slug, updated_at').eq('is_active', true),
+    supabase.from('blogs').select('slug, published_at, cover_image').eq('is_published', true),
+    supabase.from('products').select('slug, updated_at, main_image, gallery').eq('is_active', true),
   ]);
 
   if (blogs) {
-    (blogs as { slug: string; published_at: string }[]).forEach(blog => {
+    (blogs as any[]).forEach(blog => {
       entries.push({
         url: `${baseUrl}/blog/${blog.slug}`,
         lastModified: new Date(blog.published_at),
         changeFrequency: 'monthly',
         priority: 0.7,
+        images: blog.cover_image ? [blog.cover_image] : undefined,
       });
     });
   }
 
   if (products) {
-    (products as { slug: string; updated_at: string | null }[]).forEach(product => {
+    (products as any[]).forEach(product => {
+      const productImages: string[] = [];
+      if (product.main_image) productImages.push(product.main_image);
+      if (product.gallery && Array.isArray(product.gallery)) {
+        productImages.push(...product.gallery);
+      }
+      
       entries.push({
         url: `${baseUrl}/urunler/${product.slug}`,
         lastModified: new Date(product.updated_at || Date.now()),
         changeFrequency: 'monthly',
         priority: 0.8,
+        images: productImages.length > 0 ? productImages : undefined,
       });
     });
   }
