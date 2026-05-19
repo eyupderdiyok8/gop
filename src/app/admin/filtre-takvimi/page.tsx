@@ -17,7 +17,7 @@ type FilterWithRelations = FilterPlan & {
   } | null;
 };
 
-type View = "tumu" | "yaklasan";
+type View = "tumu" | "yaklasan" | "gecmis";
 
 function urgencyLevel(sonraki: string) {
   const days = differenceInDays(parseISO(sonraki), new Date());
@@ -84,7 +84,6 @@ export default function FiltreTablimiPage() {
         raw: c
       }))
     ]
-    .filter(p => differenceInDays(parseISO(p.next_date), new Date()) >= 0)
     .sort((a, b) => new Date(a.next_date).getTime() - new Date(b.next_date).getTime());
 
     setPlans(unifiedPlans);
@@ -134,6 +133,7 @@ export default function FiltreTablimiPage() {
 
   const filtered = plans.filter((p) => {
     const u = urgencyLevel(p.next_date);
+    if (view === "gecmis") return u === "gecmis";
     if (view === "yaklasan") return u === "kritik" || u === "yaklasan";
     return true;
   });
@@ -141,6 +141,7 @@ export default function FiltreTablimiPage() {
   const counts = {
     tumu: plans.length,
     yaklasan: plans.filter((p) => ["kritik", "yaklasan"].includes(urgencyLevel(p.next_date))).length,
+    gecmis: plans.filter((p) => urgencyLevel(p.next_date) === "gecmis").length,
   };
 
   return (
@@ -152,10 +153,11 @@ export default function FiltreTablimiPage() {
       </div>
 
       {/* Özet */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-3 gap-4">
         {[
           { id: "tumu" as View, label: "Tüm Planlar", count: counts.tumu, icon: Filter, color: "text-brand-aqua bg-brand-aqua/10" },
           { id: "yaklasan" as View, label: "Yaklaşan (≤14 gün)", count: counts.yaklasan, icon: Clock, color: "text-amber-400 bg-amber-500/10" },
+          { id: "gecmis" as View, label: "Süre Aşımı", count: counts.gecmis, icon: AlertTriangle, color: "text-red-400 bg-red-500/10" },
         ].map((s) => (
           <button
             key={s.id}
@@ -179,7 +181,7 @@ export default function FiltreTablimiPage() {
       <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
           <h2 className="text-sm font-semibold text-slate-900">
-            {view === "tumu" ? "Tüm Planlar" : "Yaklaşan Değişimler"}
+            {view === "tumu" ? "Tüm Planlar" : view === "yaklasan" ? "Yaklaşan Değişimler" : "Süresi Geçmiş"}
           </h2>
           <span className="text-xs text-slate-400">{filtered.length} kayıt</span>
         </div>
@@ -207,7 +209,7 @@ export default function FiltreTablimiPage() {
                   <div className="flex w-full sm:w-auto flex-1 min-w-0 gap-4">
                     {/* Urgency Indicator */}
                     <div className={`w-1.5 h-12 rounded-full flex-shrink-0 mt-1 sm:mt-0 ${
-                      u === "kritik" ? "bg-brand-aqua" : u === "yaklasan" ? "bg-amber-500" : "bg-brand-aqua"
+                      u === "gecmis" ? "bg-red-500" : u === "kritik" ? "bg-brand-aqua" : u === "yaklasan" ? "bg-amber-500" : "bg-brand-aqua"
                     }`} />
   
                     {/* Info */}
@@ -240,11 +242,11 @@ export default function FiltreTablimiPage() {
                   <div className="flex w-full sm:w-auto items-center justify-between sm:justify-end gap-4 mt-2 sm:mt-0 pl-5 sm:pl-0 border-t sm:border-0 border-slate-100 pt-3 sm:pt-0">
                     {/* Tarih */}
                     <div className="text-left sm:text-right flex-shrink-0">
-                      <p className={`text-sm font-bold ${u === "kritik" ? "text-brand-aqua" : "text-slate-900"}`}>
+                      <p className={`text-sm font-bold ${u === "gecmis" ? "text-red-500" : u === "kritik" ? "text-brand-aqua" : "text-slate-900"}`}>
                         {format(parseISO(plan.next_date), "d MMM yyyy", { locale: tr })}
                       </p>
-                      <p className={`text-xs mt-0.5 ${days === 0 ? "text-brand-aqua font-bold" : "text-slate-400"}`}>
-                        {days === 0 ? "Bugün!" : `${days} gün kaldı`}
+                      <p className={`text-xs mt-0.5 ${days < 0 ? "text-red-500 font-bold" : days === 0 ? "text-brand-aqua font-bold" : "text-slate-400"}`}>
+                        {days < 0 ? `${Math.abs(days)} gün gecikti!` : days === 0 ? "Bugün!" : `${days} gün kaldı`}
                       </p>
                     </div>
   
