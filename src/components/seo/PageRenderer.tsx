@@ -195,9 +195,8 @@ export async function PageRenderer({ params }: Props) {
     breadcrumbs.push({ name: service!.ad, url: `${cum}/${hizmetSlug}` });
   }
 
-  // Dynamic Image Logic
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.suaritmaservis34.com';
-  const pageImage = customPage?.image_url || `${baseUrl}/api/og?title=${encodeURIComponent(title)}&subtitle=${encodeURIComponent(subtitle.slice(0, 100))}`;
+  // Static / Fallback Image Logic
+  const pageImage = customPage?.image_url || '/images/su-aritma-servis34.webp';
 
   return (
     <main className="min-h-screen bg-background">
@@ -321,7 +320,7 @@ export async function generateDynamicMetadata({ params }: Props): Promise<Metada
       url: canonicalUrl,
       images: [
         {
-          url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.suaritmaservis34.com'}/api/og?title=${encodeURIComponent(metaTitle)}`,
+          url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.suaritmaservis34.com'}/images/su-aritma-servis34.webp`,
           width: 1200,
           height: 630,
           alt: metaTitle,

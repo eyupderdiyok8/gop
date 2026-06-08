@@ -57,7 +57,7 @@ export async function BlogPreview() {
             >
               <div className="h-1.5 bg-white/5 group-hover:bg-brand-aqua transition-all duration-500" />
               {post.featured_image && (
-                <div className="h-52 overflow-hidden border-b border-white/5 relative">
+                <div className="aspect-video w-full overflow-hidden border-b border-white/5 relative">
                   <img src={post.featured_image} alt={post.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0f1c26] to-transparent opacity-40" />
                 </div>

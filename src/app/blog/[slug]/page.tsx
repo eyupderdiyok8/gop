@@ -143,7 +143,7 @@ export default async function BlogPostPage({ params }: Props) {
         <div className="max-w-4xl mx-auto">
           <div className="bg-white rounded-[2rem] shadow-2xl shadow-brand-navy/5 border border-white overflow-hidden">
             {blog.featured_image && (
-              <div className="aspect-[21/9] w-full overflow-hidden">
+              <div className="aspect-video md:aspect-[16/7] w-full overflow-hidden">
                 <img 
                   src={blog.featured_image} 
                   alt={blog.title} 

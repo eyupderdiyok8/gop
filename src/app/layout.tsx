@@ -44,7 +44,7 @@ export const metadata: Metadata = {
       "Gaziosmanpaşa ve çevre ilçelerde profesyonel su arıtma çözümleri. Satış, montaj ve servis.",
     images: [
       {
-        url: "https://www.suaritmaservis34.com/api/og",
+        url: "https://www.suaritmaservis34.com/images/su-aritma-servis34.webp",
         width: 1200,
         height: 630,
         alt: "SuArıtmaServis34 Su Arıtma Sistemleri",

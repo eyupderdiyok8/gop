@@ -96,17 +96,17 @@ export default async function BlogPage() {
                   <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" />5 dk okuma</span>
                 </div>
               </div>
-              <div className="flex justify-end order-first lg:order-last">
+              <div className="flex justify-end order-first lg:order-last w-full">
                  {featured.featured_image && (
-                   <div className="relative w-full aspect-video lg:aspect-square">
-                     <div className="absolute -inset-2 bg-gradient-to-r from-brand-aqua/20 to-blue-500/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                     <img 
-                      src={featured.featured_image} 
-                      alt={featured.title} 
-                      className="relative w-full h-full object-cover rounded-2xl border border-slate-100 shadow-lg"
-                     />
-                   </div>
-                 )}
+                    <div className="relative w-full aspect-video">
+                      <div className="absolute -inset-2 bg-gradient-to-r from-brand-aqua/20 to-blue-500/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <img 
+                       src={featured.featured_image} 
+                       alt={featured.title} 
+                       className="relative w-full h-full object-cover rounded-2xl border border-slate-100 shadow-lg"
+                      />
+                    </div>
+                  )}
               </div>
             </div>
           </div>
@@ -119,8 +119,8 @@ export default async function BlogPage() {
               >
                 <div className="h-1.5 bg-slate-100 group-hover:gradient-teal transition-all duration-500" />
                 {post.featured_image && (
-                  <div className="h-52 overflow-hidden border-b border-slate-50">
-                    <img src={post.featured_image} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <div className="aspect-video w-full overflow-hidden border-b border-slate-50">
+                    <img src={post.featured_image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                   </div>
                 )}
                 <div className="p-7 flex flex-col flex-1">
