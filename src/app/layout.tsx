@@ -18,6 +18,12 @@ const plusJakarta = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.suaritmaservis34.com"),
+  icons: {
+    icon: [
+      { url: "/logo.png", type: "image/png" },
+    ],
+    apple: "/logo.png",
+  },
   title: {
     default: "SuArıtmaServis34 | Gaziosmanpaşa Su Arıtma Servisi",
     template: "%s | SuArıtmaServis34",

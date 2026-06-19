@@ -1,21 +1,141 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Droplets, Phone, Home, Wrench, Package, Info, FileText, MessageSquare } from "lucide-react";
+import { Menu, Droplets, Phone, Home, Wrench, Package, Info, FileText, MessageSquare, ChevronDown, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SERVICES_DATA } from "@/lib/constants/services";
+
+const serviceMenuItems = Object.values(SERVICES_DATA).map((s) => ({
+  href: `/hizmetler/${s.slug}`,
+  label: s.title,
+}));
 
 const navLinks = [
   { href: "/", label: "Ana Sayfa", icon: Home },
-  { href: "/hizmetler", label: "Hizmetler", icon: Wrench },
+  { href: "/hizmetler", label: "Hizmetler", icon: Wrench, hasDropdown: true },
   { href: "/urunler", label: "Ürünler", icon: Package },
   { href: "/hakkimizda", label: "Hakkımızda", icon: Info },
   { href: "/blog", label: "Blog", icon: FileText },
   { href: "/iletisim", label: "İletişim", icon: MessageSquare },
 ];
+
+function NavItemWithDropdown({ link, isSolid, pathname }: { link: any; isSolid: boolean; pathname: string }) {
+  const [open, setOpen] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleEnter = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setOpen(true);
+  };
+  const handleLeave = () => {
+    timeoutRef.current = setTimeout(() => setOpen(false), 150);
+  };
+
+  return (
+    <div
+      className="relative"
+      onMouseEnter={handleEnter}
+      onMouseLeave={handleLeave}
+    >
+      <Link
+        href={link.href}
+        className={cn(
+          "px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-1",
+          isSolid
+            ? "text-white/80 hover:text-white hover:bg-white/10"
+            : "text-white/80 hover:text-white hover:bg-white/10"
+        )}
+      >
+        {link.label}
+        <ChevronDown className={cn("w-3.5 h-3.5 transition-transform duration-200", open && "rotate-180")} />
+      </Link>
+
+      {open && (
+        <div className="absolute top-full left-0 mt-1 w-64 bg-brand-navy/95 backdrop-blur-lg rounded-xl shadow-2xl border border-white/10 py-2 z-50 animate-in fade-in-0 slide-in-from-top-2 duration-200">
+          <Link
+            href={link.href}
+            onClick={() => setOpen(false)}
+            className="block px-4 py-2.5 text-sm text-brand-aqua font-semibold hover:bg-white/10 transition-colors border-b border-white/10 mb-1"
+          >
+            Tüm Hizmetler
+          </Link>
+          {serviceMenuItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setOpen(false)}
+              className={cn(
+                "block px-4 py-2 text-sm transition-colors hover:bg-white/10",
+                pathname === item.href ? "text-brand-aqua font-semibold" : "text-white/80"
+              )}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MobileNavItemWithDropdown({ link, pathname, setOpen }: { link: any; pathname: string; setOpen: (v: boolean) => void }) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div>
+      <div className="flex items-center">
+        <Link
+          href={link.href}
+          onClick={() => setOpen(false)}
+          className={cn(
+            "flex items-center gap-4 px-4 py-4 rounded-xl text-base font-medium transition-all duration-200 flex-1",
+            pathname === link.href
+              ? "bg-brand-aqua/20 text-brand-aqua-light border border-brand-aqua/20"
+              : "text-white/70 hover:text-white hover:bg-white/5"
+          )}
+        >
+          <link.icon className={cn("w-5 h-5", pathname === link.href ? "text-brand-aqua" : "text-white/40")} />
+          {link.label}
+        </Link>
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="p-3 text-white/40 hover:text-white transition-colors"
+        >
+          <ChevronDown className={cn("w-4 h-4 transition-transform duration-200", expanded && "rotate-180")} />
+        </button>
+      </div>
+
+      {expanded && (
+        <div className="ml-8 mt-1 space-y-0.5 border-l border-white/10 pl-3">
+          <Link
+            href={link.href}
+            onClick={() => setOpen(false)}
+            className="block py-2.5 px-3 text-sm text-brand-aqua font-semibold hover:bg-white/5 rounded-lg transition-colors"
+          >
+            Tüm Hizmetler
+          </Link>
+          {serviceMenuItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setOpen(false)}
+              className={cn(
+                "block py-2.5 px-3 text-sm rounded-lg transition-colors hover:bg-white/5",
+                pathname === item.href ? "text-brand-aqua font-semibold" : "text-white/60"
+              )}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -49,20 +169,24 @@ export function Navbar() {
 
           {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "px-4 py-2 rounded-md text-sm font-medium transition-colors",
-                  isSolid
-                    ? "text-white/80 hover:text-white hover:bg-white/10"
-                    : "text-white/80 hover:text-white hover:bg-white/10"
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navLinks.map((link) =>
+              link.hasDropdown ? (
+                <NavItemWithDropdown key={link.href} link={link} isSolid={isSolid} pathname={pathname} />
+              ) : (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "px-4 py-2 rounded-md text-sm font-medium transition-colors",
+                    isSolid
+                      ? "text-white/80 hover:text-white hover:bg-white/10"
+                      : "text-white/80 hover:text-white hover:bg-white/10"
+                  )}
+                >
+                  {link.label}
+                </Link>
+              )
+            )}
           </nav>
 
           {/* CTA */}
@@ -107,20 +231,24 @@ export function Navbar() {
               <nav className="flex-1 overflow-y-auto p-4 py-6">
                 <div className="space-y-1">
                   {navLinks.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      onClick={() => setOpen(false)}
-                      className={cn(
-                        "flex items-center gap-4 px-4 py-4 rounded-xl text-base font-medium transition-all duration-200",
-                        pathname === link.href
-                          ? "bg-brand-aqua/20 text-brand-aqua-light border border-brand-aqua/20"
-                          : "text-white/70 hover:text-white hover:bg-white/5"
-                      )}
-                    >
-                      <link.icon className={cn("w-5 h-5", pathname === link.href ? "text-brand-aqua" : "text-white/40")} />
-                      {link.label}
-                    </Link>
+                    link.hasDropdown ? (
+                      <MobileNavItemWithDropdown key={link.href} link={link} pathname={pathname} setOpen={setOpen} />
+                    ) : (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        onClick={() => setOpen(false)}
+                        className={cn(
+                          "flex items-center gap-4 px-4 py-4 rounded-xl text-base font-medium transition-all duration-200",
+                          pathname === link.href
+                            ? "bg-brand-aqua/20 text-brand-aqua-light border border-brand-aqua/20"
+                            : "text-white/70 hover:text-white hover:bg-white/5"
+                        )}
+                      >
+                        <link.icon className={cn("w-5 h-5", pathname === link.href ? "text-brand-aqua" : "text-white/40")} />
+                        {link.label}
+                      </Link>
+                    )
                   ))}
                 </div>
               </nav>

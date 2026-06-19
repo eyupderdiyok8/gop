@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Star, Quote, Play, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 type Testimonial = {
   name: string;
@@ -40,7 +41,7 @@ const testimonials: Testimonial[] = [
     text: "Filtre değişimi için aradım, aynı gün geldiler. Hızlı ve güvenilir servis. Fiyatlar da makul. Yıllardır kullanıyorum, sorun yok.",
     date: "Mart 2026",
     mediaType: "video",
-    mediaSrc: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    mediaSrc: "https://www.youtube.com/embed/zjKagH_Oygg",
     mediaThumb: "/testimonials/su-aritma-servisi-musteri-yorumlari2.jpeg",
   },
   {
@@ -71,7 +72,7 @@ const testimonials: Testimonial[] = [
 ];
 
 export function Testimonials() {
-  const [lightbox, setLightbox] = useState<{ src: string; type: "image" | "video" } | null>(null);
+  const [lightbox, setLightbox] = useState<{ src: string; type: "image" | "video"; vertical?: boolean } | null>(null);
   const mediaItems = testimonials.filter(t => t.mediaType && t.mediaSrc);
 
   return (
@@ -116,7 +117,7 @@ export function Testimonials() {
               {/* Media preview if available */}
               {t.mediaType && t.mediaSrc && (
                 <button
-                  onClick={() => setLightbox({ src: t.mediaSrc!, type: t.mediaType! })}
+                  onClick={() => setLightbox({ src: t.mediaSrc!, type: t.mediaType!, vertical: t.mediaType === "video" && t.mediaSrc?.includes("zjKagH_Oygg") })}
                   className="relative w-full h-44 bg-muted overflow-hidden group block"
                   aria-label={`${t.name} yorumunun fotoğrafını/videosunu görüntüle`}
                 >
@@ -203,7 +204,7 @@ export function Testimonials() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="max-w-4xl w-full flex items-center justify-center"
+              className={cn("flex items-center justify-center w-full", lightbox.vertical ? "max-w-sm" : "max-w-4xl")}
               onClick={e => e.stopPropagation()}
             >
               {lightbox.type === "image" ? (
@@ -213,7 +214,7 @@ export function Testimonials() {
                   className="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl"
                 />
               ) : (
-                <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
+                <div className="relative w-full" style={{ paddingTop: lightbox.vertical ? "177.78%" : "56.25%" }}>
                   <iframe
                     src={lightbox.src + "?autoplay=1"}
                     className="absolute inset-0 w-full h-full rounded-2xl"
