@@ -191,23 +191,16 @@ export function Navbar() {
           </nav>
 
           {/* CTA */}
-          <div className="hidden lg:flex items-center gap-3">
-            <a
-              href="tel:+905531142734"
-              className={cn(
-                "flex items-center gap-2 text-sm font-medium transition-colors",
-                isSolid ? "text-white/80 hover:text-white" : "text-white/80 hover:text-white"
-              )}
-            >
-              <Phone className="w-4 h-4" />
-              0553 114 27 34
-            </a>
+          <div className="hidden lg:flex items-center">
             <Button
               asChild
               size="sm"
               className="gradient-teal text-white border-0 hover:opacity-90 shadow-sm font-medium"
             >
-              <Link href="/iletisim">Fiyat Teklifi Al</Link>
+              <a href="tel:+905531142734">
+                <Phone className="mr-2 w-4 h-4" />
+                Hemen Ara
+              </a>
             </Button>
           </div>
 

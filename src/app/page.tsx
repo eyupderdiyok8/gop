@@ -20,10 +20,10 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <DeviceRenewal />
       <Features />
       <FeaturedProducts />
       <Services />
-      <DeviceRenewal />
       <Stats />
       <SavingsCalculator />
       <Testimonials />
