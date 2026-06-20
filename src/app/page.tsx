@@ -7,6 +7,7 @@ import { Testimonials } from "@/components/sections/Testimonials";
 import { BlogPreview } from "@/components/sections/BlogPreview";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { SavingsCalculator } from "@/components/sections/SavingsCalculator";
+import { DeviceRenewal } from "@/components/sections/DeviceRenewal";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -22,6 +23,7 @@ export default function HomePage() {
       <Features />
       <FeaturedProducts />
       <Services />
+      <DeviceRenewal />
       <Stats />
       <SavingsCalculator />
       <Testimonials />

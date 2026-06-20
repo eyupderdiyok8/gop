@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Droplets, Phone, Home, Wrench, Package, Info, FileText, MessageSquare, ChevronDown, ChevronRight } from "lucide-react";
+import { Menu, Droplets, Phone, Home, Wrench, Package, Info, FileText, MessageSquare, ChevronDown, ChevronRight, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SERVICES_DATA } from "@/lib/constants/services";
 
@@ -18,6 +18,7 @@ const navLinks = [
   { href: "/", label: "Ana Sayfa", icon: Home },
   { href: "/hizmetler", label: "Hizmetler", icon: Wrench, hasDropdown: true },
   { href: "/urunler", label: "Ürünler", icon: Package },
+  { href: "/cihaz-yenileme", label: "Cihaz Yenileme", icon: RefreshCw },
   { href: "/hakkimizda", label: "Hakkımızda", icon: Info },
   { href: "/blog", label: "Blog", icon: FileText },
   { href: "/iletisim", label: "İletişim", icon: MessageSquare },
