@@ -2,6 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { MultiStepRandevuForm } from "@/components/public/MultiStepRandevuForm";
 import type { Metadata } from "next";
 
@@ -13,7 +14,7 @@ const contactItems = [
     href: "tel:+905531142734",
   },
   {
-    icon: MessageCircle,
+    icon: WhatsAppIcon,
     label: "WhatsApp",
     value: "0553 114 27 34",
     href: "https://wa.me/905531142734",

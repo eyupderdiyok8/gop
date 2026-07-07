@@ -12,6 +12,7 @@ import {
   Droplets,
   ShieldCheck
 } from "lucide-react";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import Link from "next/link";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { CtaBand } from "@/components/sections/CtaBand";
@@ -150,7 +151,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                   </a>
                   <a href="https://wa.me/905531142734" className="flex items-center gap-4 p-4 bg-[#25D366]/10 rounded-2xl hover:bg-[#25D366] transition-all group">
                     <div className="w-10 h-10 rounded-full bg-[#25D366]/20 flex items-center justify-center group-hover:bg-white/20">
-                      <MessageCircle className="w-5 h-5 text-white" />
+                      <WhatsAppIcon className="w-5 h-5 text-white" />
                     </div>
                     <span className="font-bold">WhatsApp Destek</span>
                   </a>

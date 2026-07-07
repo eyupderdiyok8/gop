@@ -7,7 +7,6 @@ import { Badge } from "@/components/ui/badge";
 import {
   ArrowRight,
   Phone,
-  MessageCircle,
   RefreshCw,
   ShieldCheck,
   Banknote,
@@ -330,7 +329,7 @@ export default function CihazYenilemePage() {
                   className="flex items-center gap-4 p-4 bg-[#25D366]/10 rounded-2xl hover:bg-[#25D366]/20 transition-all group"
                 >
                   <div className="w-10 h-10 rounded-full bg-[#25D366]/20 flex items-center justify-center group-hover:bg-white/20">
-                    <MessageCircle className="w-5 h-5 text-white" />
+                    <WhatsAppIcon className="w-5 h-5 text-white" />
                   </div>
                   <div>
                     <p className="text-white/60 text-xs">WhatsApp ile Yazın</p>

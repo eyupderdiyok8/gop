@@ -14,6 +14,7 @@ import {
    Truck,
    ArrowRight
 } from "lucide-react";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CtaBand } from "@/components/sections/CtaBand";
@@ -136,7 +137,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                               <Button asChild size="lg" className="w-full bg-brand-aqua hover:bg-brand-aqua/80 text-white border-0 h-14 rounded-2xl font-bold transition-colors">
                                  <a href={`https://wa.me/905531142734?text=Merhaba, ${product.name} ürünü hakkında bilgi almak istiyorum.`}>
-                                    <MessageCircle className="w-5 h-5 mr-2" /> WhatsApp'tan Sor
+                                    <WhatsAppIcon className="w-5 h-5 mr-2" /> WhatsApp'tan Sor
                                  </a>
                               </Button>
                               <Button asChild size="lg" className="w-full border border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white h-14 rounded-2xl font-bold shadow-none">

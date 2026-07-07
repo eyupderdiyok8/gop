@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Droplets, Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 
 const footerLinks = {
   hizmetler: [
@@ -155,7 +156,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="w-9 h-9 rounded-lg bg-white/10 hover:bg-brand-aqua flex items-center justify-center transition-colors"
                 >
-                  <MessageCircle className="w-4 h-4" />
+                  <WhatsAppIcon className="w-4 h-4" />
                 </a>
               </div>
             </div>
@@ -181,7 +182,7 @@ export function Footer() {
         className="fixed bottom-6 right-6 w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 z-50"
         aria-label="WhatsApp ile iletişime geç"
       >
-        <MessageCircle className="w-6 h-6 text-white" />
+        <WhatsAppIcon className="w-6 h-6 text-white" />
       </a>
     </footer>
   );

@@ -105,7 +105,7 @@ ON CONFLICT (slug) DO NOTHING;
 -- 2. GAZİOSMANPAŞA MAHALLELERİ
 INSERT INTO locations (il, ilce, mahalle, slug, lat, lng, tds_degeri, nufus, rating_score, review_count) VALUES
 ('istanbul', 'gaziosmanpasa', 'barbaros',        'istanbul/gaziosmanpasa/barbaros',        41.0621, 28.9080, 315, 28000, 4.9, 95),
-('istanbul', 'gaziosmanpasa', 'baglarbaşı',      'istanbul/gaziosmanpasa/baglarbaşı',      41.0598, 28.9145, 322, 22000, 4.8, 88),
+('istanbul', 'gaziosmanpasa', 'baglarbasi',      'istanbul/gaziosmanpasa/baglarbasi',      41.0598, 28.9145, 322, 22000, 4.8, 88),
 ('istanbul', 'gaziosmanpasa', 'karadeniz',       'istanbul/gaziosmanpasa/karadeniz',       41.0712, 28.9056, 308, 18500, 4.9, 102),
 ('istanbul', 'gaziosmanpasa', 'karayollari',     'istanbul/gaziosmanpasa/karayollari',     41.0689, 28.9198, 325, 15000, 4.8, 76),
 ('istanbul', 'gaziosmanpasa', 'merkez',          'istanbul/gaziosmanpasa/merkez',          41.0675, 28.9122, 320, 12000, 4.9, 115),
@@ -139,7 +139,7 @@ ON CONFLICT (slug) DO NOTHING;
 
 -- Eyüp Mahalleleri
 INSERT INTO locations (il, ilce, mahalle, slug, lat, lng, tds_degeri, nufus, rating_score, review_count) VALUES
-('istanbul', 'eyup', 'alibeyköy',      'istanbul/eyup/alibeykoy',      41.0650, 28.9350, 318, 45000, 4.8, 122),
+('istanbul', 'eyup', 'alibeykoy',      'istanbul/eyup/alibeykoy',      41.0650, 28.9350, 318, 45000, 4.8, 122),
 ('istanbul', 'eyup', 'rami',           'istanbul/eyup/rami',           41.0550, 28.9220, 325, 32000, 4.9, 135),
 ('istanbul', 'eyup', 'gungorensanayi', 'istanbul/eyup/gungorensanayi', 41.0580, 28.9400, 310, 15000, 4.7, 68),
 ('istanbul', 'eyup', 'eyup',           'istanbul/eyup/eyup',           41.0478, 28.9340, 295, 28000, 4.9, 145)

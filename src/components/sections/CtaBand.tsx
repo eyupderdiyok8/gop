@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Phone, ArrowRight, MessageCircle } from "lucide-react";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 
 export function CtaBand() {
   return (
@@ -64,7 +65,7 @@ export function CtaBand() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <MessageCircle className="mr-2 w-4 h-4" />
+                <WhatsAppIcon className="mr-2 w-4 h-4" />
                 WhatsApp
               </a>
             </Button>
