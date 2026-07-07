@@ -29,6 +29,12 @@ export default function ServisPage() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("tumu");
   const [formModal, setFormModal] = useState<{ open: boolean; item?: any }>({ open: false });
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 15;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, statusFilter]);
 
   const fetchRecords = useCallback(async () => {
     setLoading(true);
@@ -71,6 +77,32 @@ export default function ServisPage() {
       (r.teknisyen ?? "").toLowerCase().includes(term)
     );
   });
+
+  const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
+  const paginatedRecords = filtered.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const getPageNumbers = () => {
+    const pages = [];
+    const delta = 2;
+    for (let i = 1; i <= totalPages; i++) {
+      if (
+        i === 1 ||
+        i === totalPages ||
+        (i >= currentPage - delta && i <= currentPage + delta)
+      ) {
+        pages.push(i);
+      } else if (
+        (i === 2 && currentPage - delta > 2) ||
+        (i === totalPages - 1 && currentPage + delta < totalPages - 1)
+      ) {
+        pages.push("...");
+      }
+    }
+    return pages.filter((item, pos, self) => self.indexOf(item) === pos);
+  };
 
   const counts = {
     tumu: records.length,
@@ -159,7 +191,7 @@ export default function ServisPage() {
                   </td>
                 </tr>
               ) : (
-                filtered.map((r) => (
+                paginatedRecords.map((r) => (
                   <tr key={r.id} className="hover:bg-white/3 transition">
                     <td className="px-6 py-4">
                       <p className="text-slate-900 font-medium">
@@ -199,6 +231,65 @@ export default function ServisPage() {
           </table>
         </div>
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 border-t border-slate-100 bg-white">
+          <p className="text-xs text-slate-500">
+            Toplam <b>{filtered.length}</b> kayıttan <b>{(currentPage - 1) * itemsPerPage + 1}-{Math.min(currentPage * itemsPerPage, filtered.length)}</b> arası gösteriliyor
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-1.5">
+            <button
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage <= 1}
+              className={`px-3 py-1.5 border rounded-lg text-xs font-semibold transition-all ${
+                currentPage <= 1
+                  ? "pointer-events-none opacity-50 bg-slate-50 text-slate-400 border-slate-200"
+                  : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50 shadow-sm"
+              }`}
+            >
+              Önceki
+            </button>
+            
+            <div className="flex items-center gap-1.5">
+              {getPageNumbers().map((p, idx) => {
+                if (p === "...") {
+                  return (
+                    <span key={`dots-${idx}`} className="text-slate-400 px-1 text-xs">
+                      ...
+                    </span>
+                  );
+                }
+                return (
+                  <button
+                    key={`page-${p}`}
+                    onClick={() => setCurrentPage(p as number)}
+                    className={`px-3 py-1.5 border rounded-lg text-xs font-semibold transition-all ${
+                      p === currentPage
+                        ? "bg-brand-aqua border-brand-aqua text-white shadow-sm"
+                        : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50 shadow-sm"
+                    }`}
+                  >
+                    {p}
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              disabled={currentPage >= totalPages}
+              className={`px-3 py-1.5 border rounded-lg text-xs font-semibold transition-all ${
+                currentPage >= totalPages
+                  ? "pointer-events-none opacity-50 bg-slate-50 text-slate-400 border-slate-200"
+                  : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50 shadow-sm"
+              }`}
+            >
+              Sonraki
+            </button>
+          </div>
+        </div>
+      )}
 
       {formModal.open && (
         <ServisFormModal

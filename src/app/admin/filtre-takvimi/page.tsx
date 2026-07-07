@@ -40,6 +40,12 @@ export default function FiltreTablimiPage() {
   const [view, setView] = useState<View>("tumu");
   const [sendingId, setSendingId] = useState<string | null>(null);
   const [sentIds, setSentIds] = useState<Set<string>>(new Set());
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 15;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [view]);
 
   const fetchPlans = useCallback(async () => {
     setLoading(true);
@@ -138,6 +144,32 @@ export default function FiltreTablimiPage() {
     return true;
   });
 
+  const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
+  const paginatedPlans = filtered.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const getPageNumbers = () => {
+    const pages = [];
+    const delta = 2;
+    for (let i = 1; i <= totalPages; i++) {
+      if (
+        i === 1 ||
+        i === totalPages ||
+        (i >= currentPage - delta && i <= currentPage + delta)
+      ) {
+        pages.push(i);
+      } else if (
+        (i === 2 && currentPage - delta > 2) ||
+        (i === totalPages - 1 && currentPage + delta < totalPages - 1)
+      ) {
+        pages.push("...");
+      }
+    }
+    return pages.filter((item, pos, self) => self.indexOf(item) === pos);
+  };
+
   const counts = {
     tumu: plans.length,
     yaklasan: plans.filter((p) => ["kritik", "yaklasan"].includes(urgencyLevel(p.next_date))).length,
@@ -196,7 +228,7 @@ export default function FiltreTablimiPage() {
               <p className="text-slate-400 text-sm">Bu kategoride plan yok</p>
             </div>
           ) : (
-            filtered.map((plan: any) => {
+            paginatedPlans.map((plan: any) => {
               const u = urgencyLevel(plan.next_date);
               const cfg = urgencyConfig[u];
               const days = differenceInDays(parseISO(plan.next_date), new Date());
@@ -287,6 +319,65 @@ export default function FiltreTablimiPage() {
             })
           )}
         </div>
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-6 border-t border-slate-100 bg-white">
+            <p className="text-xs text-slate-500">
+              Toplam <b>{filtered.length}</b> kayıttan <b>{(currentPage - 1) * itemsPerPage + 1}-{Math.min(currentPage * itemsPerPage, filtered.length)}</b> arası gösteriliyor
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-1.5">
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage <= 1}
+                className={`px-3 py-1.5 border rounded-lg text-xs font-semibold transition-all ${
+                  currentPage <= 1
+                    ? "pointer-events-none opacity-50 bg-slate-50 text-slate-400 border-slate-200"
+                    : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50 shadow-sm"
+                }`}
+              >
+                Önceki
+              </button>
+              
+              <div className="flex items-center gap-1.5">
+                {getPageNumbers().map((p, idx) => {
+                  if (p === "...") {
+                    return (
+                      <span key={`dots-${idx}`} className="text-slate-400 px-1 text-xs">
+                        ...
+                      </span>
+                    );
+                  }
+                  return (
+                    <button
+                      key={`page-${p}`}
+                      onClick={() => setCurrentPage(p as number)}
+                      className={`px-3 py-1.5 border rounded-lg text-xs font-semibold transition-all ${
+                        p === currentPage
+                          ? "bg-brand-aqua border-brand-aqua text-white shadow-sm"
+                          : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50 shadow-sm"
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage >= totalPages}
+                className={`px-3 py-1.5 border rounded-lg text-xs font-semibold transition-all ${
+                  currentPage >= totalPages
+                    ? "pointer-events-none opacity-50 bg-slate-50 text-slate-400 border-slate-200"
+                    : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50 shadow-sm"
+                }`}
+              >
+                Sonraki
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

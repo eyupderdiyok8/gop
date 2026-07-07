@@ -17,6 +17,12 @@ export default function MusterilerPage() {
   const [viewMode, setViewMode] = useState<"list" | "grid">("grid");
   const [formModal, setFormModal] = useState<{ open: boolean; item?: Customer | null }>({ open: false });
   const [fullText, setFullText] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
 
   const fetchCustomers = useCallback(async () => {
     setLoading(true);
@@ -99,6 +105,32 @@ export default function MusterilerPage() {
       c.ad.toLowerCase().includes(search.toLowerCase()) ||
       c.telefon.includes(search)
   );
+
+  const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
+  const paginatedCustomers = filtered.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const getPageNumbers = () => {
+    const pages = [];
+    const delta = 2;
+    for (let i = 1; i <= totalPages; i++) {
+      if (
+        i === 1 ||
+        i === totalPages ||
+        (i >= currentPage - delta && i <= currentPage + delta)
+      ) {
+        pages.push(i);
+      } else if (
+        (i === 2 && currentPage - delta > 2) ||
+        (i === totalPages - 1 && currentPage + delta < totalPages - 1)
+      ) {
+        pages.push("...");
+      }
+    }
+    return pages.filter((item, pos, self) => self.indexOf(item) === pos);
+  };
 
   return (
     <div className="p-4 md:p-8 space-y-6">
@@ -190,7 +222,7 @@ export default function MusterilerPage() {
         </div>
       ) : viewMode === "list" ? (
         <div className="grid gap-3">
-          {filtered.map((c) => (
+          {paginatedCustomers.map((c) => (
             <div
               key={c.id}
               className="group bg-white border border-slate-200 rounded-xl px-6 py-4 flex items-center gap-4 hover:bg-slate-50 hover:border-white/15 transition-all"
@@ -260,7 +292,7 @@ export default function MusterilerPage() {
       ) : (
         /* GRID VIEW */
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {filtered.map((c, i) => {
+          {paginatedCustomers.map((c, i) => {
             const colors = [
               "from-blue-600 to-indigo-700",
               "from-brand-aqua to-brand-aqua",
@@ -365,6 +397,65 @@ export default function MusterilerPage() {
               </div>
             );
           })}
+        </div>
+      )}
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 border-t border-slate-100 bg-white">
+          <p className="text-xs text-slate-500">
+            Toplam <b>{filtered.length}</b> müşteriden <b>{(currentPage - 1) * itemsPerPage + 1}-{Math.min(currentPage * itemsPerPage, filtered.length)}</b> arası gösteriliyor
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-1.5">
+            <button
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage <= 1}
+              className={`px-3 py-1.5 border rounded-lg text-xs font-semibold transition-all ${
+                currentPage <= 1
+                  ? "pointer-events-none opacity-50 bg-slate-50 text-slate-400 border-slate-200"
+                  : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50 shadow-sm"
+              }`}
+            >
+              Önceki
+            </button>
+            
+            <div className="flex items-center gap-1.5">
+              {getPageNumbers().map((p, idx) => {
+                if (p === "...") {
+                  return (
+                    <span key={`dots-${idx}`} className="text-slate-400 px-1 text-xs">
+                      ...
+                    </span>
+                  );
+                }
+                return (
+                  <button
+                    key={`page-${p}`}
+                    onClick={() => setCurrentPage(p as number)}
+                    className={`px-3 py-1.5 border rounded-lg text-xs font-semibold transition-all ${
+                      p === currentPage
+                        ? "bg-brand-aqua border-brand-aqua text-white shadow-sm"
+                        : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50 shadow-sm"
+                    }`}
+                  >
+                    {p}
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              disabled={currentPage >= totalPages}
+              className={`px-3 py-1.5 border rounded-lg text-xs font-semibold transition-all ${
+                currentPage >= totalPages
+                  ? "pointer-events-none opacity-50 bg-slate-50 text-slate-400 border-slate-200"
+                  : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50 shadow-sm"
+              }`}
+            >
+              Sonraki
+            </button>
+          </div>
         </div>
       )}
 

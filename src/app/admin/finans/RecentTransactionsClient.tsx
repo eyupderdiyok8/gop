@@ -7,12 +7,23 @@ import { exportToExcel } from "@/lib/exportUtils";
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
 import { FinansListesi } from "./FinansListesi";
+import Link from "next/link";
 
 interface Props {
   initialTransactions: any[];
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
+  range: string;
 }
 
-export function RecentTransactionsClient({ initialTransactions }: Props) {
+export function RecentTransactionsClient({ 
+  initialTransactions,
+  currentPage,
+  totalPages,
+  totalCount,
+  range
+}: Props) {
   const [transactions, setTransactions] = useState(initialTransactions);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const router = useRouter();
@@ -52,6 +63,28 @@ export function RecentTransactionsClient({ initialTransactions }: Props) {
     exportToExcel(data, "Finans_Raporu");
   };
 
+  const getPageNumbers = () => {
+    const pages = [];
+    const delta = 2; // range around current page
+    
+    for (let i = 1; i <= totalPages; i++) {
+      if (
+        i === 1 ||
+        i === totalPages ||
+        (i >= currentPage - delta && i <= currentPage + delta)
+      ) {
+        pages.push(i);
+      } else if (
+        (i === 2 && currentPage - delta > 2) ||
+        (i === totalPages - 1 && currentPage + delta < totalPages - 1)
+      ) {
+        pages.push("...");
+      }
+    }
+    // Remove consecutive duplicates of "..."
+    return pages.filter((item, pos, self) => self.indexOf(item) === pos);
+  };
+
   return (
     <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
       <div className="p-5 border-b border-slate-100 flex justify-between items-center bg-white">
@@ -87,7 +120,7 @@ export function RecentTransactionsClient({ initialTransactions }: Props) {
             {transactions.length > 0 ? (
               transactions.map((tx: any) => (
                 <tr key={tx.id} className="hover:bg-slate-50 transition-colors group">
-                  <td className="px-6 py-4 whitespace-nowrap text-slate-500">
+                   <td className="px-6 py-4 whitespace-nowrap text-slate-500">
                     {new Date(tx.tarih).toLocaleDateString('tr-TR')}
                   </td>
                   <td className="px-6 py-4">
@@ -152,6 +185,63 @@ export function RecentTransactionsClient({ initialTransactions }: Props) {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="p-4 border-t border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-xs text-slate-500 text-center sm:text-left">
+            Toplam <b>{totalCount}</b> işlemden <b>{(currentPage - 1) * 25 + 1}-{Math.min(currentPage * 25, totalCount)}</b> arası gösteriliyor
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-1.5">
+            <Link
+              href={`?range=${range}&page=${currentPage - 1}`}
+              className={`px-3 py-1.5 border rounded-lg text-xs font-semibold transition-all ${
+                currentPage <= 1
+                  ? "pointer-events-none opacity-50 bg-slate-100 border-slate-200 text-slate-400"
+                  : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50 shadow-sm"
+              }`}
+            >
+              Önceki
+            </Link>
+            
+            <div className="flex items-center gap-1.5">
+              {getPageNumbers().map((p, idx) => {
+                if (p === "...") {
+                  return (
+                    <span key={`dots-${idx}`} className="text-slate-400 px-1 text-xs">
+                      ...
+                    </span>
+                  );
+                }
+                return (
+                  <Link
+                    key={`page-${p}`}
+                    href={`?range=${range}&page=${p}`}
+                    className={`px-3 py-1.5 border rounded-lg text-xs font-semibold transition-all ${
+                      p === currentPage
+                        ? "bg-brand-aqua border-brand-aqua text-white shadow-sm"
+                        : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50 shadow-sm"
+                    }`}
+                  >
+                    {p}
+                  </Link>
+                );
+              })}
+            </div>
+
+            <Link
+              href={`?range=${range}&page=${currentPage + 1}`}
+              className={`px-3 py-1.5 border rounded-lg text-xs font-semibold transition-all ${
+                currentPage >= totalPages
+                  ? "pointer-events-none opacity-50 bg-slate-100 border-slate-200 text-slate-400"
+                  : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50 shadow-sm"
+              }`}
+            >
+              Sonraki
+            </Link>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -19,6 +19,7 @@ import {
   Clock,
 } from "lucide-react";
 import { FAQSection } from "@/components/seo/FAQSection";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { CtaBand } from "@/components/sections/CtaBand";
 
 const benefits = [
