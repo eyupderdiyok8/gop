@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { ArrowDown, Droplets, ChevronRight, Home } from "lucide-react";
 import Link from "next/link";
@@ -41,7 +42,7 @@ export function HeroSection({ title, subtitle, tdsValue, locationName, breadcrum
     <section className="relative gradient-hero pt-24 pb-20 px-4 sm:px-6 lg:px-8 text-center text-white overflow-hidden">
       {breadcrumbSchema && (
         <script
-          id={`breadcrumb-schema-${Math.random().toString(36).substring(7)}`}
+          id="breadcrumb-schema"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
         />
@@ -89,9 +90,12 @@ export function HeroSection({ title, subtitle, tdsValue, locationName, breadcrum
           <div className="relative max-w-2xl mx-auto mb-10 group">
             <div className="absolute -inset-1 bg-gradient-to-r from-brand-aqua/50 to-blue-500/50 rounded-2xl blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
             <div className="relative bg-brand-navy rounded-2xl overflow-hidden border border-white/10 shadow-2xl skew-y-1 group-hover:skew-y-0 transition-transform duration-500">
-               <img 
+               <Image 
                 src={imageUrl} 
                 alt={`${locationName} Su Arıtma`} 
+                width={1200}
+                height={675}
+                loading="lazy"
                 className="w-full h-auto object-cover opacity-90 group-hover:opacity-100 transition-opacity"
                />
                <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/60 to-transparent pointer-events-none" />

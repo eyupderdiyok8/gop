@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   description: "Ev, ofis ve endüstriyel su arıtma çözümleri. En iyi fiyatlar, ücretsiz montaj ve 2 yıl garantili ürünlerimizi inceleyin.",
 };
 
-// Sayfanın her zaman güncel kalmasını sağla (veya belirli bir süre cache'le)
-export const revalidate = 0;
+// Sayfanın periyodik olarak güncellenmesini sağla (1 saat)
+export const revalidate = 3600;
 
 export default async function UrunlerPage() {
   const supabase = await createClient();

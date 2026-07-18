@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Clock, Calendar, ArrowRight } from "lucide-react";
@@ -22,7 +23,7 @@ const categoryColors: Record<string, string> = {
   "Yerel": "bg-brand-aqua/10 text-brand-aqua border-brand-aqua",
 };
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export default async function BlogPage() {
   const supabase = await createClient();
@@ -100,9 +101,12 @@ export default async function BlogPage() {
                  {featured.featured_image && (
                     <div className="relative w-full aspect-video">
                       <div className="absolute -inset-2 bg-gradient-to-r from-brand-aqua/20 to-blue-500/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                      <img 
+                      <Image 
                        src={featured.featured_image} 
                        alt={featured.title} 
+                       fill
+                       sizes="(max-width: 768px) 100vw, 50vw"
+                       loading="lazy"
                        className="relative w-full h-full object-cover rounded-2xl border border-slate-100 shadow-lg"
                       />
                     </div>
@@ -119,8 +123,8 @@ export default async function BlogPage() {
               >
                 <div className="h-1.5 bg-slate-100 group-hover:gradient-teal transition-all duration-500" />
                 {post.featured_image && (
-                  <div className="aspect-video w-full overflow-hidden border-b border-slate-50">
-                    <img src={post.featured_image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <div className="aspect-video w-full overflow-hidden border-b border-slate-50 relative">
+                    <Image src={post.featured_image} alt={post.title} fill sizes="(max-width: 768px) 100vw, 33vw" loading="lazy" className="object-cover group-hover:scale-105 transition-transform duration-700" />
                   </div>
                 )}
                 <div className="p-7 flex flex-col flex-1">

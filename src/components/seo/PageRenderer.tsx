@@ -5,7 +5,6 @@ import { ServiceSection } from "@/components/seo/ServiceSection";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { NearbyLocations } from "@/components/seo/NearbyLocations";
 import { LocalServicesLinks } from "@/components/seo/LocalServicesLinks";
-import { BreadcrumbNav } from "@/components/seo/BreadcrumbNav";
 import { generateLocalBusinessSchema, generateServiceSchema } from "@/lib/seo/schema";
 import { CtaBand } from "@/components/sections/CtaBand";
 import type { Metadata } from "next";

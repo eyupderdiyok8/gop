@@ -1,10 +1,19 @@
-"use client";
-
+import type { Metadata } from "next";
 import { Badge } from "@/components/ui/badge";
 import { Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { MultiStepRandevuForm } from "@/components/public/MultiStepRandevuForm";
-import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "İletişim – Fiyat Teklifi & Randevu | SuArıtmaServis34 Gaziosmanpaşa",
+  description:
+    "Gaziosmanpaşa ve çevre ilçelerde su arıtma servisi için bize ulaşın. Telefon: 0553 114 27 34, WhatsApp destek hattı ve online randevu formu ile 7/24 hizmetinizdeyiz.",
+  openGraph: {
+    title: "İletişim – SuArıtmaServis34 Gaziosmanpaşa",
+    description:
+      "Su arıtma satış, montaj, bakım ve acil servis için bize ulaşın. Telefon ve WhatsApp üzerinden hızlı destek.",
+  },
+};
 
 const contactItems = [
   {

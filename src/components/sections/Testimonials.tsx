@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Star, Quote, Play, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
@@ -122,20 +123,26 @@ export function Testimonials() {
                   aria-label={`${t.name} yorumunun fotoğrafını/videosunu görüntüle`}
                 >
                   {t.mediaType === "image" ? (
-                    <img
-                      src={t.mediaSrc}
+                    <Image
+                      src={t.mediaSrc || ""}
                       alt={`${t.name} müşteri yorumu`}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 400px"
+                      loading="lazy"
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = `https://placehold.co/600x300/1e3a5f/ffffff?text=${encodeURIComponent(t.name)}`;
                       }}
                     />
                   ) : (
                     <>
-                      <img
+                      <Image
                         src={t.mediaThumb || `https://placehold.co/600x300/1e3a5f/ffffff?text=Video+Yorum`}
                         alt={`${t.name} video yorumu`}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        fill
+                        sizes="(max-width: 768px) 100vw, 400px"
+                        loading="lazy"
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
                         onError={(e) => {
                           (e.target as HTMLImageElement).src = `https://placehold.co/600x300/1e3a5f/ffffff?text=Video`;
                         }}

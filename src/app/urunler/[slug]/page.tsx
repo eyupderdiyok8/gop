@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { Product } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +21,32 @@ import { notFound } from "next/navigation";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { ProductImageGallery } from "@/components/public/urunler/ProductImageGallery";
 
+export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const supabase = await createClient();
+  const { data: product } = await supabase
+    .from("products")
+    .select("name, tagline, description, main_image, category:product_categories(name)")
+    .eq("slug", slug)
+    .single();
+
+  if (!product) return { title: "Ürün Bulunamadı" };
+
+  const categoryName = product.category 
+    ? (Array.isArray(product.category) ? product.category[0]?.name : (product.category as any).name)
+    : undefined;
+
+  return {
+    title: `${product.name} – ${categoryName || "Su Arıtma Cihazı"} | SuArıtmaServis34`,
+    description: product.tagline || product.description?.slice(0, 160) || `${product.name} su arıtma cihazı. En uygun fiyat, ücretsiz montaj ve 2 yıl garanti ile.`,
+    openGraph: {
+      title: `${product.name} – SuArıtmaServis34`,
+      description: product.tagline || product.description?.slice(0, 160) || "",
+      images: product.main_image ? [{ url: product.main_image, width: 1200, height: 1200, alt: product.name }] : [],
+    },
+  };
+}
+
 interface ProductPageProps {
    params: Promise<{ slug: string }>;
 }
@@ -31,8 +58,8 @@ const iconMap: Record<string, any> = {
    settings: Settings,
 };
 
-// Sayfanın güncel kalmasını sağla
-export const revalidate = 0;
+// Sayfanın periyodik olarak güncellenmesini sağla (1 saat)
+export const revalidate = 3600;
 
 export default async function ProductDetailPage({ params }: ProductPageProps) {
    const { slug } = await params;

@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -46,10 +47,12 @@ export async function FeaturedProducts() {
                 <div className="relative aspect-square overflow-hidden bg-white">
                   <div className="absolute inset-0 bg-dots opacity-20 pointer-events-none" />
                   {product.main_image ? (
-                    <img
+                    <Image
                       src={product.main_image}
                       alt={product.name}
-                      className="w-full h-full object-contain p-8 group-hover/card:scale-110 transition-transform duration-700"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-contain p-8 group-hover/card:scale-110 transition-transform duration-700"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center opacity-20">

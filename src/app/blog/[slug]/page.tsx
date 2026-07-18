@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
+import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, ArrowLeft } from "lucide-react";
@@ -9,7 +10,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { ShareButton } from "@/components/public/blog/ShareButton";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -143,11 +144,14 @@ export default async function BlogPostPage({ params }: Props) {
         <div className="max-w-4xl mx-auto">
           <div className="bg-white rounded-[2rem] shadow-2xl shadow-brand-navy/5 border border-white overflow-hidden">
             {blog.featured_image && (
-              <div className="aspect-video md:aspect-[16/7] w-full overflow-hidden">
-                <img 
+              <div className="aspect-video md:aspect-[16/7] w-full overflow-hidden relative">
+                <Image 
                   src={blog.featured_image} 
                   alt={blog.title} 
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 900px"
+                  loading="lazy"
+                  className="object-cover"
                 />
               </div>
             )}
@@ -170,7 +174,7 @@ export default async function BlogPostPage({ params }: Props) {
               <div className="mt-20 pt-10 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-6">
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 rounded-full gradient-teal flex items-center justify-center shadow-inner">
-                    <img src="/logo-icon.png" className="w-7 h-7 shadow-sm" alt="SuArıtmaServis34" />
+                    <Image src="/logo-icon.png" width={28} height={28} className="shadow-sm" alt="SuArıtmaServis34" />
                   </div>
                   <div>
                     <p className="text-brand-navy font-bold text-lg">SuArıtmaServis34 Uzman Ekibi</p>

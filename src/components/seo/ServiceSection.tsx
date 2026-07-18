@@ -10,19 +10,6 @@ interface Props {
   featuredImage?: string;
 }
 
-function spin(text: string) {
-  const regex = /\{([^{}]*)\}/g;
-  let result = text;
-  let match;
-  while ((match = regex.exec(result)) !== null) {
-    const choices = match[1].split("|");
-    const choice = choices[Math.floor(Math.random() * choices.length)];
-    result = result.replace(match[0], choice);
-    regex.lastIndex = 0; // reset regex state
-  }
-  return result;
-}
-
 const STOCK_IMAGES = [
   "https://images.unsplash.com/photo-1559839734-2b71f1e3c770?q=80&w=1200&auto=format&fit=crop", // Clean kitchen faucet
   "https://images.unsplash.com/photo-1626285861696-9f0bf5a49c6d?q=80&w=1200&auto=format&fit=crop", // High-end glass of water
@@ -41,8 +28,8 @@ function getHash(str: string) {
 }
 
 export function ServiceSection({ locationName, serviceName, customContent, serviceType, tdsValue, featuredImage }: Props) {
-  const baseTitle = spin(`{Profesyonel|Güvenilir|Uzman|Kaliteli} ${locationName} ${serviceName} {Hizmeti|Merkezimiz|Ekibimiz}`);
-  const baseDesc = spin(`{Sizlere|Bölge halkına|Siz değerli müşterilerimize} ${locationName} bölgesinde İstanbul’un yoğun kireçli suyuna karşı {en iyi|en hızlı|garantili} ${serviceName.toLowerCase()} hizmetini {sunmaktan|sağlamaktan} gurur duyuyoruz. {Hemen arayın|Randevu alın|Bize ulaşın}, {hızlı çözüm|aynı gün servis|hızlı teklif} imkânından {faydalanın|yararlanın}. Gaziosmanpaşa ve tüm çevre ilçelere servis veriyoruz.`);
+  const baseTitle = `${locationName} ${serviceName} Hizmeti`;
+  const baseDesc = `${locationName} bölgesinde İstanbul'un yoğun kireçli suyuna karşı profesyonel ${serviceName.toLowerCase()} hizmeti sunuyoruz. Sertifikalı teknisyenlerimizle aynı gün servis, garantili işçilik ve uygun fiyat avantajıyla sizlere hizmet vermekten mutluluk duyuyoruz. Gaziosmanpaşa merkez olmak üzere Sultangazi, Eyüp, Bağcılar ve tüm çevre ilçelere 7/24 servis desteği sağlıyoruz. Bize ulaşın, aynı gün hızlı çözüm imkânından yararlanın.`;
 
   // Deterministik olarak o sayfaya özel hep aynı görseli atar
   const imageIndex = getHash(`${locationName}-${serviceName}`) % STOCK_IMAGES.length;

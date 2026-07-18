@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -58,7 +59,7 @@ export async function BlogPreview() {
               <div className="h-1.5 bg-white/5 group-hover:bg-brand-aqua transition-all duration-500" />
               {post.featured_image && (
                 <div className="aspect-video w-full overflow-hidden border-b border-white/5 relative">
-                  <img src={post.featured_image} alt={post.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                  <Image src={post.featured_image} alt={post.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover group-hover:scale-110 transition-transform duration-700" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0f1c26] to-transparent opacity-40" />
                 </div>
               )}
