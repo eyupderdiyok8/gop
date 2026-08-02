@@ -21,10 +21,11 @@ const organizationSchema = {
   "priceRange": "₺₺",
   "address": {
     "@type": "PostalAddress",
-    "addressLocality": "Gaziosmanpaşa",
+    "addressLocality": "Sultangazi",
     "addressRegion": "İstanbul",
     "addressCountry": "TR",
-    "streetAddress": "Bağlarbaşı Mh. Adsız Nefer Cd. No:62"
+    "postalCode": "34265",
+    "streetAddress": "Sultançiftliği Mah. Eski Edirne Asfaltı Cad. No:461"
   },
   "geo": {
     "@type": "GeoCoordinates",

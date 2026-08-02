@@ -49,7 +49,7 @@ export function Footer() {
             <div className="flex flex-col gap-3 text-sm text-white/60">
               <div className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-brand-aqua mt-0.5 flex-shrink-0" />
-                <span>Bağlarbaşı Mh. Adsız Nefer Cd. No:62<br />Gaziosmanpaşa / İstanbul</span>
+                <span>Sultançiftliği Mah. Eski Edirne Asfaltı Cad. No:461<br />34265 Sultangazi / İstanbul</span>
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-brand-aqua flex-shrink-0" />

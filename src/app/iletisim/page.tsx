@@ -31,7 +31,7 @@ const contactItems = [
   {
     icon: MapPin,
     label: "Adres",
-    value: "Bağlarbaşı Mh. Adsız Nefer Cd. No:62, Gaziosmanpaşa / İstanbul",
+    value: "Sultançiftliği Mah. Eski Edirne Asfaltı Cad. No:461, 34265 Sultangazi / İstanbul",
     href: null,
   },
   {
@@ -103,7 +103,7 @@ export default function IletisimPage() {
             {/* Map embed */}
             <div className="rounded-2xl overflow-hidden border border-border h-56">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d192697.7932762524!2d28.8477596!3d41.0052331!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14caa7040068086b%3A0xe1cc1e01f4ca1567!2zSXPPhGFuYnVs!5e0!3m2!1str!2str!4v1650000000000!5m2!1str!2str"
+                src="https://www.google.com/maps?q=Sultançiftliği%20Mah.%20Eski%20Edirne%20Asfaltı%20Cad.%20No%3A461%2034265%20Sultangazi%2Fİstanbul&output=embed"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
