@@ -7,144 +7,8 @@ import { NearbyLocations } from "@/components/seo/NearbyLocations";
 import { LocalServicesLinks } from "@/components/seo/LocalServicesLinks";
 import { generateLocalBusinessSchema, generateServiceSchema } from "@/lib/seo/schema";
 import { CtaBand } from "@/components/sections/CtaBand";
+import { formatLocationName } from "@/lib/seo/locationNames";
 import type { Metadata } from "next";
-
-const TR_MAP: Record<string, string> = {
-  // İller
-  istanbul: "İstanbul",
-
-  // İstanbul İlçeleri
-  gaziosmanpasa: "Gaziosmanpaşa",
-  sultangazi: "Sultangazi",
-  eyup: "Eyüpsultan",
-  basaksehir: "Başakşehir",
-  bagcilar: "Bağcılar",
-  bayrampasa: "Bayrampaşa",
-  esenler: "Esenler",
-  gungoren: "Güngören",
-
-  // Gaziosmanpaşa Mahalleleri
-  barbaros: "Barbaros",
-  baglarbasi: "Bağlarbaşı",
-  karadeniz: "Karadeniz",
-  karayollari: "Karayolları",
-  merkez: "Merkez",
-  mevlana: "Mevlana",
-  sarigol: "Sarıgöl",
-  seyrantepe: "Seyrantepe",
-  sultanciftligi: "Sultançiftliği",
-  topcular: "Topçular",
-  turkoba: "Türkoba",
-  yesilpinar: "Yeşilpınar",
-  karlitepe: "Karlıtepe",
-  kucukkoy: "Küçükköy",
-  fevzicakmak: "Fevziçakmak",
-  ufuk: "Ufuk",
-  yenidogan: "Yenidoğan",
-  pazarici: "Pazariçi",
-  atisalani: "Atışalanı",
-  karaagac: "Karaağaç",
-
-  // Sultangazi Mahalleleri
-  cebeci: "Cebeci",
-  ugurmumcu: "Uğur Mumcu",
-  habibler: "Habibler",
-  ikitelli: "İkitelli",
-  "50-yil": "50. Yıl",
-  "75-yil": "75. Yıl",
-  cumhuriyet: "Cumhuriyet",
-  esentepe: "Esentepe",
-  "eski-habipler": "Eski Habipler",
-  ismetpasa: "İsmetpaşa",
-  malkocoglu: "Malkoçoğlu",
-  yayla: "Yayla",
-  "yunus-emre": "Yunus Emre",
-  "zubeyde-hanim": "Zübeyde Hanım",
-  gazi: "Gazi",
-
-  // Eyüp Mahalleleri
-  alibeykoy: "Alibeyköy",
-  agacli: "Ağaçlı",
-  akpinar: "Akpınar",
-  aksemsettin: "Akşemsettin",
-  circir: "Çırçır",
-  ciftalan: "Çiftalan",
-  defterdar: "Defterdar",
-  dugmeciler: "Düğmeciler",
-  emniyettepe: "Emniyettepe",
-  "eyupsultan-merkez": "Eyüpsultan Merkez",
-  gokturk: "Göktürk",
-  guzeltepe: "Güzeltepe",
-  isiklar: "Işıklar",
-  ihsaniye: "İhsaniye",
-  islambey: "İslambey",
-  karadolap: "Karadolap",
-  kemerburgaz: "Kemerburgaz",
-  mimarsinan: "Mimarsinan",
-  mithatpasa: "Mithatpaşa",
-  nisanca: "Nişanca",
-  odayeri: "Odayeri",
-  pirincci: "Pirinççi",
-  "rami-cuma": "Rami Cuma",
-  "rami-yeni": "Rami Yeni",
-  sakarya: "Sakarya",
-  silahtaraga: "Silahtarağa",
-  "5-levent": "5. Levent",
-  rami: "Rami",
-  gungorensanayi: "Güngören Sanayi",
-
-  // Bağcılar Mahalleleri
-  baris: "Barış",
-  yenimahalle: "Yenimahalle",
-  baglar: "Bağlar",
-  goztepe: "Göztepe",
-
-  // Gaziosmanpaşa ek mahalleleri
-  "barbaros-hayrettinpasa": "Barbaros Hayrettinpaşa",
-  hurriyet: "Hürriyet",
-  "kazim-karabekir": "Kazım Karabekir",
-  semsipasa: "Şemsipaşa",
-  "yeni-mahalle": "Yeni Mahalle",
-  yildiztabya: "Yıldıztabya",
-
-  // Bayrampaşa Mahalleleri
-  yildirim: "Yıldırım",
-  kartaltepe: "Kartaltepe",
-  muratpasa: "Muratpaşa",
-  altintepsi: "Altıntepsi",
-  cevatpasa: "Cevatpaşa",
-  kocatepe: "Kocatepe",
-  orta: "Orta",
-  terazidere: "Terazidere",
-  vatan: "Vatan",
-
-  // Genel
-  cumhuriyet: "Cumhuriyet",
-  hurriyet: "Hürriyet",
-  zafer: "Zafer",
-  ataturk: "Atatürk",
-  "15-temmuz": "15 Temmuz",
-  birlik: "Birlik",
-  "cifte-havuzlar": "Çifte Havuzlar",
-  davutpasa: "Davutpaşa",
-  fatih: "Fatih",
-  kemer: "Kemer",
-  menderes: "Menderes",
-  "mimar-sinan": "Mimar Sinan",
-  "namik-kemal": "Namık Kemal",
-  "nine-hatun": "Nine Hatun",
-  orucreis: "Oruçreis",
-  tuna: "Tuna",
-  "turgut-reis": "Turgut Reis",
-  "yavuz-selim": "Yavuz Selim",
-  sehitler: "Şehitler",
-  "yesil-vadi": "Yeşil Vadi",
-};
-
-function toTR(slugPart: string) {
-  if (!slugPart) return "";
-  return TR_MAP[slugPart.toLowerCase()] || (slugPart.charAt(0).toUpperCase() + slugPart.slice(1));
-}
 
 interface Props {
   params: Promise<{ il?: string; ilce?: string; mahalle_or_hizmet?: string; hizmet?: string }>;
@@ -204,8 +68,8 @@ export async function PageRenderer({ params }: Props) {
   const customPage = await getCustomPage(location.id, service?.id);
 
   const locName = location.mahalle
-    ? `${toTR(location.mahalle)} Mahallesi`
-    : (location.ilce ? toTR(location.ilce) : toTR(location.il));
+    ? `${formatLocationName(location.mahalle)} Mahallesi`
+    : (location.ilce ? formatLocationName(location.ilce) : formatLocationName(location.il));
 
   const title = customPage?.h1 || (service
     ? `${locName} ${service.ad}`
@@ -252,7 +116,7 @@ export async function PageRenderer({ params }: Props) {
   let cum = "";
   for (const s of currentSlugArr) {
     cum += `/${s}`;
-    breadcrumbs.push({ name: toTR(s), url: cum });
+    breadcrumbs.push({ name: formatLocationName(s), url: cum });
   }
   if (hizmetSlug) {
     breadcrumbs.push({ name: service!.ad, url: `${cum}/${hizmetSlug}` });
@@ -352,8 +216,8 @@ export async function generateDynamicMetadata({ params }: Props): Promise<Metada
 
   const customPage = await getCustomPage(location.id, service?.id);
   const locName = location.mahalle
-    ? `${toTR(location.mahalle)}`
-    : toTR(location.ilce);
+    ? `${formatLocationName(location.mahalle)}`
+    : formatLocationName(location.ilce);
 
   const metaTitle = customPage?.title || (service
     ? `${locName} Su Arıtma ${service.ad} | SuArıtmaServis34`

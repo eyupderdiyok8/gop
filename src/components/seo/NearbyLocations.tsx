@@ -3,6 +3,7 @@
 import { MapPin, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { formatLocationName } from "@/lib/seo/locationNames";
 
 interface Neighbor {
   il: string;
@@ -34,7 +35,9 @@ export function NearbyLocations({
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {neighbors.map((n, i) => {
-            const locName = n.mahalle ? `${n.mahalle} Mahallesi` : n.ilce;
+            const locName = n.mahalle
+              ? `${formatLocationName(n.mahalle)} Mahallesi`
+              : formatLocationName(n.ilce);
             return (
               <motion.div
                 key={n.slug}
@@ -50,7 +53,7 @@ export function NearbyLocations({
                   <div className="w-10 h-10 rounded-full bg-brand-aqua/10 flex items-center justify-center mb-3 group-hover:bg-brand-aqua/20 transition-colors">
                     <MapPin className="w-5 h-5 text-brand-aqua" />
                   </div>
-                  <h3 className="font-semibold text-sm text-foreground mb-1 group-hover:text-brand-aqua transition-colors capitalize">
+                  <h3 className="font-semibold text-sm text-foreground mb-1 group-hover:text-brand-aqua transition-colors">
                     {locName}
                   </h3>
                   <div className="mt-auto pt-3 flex items-center justify-between text-xs font-medium text-brand-aqua">
