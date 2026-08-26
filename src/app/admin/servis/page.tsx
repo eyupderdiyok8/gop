@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { ServiceRecord } from "@/lib/types";
-import { Plus, Search, Wrench, Edit2, Trash2, ChevronDown, Download } from "lucide-react";
+import { Plus, Search, Wrench, Edit2, Trash2, Download, CalendarDays, UserRound } from "lucide-react";
 import { exportToExcel } from "@/lib/exportUtils";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
@@ -176,8 +176,84 @@ export default function ServisPage() {
         />
       </div>
 
+      {/* Mobil Kartlar */}
+      <div className="md:hidden space-y-3">
+        {loading ? (
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 text-center text-slate-400 shadow-sm">
+            Yükleniyor...
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="bg-white border border-dashed border-slate-200 rounded-2xl p-8 text-center shadow-sm">
+            <Wrench className="w-9 h-9 text-slate-200 mx-auto mb-2" />
+            <p className="text-slate-400 font-medium">Servis kaydı bulunamadı</p>
+          </div>
+        ) : (
+          paginatedRecords.map((r) => (
+            <div
+              key={r.id}
+              className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_12px_30px_rgba(15,23,42,0.07)]"
+            >
+              <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand-aqua via-cyan-300 to-slate-200" />
+
+              <div className="flex items-start justify-between gap-3 pt-1">
+                <div className="flex min-w-0 items-start gap-3">
+                  <div className="mt-0.5 flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-brand-aqua/10 text-brand-aqua ring-1 ring-brand-aqua/15">
+                    <UserRound className="h-5 w-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="truncate text-xl font-bold leading-tight text-slate-950">
+                      {r.devices?.customers?.ad || r.customers?.ad || "—"}
+                    </p>
+                    <p className="mt-1 text-sm font-medium text-slate-500">
+                      {r.devices ? `${r.devices.marka} ${r.devices.model}` : "Genel Servis"}
+                    </p>
+                  </div>
+                </div>
+                <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ${STATUS_COLORS[r.durum]}`}>
+                  {STATUS_LABELS[r.durum]}
+                </span>
+              </div>
+
+              <div className="mt-4 rounded-xl bg-slate-50 px-3 py-3 ring-1 ring-slate-100">
+                <p className="text-base font-medium leading-relaxed text-slate-800">{r.aciklama}</p>
+                {r.notlar && <p className="mt-2 text-sm italic leading-relaxed text-slate-500">{r.notlar}</p>}
+              </div>
+
+              <div className="mt-4 grid gap-2 text-sm">
+                <div className="flex items-center gap-2 text-slate-500">
+                  <CalendarDays className="h-4 w-4 text-slate-400" />
+                  <span>Servis Tarihi:</span>
+                  <span className="font-semibold text-slate-800">{format(new Date(r.servis_tarihi), "d MMM yyyy", { locale: tr })}</span>
+                </div>
+                {r.sonraki_servis_tarihi && (
+                  <div className="flex items-center gap-2 rounded-xl bg-brand-aqua/10 px-3 py-2 text-brand-aqua">
+                    <CalendarDays className="h-4 w-4" />
+                    <span className="font-semibold">Sonraki Bakım Tarihi:</span>
+                    <span className="font-bold">{format(new Date(r.sonraki_servis_tarihi), "d MMM yyyy", { locale: tr })}</span>
+                  </div>
+                )}
+                {r.teknisyen && (
+                  <div className="text-slate-500">
+                    Teknisyen: <span className="font-semibold text-slate-700">{r.teknisyen}</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-4 flex justify-end gap-2 border-t border-slate-100 pt-3">
+                <button onClick={() => setFormModal({ open: true, item: r })} className="rounded-xl bg-amber-50 p-2.5 text-amber-500 transition active:scale-95">
+                  <Edit2 className="h-4 w-4" />
+                </button>
+                <button onClick={() => deleteRecord(r.id)} className="rounded-xl bg-red-50 p-2.5 text-red-500 transition active:scale-95">
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
       {/* Tablo */}
-      <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
+      <div className="hidden bg-white border border-slate-200 rounded-2xl overflow-hidden md:block">
         <div className="overflow-x-auto">
           <table className="w-full text-base md:text-sm">
             <thead>
