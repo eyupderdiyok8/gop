@@ -9,6 +9,12 @@ import { format } from "date-fns";
 import { tr } from "date-fns/locale";
 import { ServisFormModal } from "@/components/admin/servis/ServisFormModal";
 
+type ServiceRecordWithRelations = ServiceRecord & {
+  customers?: {
+    ad: string;
+  } | null;
+};
+
 const STATUS_COLORS: Record<string, string> = {
   bekliyor: "bg-amber-50 text-amber-600 border-amber-200",
   devam_ediyor: "bg-blue-50 text-blue-600 border-blue-200",
@@ -24,11 +30,11 @@ const STATUS_LABELS: Record<string, string> = {
 };
 
 export default function ServisPage() {
-  const [records, setRecords] = useState<any[]>([]);
+  const [records, setRecords] = useState<ServiceRecordWithRelations[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("tumu");
-  const [formModal, setFormModal] = useState<{ open: boolean; item?: any }>({ open: false });
+  const [formModal, setFormModal] = useState<{ open: boolean; item?: ServiceRecordWithRelations }>({ open: false });
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
 
@@ -63,6 +69,7 @@ export default function ServisPage() {
       'Açıklama': r.aciklama,
       'Teknisyen': r.teknisyen || '-',
       'Tarih': format(new Date(r.servis_tarihi), "d MMM yyyy", { locale: tr }),
+      'Sonraki Bakım Tarihi': r.sonraki_servis_tarihi ? format(new Date(r.sonraki_servis_tarihi), "d MMM yyyy", { locale: tr }) : '-',
       'Durum': STATUS_LABELS[r.durum]
     }));
     exportToExcel(data, "Servis_Kayitlari");
@@ -172,11 +179,11 @@ export default function ServisPage() {
       {/* Tablo */}
       <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full text-base md:text-sm">
             <thead>
               <tr className="border-b border-slate-200">
                 {["Müşteri / Cihaz", "Açıklama", "Teknisyen", "Tarih", "Durum", ""].map((h) => (
-                  <th key={h} className="text-left px-6 py-4 text-xs font-medium text-slate-400 uppercase tracking-wide">{h}</th>
+                  <th key={h} className="text-left px-6 py-4 text-sm md:text-xs font-medium text-slate-400 uppercase tracking-wide">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -194,10 +201,10 @@ export default function ServisPage() {
                 paginatedRecords.map((r) => (
                   <tr key={r.id} className="hover:bg-white/3 transition">
                     <td className="px-6 py-4">
-                      <p className="text-slate-900 font-medium">
+                      <p className="text-slate-900 font-semibold text-lg md:text-sm">
                         {r.devices?.customers?.ad || r.customers?.ad || "—"}
                       </p>
-                      <p className="text-xs text-slate-400 mt-0.5">
+                      <p className="text-sm md:text-xs text-slate-400 mt-0.5">
                         {r.devices ? `${r.devices.marka} ${r.devices.model}` : "Genel Servis"}
                       </p>
                     </td>
@@ -206,8 +213,13 @@ export default function ServisPage() {
                       {r.notlar && <p className="text-[10px] text-slate-400 italic mt-1 whitespace-normal">{r.notlar}</p>}
                     </td>
                     <td className="px-6 py-4 text-slate-500">{r.teknisyen ?? "—"}</td>
-                    <td className="px-6 py-4 text-slate-500 text-xs">
-                      {format(new Date(r.servis_tarihi), "d MMM yyyy", { locale: tr })}
+                    <td className="px-6 py-4 text-slate-500 text-sm md:text-xs min-w-[180px]">
+                      <p>{format(new Date(r.servis_tarihi), "d MMM yyyy", { locale: tr })}</p>
+                      {r.sonraki_servis_tarihi && (
+                        <p className="mt-1 text-sm md:text-xs font-semibold text-slate-700">
+                          Sonraki Bakım Tarihi: {format(new Date(r.sonraki_servis_tarihi), "d MMM yyyy", { locale: tr })}
+                        </p>
+                      )}
                     </td>
                     <td className="px-6 py-4">
                       <span className={`text-xs px-2.5 py-1 rounded-full border ${STATUS_COLORS[r.durum]}`}>

@@ -250,7 +250,7 @@ export function CustomerDetailClient({ customer, devices, appointments, notes: i
                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
                         {s.device ? `${s.device.marka} ${s.device.model}` : customer.ad}
                       </p>
-                      <p className="text-sm sm:text-base text-slate-900 font-medium">{s.aciklama}</p>
+                      <p className="text-base sm:text-base text-slate-900 font-medium">{s.aciklama}</p>
                       {s.notlar && (
                         <p className="text-[10px] sm:text-xs text-slate-500 mt-1 bg-slate-50 px-2 py-1 rounded inline-block border border-slate-100 italic">
                           {s.notlar}
@@ -260,8 +260,8 @@ export function CustomerDetailClient({ customer, devices, appointments, notes: i
                         <ShieldCheck className="w-3 h-3 text-brand-aqua" /> Teknisyen: {s.teknisyen}
                       </p>}
                       {s.sonraki_servis_tarihi && (
-                        <p className="text-[10px] sm:text-xs text-brand-aqua font-medium mt-1.5 flex items-center gap-1">
-                          <CalendarDays className="w-3 h-3" /> Sonraki: {format(new Date(s.sonraki_servis_tarihi), "d MMM yyyy", { locale: tr })}
+                        <p className="text-sm sm:text-xs text-brand-aqua font-semibold mt-2 flex items-center gap-1">
+                          <CalendarDays className="w-4 h-4 sm:w-3 sm:h-3" /> Sonraki Bakım Tarihi: {format(new Date(s.sonraki_servis_tarihi), "d MMM yyyy", { locale: tr })}
                         </p>
                       )}
                     </div>
