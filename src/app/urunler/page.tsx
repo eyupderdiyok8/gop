@@ -8,6 +8,9 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Ürün Kataloğu – Su Arıtma Cihazları Gaziosmanpaşa & İstanbul",
   description: "Ev, ofis ve endüstriyel su arıtma çözümleri. En iyi fiyatlar, ücretsiz montaj ve 2 yıl garantili ürünlerimizi inceleyin.",
+  alternates: {
+    canonical: "/urunler",
+  },
 };
 
 // Sayfanın periyodik olarak güncellenmesini sağla (1 saat)

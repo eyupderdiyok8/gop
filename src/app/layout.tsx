@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     "reverse osmosis istanbul",
     "su filtresi gaziosmanpaşa",
   ],
-    openGraph: {
+  openGraph: {
     type: "website",
     locale: "tr_TR",
     siteName: "SuArıtmaServis34",
@@ -56,6 +56,12 @@ export const metadata: Metadata = {
         alt: "SuArıtmaServis34 Su Arıtma Sistemleri",
       },
     ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SuArıtmaServis34 | Gaziosmanpaşa Su Arıtma",
+    description: "Gaziosmanpaşa ve çevre ilçelerde profesyonel su arıtma çözümleri.",
+    images: ["/images/su-aritma-servis34.webp"],
   },
   robots: {
     index: true,

@@ -44,6 +44,9 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
       description: product.tagline || product.description?.slice(0, 160) || "",
       images: product.main_image ? [{ url: product.main_image, width: 1200, height: 1200, alt: product.name }] : [],
     },
+    alternates: {
+      canonical: `/urunler/${slug}`,
+    },
   };
 }
 

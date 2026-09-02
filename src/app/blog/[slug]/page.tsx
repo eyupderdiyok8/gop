@@ -36,6 +36,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: blog.seo_description || blog.excerpt,
       images: blog.featured_image ? [{ url: blog.featured_image }] : [],
     },
+    alternates: {
+      canonical: `/blog/${slug}`,
+    },
   };
 }
 

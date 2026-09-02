@@ -56,6 +56,9 @@ export const metadata: Metadata = {
   title: "SuArıtmaServis34 | Gaziosmanpaşa Su Arıtma Satış, Montaj, Servis",
   description:
     "Gaziosmanpaşa ve çevre İstanbul ilçelerinde ev ve ofis tipi su arıtma cihazı satış, montaj ve periyodik bakım hizmetleri. Fiyat teklifi için hemen arayın.",
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default function HomePage() {

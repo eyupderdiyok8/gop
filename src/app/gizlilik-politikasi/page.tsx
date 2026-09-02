@@ -4,6 +4,9 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Gizlilik Politikası | SuArıtmaServis34",
   description: "SuArıtmaServis34 olarak kişisel verilerinizin güvenliği hususuna azami hassasiyet göstermekteyiz. KVKK uyumlu gizlilik politikamız.",
+  alternates: {
+    canonical: "/gizlilik-politikasi",
+  },
 };
 
 export default function GizlilikPolitikasiPage() {

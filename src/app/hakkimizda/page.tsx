@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   title: "Hakkımızda – SuArıtmaServis34 Gaziosmanpaşa Su Arıtma",
   description:
     "Gaziosmanpaşa ve çevre ilçelerde su arıtma çözümleri sunuyoruz. Sertifikalı ekip, güvenilir servis, kaliteli ürünler.",
+  alternates: {
+    canonical: "/hakkimizda",
+  },
 };
 
 const values = [

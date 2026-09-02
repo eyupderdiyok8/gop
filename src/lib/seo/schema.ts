@@ -1,20 +1,29 @@
+const SITE_URL = "https://www.suaritmaservis34.com";
+
 // Helper functions for programmatic SEO schemas
 
-export function generateLocalBusinessSchema(locationName: string, serviceName?: string, lat?: number, lng?: number, ratingScore?: number, reviewCount?: number) {
+export function generateLocalBusinessSchema(locationName: string, serviceName?: string, lat?: number, lng?: number) {
   const schema: any = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": `SuArıtmaServis34 ${locationName} ${serviceName ? serviceName : 'Su Arıtma Servisi'}`,
-    "image": "https://www.suaritmaservis34.com/og-image.jpg",
+    "@id": `${SITE_URL}/#localbusiness`,
+    "image": `${SITE_URL}/images/su-aritma-servis34.webp`,
     "description": `${locationName} bölgesinde güvenilir, 7/24 hizmetinizde su arıtma çözümleri. Gaziosmanpaşa ve tüm İstanbul'a aynı gün servis.`,
-    "url": "https://www.suaritmaservis34.com",
+    "url": SITE_URL,
     "telephone": "+905531142734",
     "priceRange": "₺₺",
     "address": {
       "@type": "PostalAddress",
-      "addressLocality": locationName,
+      "streetAddress": "Sultançiftliği Mah. Eski Edirne Asfaltı Cad. No:461",
+      "postalCode": "34265",
+      "addressLocality": "Sultangazi",
       "addressRegion": "İstanbul",
       "addressCountry": "TR"
+    },
+    "areaServed": {
+      "@type": "Place",
+      "name": locationName
     },
     "openingHoursSpecification": {
       "@type": "OpeningHoursSpecification",
@@ -25,11 +34,12 @@ export function generateLocalBusinessSchema(locationName: string, serviceName?: 
         "Thursday",
         "Friday",
         "Saturday",
-        "Sunday"
+        "Saturday"
       ],
-      "opens": "00:00",
-      "closes": "23:59"
-    }
+      "opens": "08:00",
+      "closes": "19:00"
+    },
+    "sameAs": ["https://wa.me/905531142734"]
   };
 
   if (lat && lng) {
@@ -40,21 +50,10 @@ export function generateLocalBusinessSchema(locationName: string, serviceName?: 
     };
   }
 
-  // AggregateRating for massive CTR boost
-  if (ratingScore && reviewCount) {
-    schema["aggregateRating"] = {
-      "@type": "AggregateRating",
-      "ratingValue": ratingScore,
-      "reviewCount": reviewCount,
-      "bestRating": "5",
-      "worstRating": "1"
-    };
-  }
-
   return schema;
 }
 
-export function generateServiceSchema(serviceName: string, serviceDesc: string, providerName: string, areaServed: string, ratingScore?: number, reviewCount?: number) {
+export function generateServiceSchema(serviceName: string, serviceDesc: string, providerName: string, areaServed: string) {
   const schema: any = {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -71,16 +70,6 @@ export function generateServiceSchema(serviceName: string, serviceDesc: string, 
       "name": areaServed
     }
   };
-
-  if (ratingScore && reviewCount) {
-    schema["aggregateRating"] = {
-      "@type": "AggregateRating",
-      "ratingValue": ratingScore,
-      "reviewCount": reviewCount,
-      "bestRating": "5",
-      "worstRating": "1"
-    };
-  }
 
   return schema;
 }

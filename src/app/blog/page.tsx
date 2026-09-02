@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   title: "Blog – Su Arıtma Rehberi | SuArıtmaServis34 Gaziosmanpaşa",
   description:
     "Gaziosmanpaşa su kalitesi, filtre bakımı, RO sistemleri ve su arıtma teknolojileri hakkında uzman bilgisi.",
+  alternates: {
+    canonical: "/blog",
+  },
 };
 
 const categoryColors: Record<string, string> = {

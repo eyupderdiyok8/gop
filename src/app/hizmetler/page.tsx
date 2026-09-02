@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   title: "Hizmetlerimiz – Su Arıtma Satış, Montaj, Bakım & Servis",
   description:
     "Gaziosmanpaşa ve çevre ilçelerde su arıtma cihazı satışı, profesyonel montaj, periyodik filtre bakımı ve acil arıza servisi. Hizmetlerimiz için bizi arayın.",
+  alternates: {
+    canonical: "/hizmetler",
+  },
 };
 
 export default function HizmetlerPage() {

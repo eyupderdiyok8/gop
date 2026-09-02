@@ -13,6 +13,9 @@ export const metadata: Metadata = {
     description:
       "Su arıtma satış, montaj, bakım ve acil servis için bize ulaşın. Telefon ve WhatsApp üzerinden hızlı destek.",
   },
+  alternates: {
+    canonical: "/iletisim",
+  },
 };
 
 const contactItems = [

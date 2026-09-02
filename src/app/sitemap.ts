@@ -87,12 +87,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (!locations || locations.length === 0) return entries;
 
   // Iller (e.g. /istanbul)
-  const ilSet = new Set<string>();
-  locations.forEach((loc: any) => ilSet.add(loc.il));
-  ilSet.forEach(il => {
+  const ilMap = new Map<string, any>();
+  locations.forEach((loc: any) => {
+    if (loc.il && !ilMap.has(loc.il)) ilMap.set(loc.il, loc);
+  });
+  ilMap.forEach((loc, il) => {
     entries.push({
       url: `${baseUrl}/${il}`,
-      lastModified: new Date(),
+      lastModified: new Date(loc.created_at),
       changeFrequency: 'monthly',
       priority: 1.0,
     });
@@ -101,14 +103,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Ilceler (e.g. /istanbul/gaziosmanpasa)
   const ilceMap = new Map<string, any>();
   locations.forEach((loc: any) => {
+    if (!loc.il || !loc.ilce) return;
     const key = `${loc.il}/${loc.ilce}`;
-    if (!ilceMap.has(key)) ilceMap.set(key, { il: loc.il, ilce: loc.ilce });
+    if (!ilceMap.has(key)) ilceMap.set(key, loc);
   });
   
   ilceMap.forEach((val, key) => {
     entries.push({
       url: `${baseUrl}/${key}`,
-      lastModified: new Date(),
+      lastModified: new Date(val.created_at),
       changeFrequency: 'monthly',
       priority: 0.8,
     });
@@ -116,8 +119,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Ilce + Hizmet (e.g. /istanbul/gaziosmanpasa/su-aritma-servisi)
     services.forEach((srv: any) => {
       entries.push({
-        url: `${baseUrl}/${key}/${srv.slug}`,
-        lastModified: new Date(),
+      url: `${baseUrl}/${key}/${srv.slug}`,
+        lastModified: new Date(val.created_at),
         changeFrequency: 'monthly',
         priority: 0.7,
       });
@@ -128,8 +131,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   locations.forEach((loc: any) => {
     if (loc.mahalle) {
       entries.push({
-        url: `${baseUrl}/${loc.il}/${loc.ilce}/${loc.mahalle}`,
-        lastModified: new Date(),
+        url: `${baseUrl}/${loc.slug}`,
+        lastModified: new Date(loc.created_at),
         changeFrequency: 'monthly',
         priority: 0.6,
       });
@@ -137,8 +140,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       // Mahalle + Hizmet (e.g. /istanbul/gaziosmanpasa/sarigol/filtre-degisimi)
       services.forEach((srv: any) => {
         entries.push({
-          url: `${baseUrl}/${loc.il}/${loc.ilce}/${loc.mahalle}/${srv.slug}`,
-          lastModified: new Date(),
+          url: `${baseUrl}/${loc.slug}/${srv.slug}`,
+          lastModified: new Date(loc.created_at),
           changeFrequency: 'monthly',
           priority: 0.5,
         });

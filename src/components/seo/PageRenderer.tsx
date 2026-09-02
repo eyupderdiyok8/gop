@@ -109,8 +109,8 @@ export async function PageRenderer({ params }: Props) {
     }
   ];
 
-  const localBusinessSchema = generateLocalBusinessSchema(locName, service?.ad, location.lat, location.lng, location.rating_score, location.review_count);
-  const serviceSchemaObj = service ? generateServiceSchema(service.ad, service.aciklama, `SuArıtmaServis34 ${locName}`, locName, service.rating_score, service.review_count) : null;
+  const localBusinessSchema = generateLocalBusinessSchema(locName, service?.ad, location.lat, location.lng);
+  const serviceSchemaObj = service ? generateServiceSchema(service.ad, service.aciklama, `SuArıtmaServis34 ${locName}`, locName) : null;
 
   const breadcrumbs = [];
   let cum = "";

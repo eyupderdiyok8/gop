@@ -31,6 +31,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${service.title} | SuArıtmaServis34 Gaziosmanpaşa`,
     description: service.shortDesc,
+    alternates: {
+      canonical: `/hizmetler/${slug}`,
+    },
   };
 }
 
