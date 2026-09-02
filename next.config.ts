@@ -31,6 +31,11 @@ const nextConfig: NextConfig = {
         source: '/istanbul/bayramspasa/:path*',
         destination: '/istanbul/bayrampasa/:path*',
         permanent: true,
+      },
+      {
+        source: '/istanbul/eyup/silahtraga',
+        destination: '/istanbul/eyup/silahtaraga',
+        permanent: true,
       }
     ]
   }
