@@ -1,14 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import { motion } from "framer-motion";
 import { TrendingDown, Droplets, Users, Calculator, ChevronRight, AlertCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
-const DAMACANA_FIYAT = 180; // ₺ per 19L
 const DAMACANA_LITRE = 19;
-const YILLIK_BAKIM = 1500; // ₺ yıllık filtre/bakım maliyeti tahmini
-const DEFAULT_MAKINE_FIYAT = 10000;
 
 export function SavingsCalculator() {
   const [kisi, setKisi] = useState(4);
@@ -67,7 +65,7 @@ export function SavingsCalculator() {
   const fmt = (n: number) => Math.round(n).toLocaleString("tr-TR");
 
   return (
-    <section className="section-padding bg-background relative overflow-hidden">
+    <section className="section-padding bg-gradient-to-b from-secondary/30 via-background to-background relative overflow-hidden">
       {/* Dekoratif arka plan */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-brand-aqua/5 blur-3xl translate-x-1/3 -translate-y-1/2" />
@@ -230,13 +228,13 @@ export function SavingsCalculator() {
             </div>
 
             {/* CTA */}
-            <a
+            <Link
               href="/iletisim"
               className="flex items-center justify-between w-full bg-brand-aqua hover:bg-brand-aqua text-white rounded-2xl px-6 py-4 font-semibold transition group"
             >
               <span>Fiyat Teklifi Al</span>
               <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </a>
+            </Link>
           </motion.div>
         </div>
       </div>

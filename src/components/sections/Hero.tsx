@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Phone, ShieldCheck, Star, Droplets, MapPin, Clock } from "lucide-react";
+import { ArrowRight, Phone, Droplets, MapPin } from "lucide-react";
 import { MultiStepRandevuForm } from "@/components/public/MultiStepRandevuForm";
 
 export function Hero() {
@@ -86,19 +86,9 @@ export function Hero() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="flex flex-wrap gap-x-6 gap-y-3"
             >
-              {[
-                { icon: ShieldCheck, text: "2 Yıl Garanti" },
-                { icon: Star, text: "500+ Mutlu Müşteri" },
-                { icon: Droplets, text: "Su Değerine Göre Sistem" },
-              ].map(({ icon: Icon, text }) => (
-                <div key={text} className="flex items-center gap-2 text-white/70 text-sm">
-                  <Icon className="w-4 h-4 text-brand-aqua-light" />
-                  {text}
-                </div>
-              ))}
-              <div className="flex items-center gap-2 text-amber-300 text-sm font-semibold">
-                <Clock className="h-4 w-4" />
-                Pzt-Cmt 08:00-19:00
+              <div className="flex items-center gap-2 text-white/70 text-sm">
+                <Droplets className="w-4 h-4 text-brand-aqua-light" />
+                Su Değerine Göre Sistem
               </div>
             </motion.div>
           </div>

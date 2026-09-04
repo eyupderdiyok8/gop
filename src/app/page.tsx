@@ -1,7 +1,6 @@
 import { Hero } from "@/components/sections/Hero";
 import { Features } from "@/components/sections/Features";
 import { Services } from "@/components/sections/Services";
-import { Stats } from "@/components/sections/Stats";
 import { FeaturedProducts } from "@/components/sections/FeaturedProducts";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { BlogPreview } from "@/components/sections/BlogPreview";
@@ -78,7 +77,6 @@ export default function HomePage() {
       <Features />
       <DeviceRenewal />
       <FeaturedProducts />
-      <Stats />
       <SavingsCalculator />
       <Testimonials />
       <BlogPreview />

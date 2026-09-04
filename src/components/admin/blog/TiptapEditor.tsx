@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
+import YoutubeExtension from "@tiptap/extension-youtube";
 import { Table } from "@tiptap/extension-table";
 import { TableRow } from "@tiptap/extension-table-row";
 import { TableHeader } from "@tiptap/extension-table-header";
@@ -21,6 +22,7 @@ import {
   Heading2, 
   Heading3, 
   ImageIcon, 
+  Video,
   LinkIcon,
   Table as TableIcon,
   PlusSquare,
@@ -41,6 +43,17 @@ export function TiptapEditor({ content, onChange }: TiptapEditorProps) {
     Image.configure({
       HTMLAttributes: {
         class: "rounded-lg max-w-full h-auto my-4",
+      },
+    }),
+    YoutubeExtension.configure({
+      controls: true,
+      nocookie: true,
+      allowFullscreen: true,
+      width: 1280,
+      height: 720,
+      HTMLAttributes: {
+        loading: "lazy",
+        title: "YouTube video oynatıcı",
       },
     }),
     Link.configure({
@@ -81,7 +94,7 @@ export function TiptapEditor({ content, onChange }: TiptapEditorProps) {
     },
     editorProps: {
       attributes: {
-        class: "prose prose-slate max-w-none min-h-[300px] h-[500px] max-h-[500px] overflow-y-auto p-4 focus:outline-none text-slate-900 [&_p]:text-slate-700 [&_h1]:text-slate-900 [&_h2]:text-slate-900 [&_h3]:text-slate-900 [&_li]:text-slate-700 [&_strong]:text-slate-900 [&_ul]:text-slate-700 [&_ol]:text-slate-700 [&_td]:text-slate-800 [&_th]:text-slate-900",
+        class: "blog-editor-content prose prose-slate max-w-none min-h-[300px] h-[500px] max-h-[500px] overflow-y-auto p-4 focus:outline-none text-slate-900 [&_p]:text-slate-700 [&_h1]:text-slate-900 [&_h2]:text-slate-900 [&_h3]:text-slate-900 [&_li]:text-slate-700 [&_strong]:text-slate-900 [&_ul]:text-slate-700 [&_ol]:text-slate-700 [&_td]:text-slate-800 [&_th]:text-slate-900",
       },
     },
   });
@@ -139,6 +152,23 @@ export function TiptapEditor({ content, onChange }: TiptapEditorProps) {
     }
 
     editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
+  };
+
+  const addYoutubeVideo = () => {
+    const url = window.prompt("YouTube video bağlantısını giriniz:");
+    if (!url) return;
+
+    const isYoutubeUrl = /^https?:\/\/(?:www\.|m\.|music\.)?(?:youtube\.com\/|youtu\.be\/)/i.test(url.trim());
+    if (!isYoutubeUrl) {
+      window.alert("Geçerli bir YouTube bağlantısı giriniz.");
+      return;
+    }
+
+    editor
+      .chain()
+      .focus()
+      .setYoutubeVideo({ src: url.trim(), width: 1280, height: 720 })
+      .run();
   };
 
   return (
@@ -224,9 +254,20 @@ export function TiptapEditor({ content, onChange }: TiptapEditorProps) {
           variant="ghost"
           size="icon-sm"
           onClick={addImage}
+          title="Görsel Ekle"
           className="text-slate-500 hover:text-slate-900"
         >
           <ImageIcon className="w-4 h-4" />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          onClick={addYoutubeVideo}
+          title="YouTube Videosu Ekle"
+          className="text-slate-500 hover:text-red-600"
+        >
+          <Video className="w-4 h-4" />
         </Button>
         <Button
           type="button"

@@ -37,13 +37,6 @@ const values = [
   },
 ];
 
-const team = [
-  { name: "Ali Kaya", title: "Kurucu & Genel Müdür", exp: "15 yıl" },
-  { name: "Murat Şahin", title: "Teknik Servis Müdürü", exp: "10 yıl" },
-  { name: "Zeynep Arslan", title: "Satış & Müşteri Hizmetleri", exp: "6 yıl" },
-  { name: "Can Yıldırım", title: "Baş Teknisyen", exp: "8 yıl" },
-];
-
 export default function HakkimizdaPage() {
   return (
     <>
@@ -90,11 +83,10 @@ export default function HakkimizdaPage() {
             </Button>
           </div>
           {/* Stats grid */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {[
               { value: "2016", label: "Kuruluş Yılı" },
-              { value: "500+", label: "Mutlu Müşteri" },
-              { value: "2", label: "Hizmet Noktası" },
+              { value: "1", label: "Hizmet Noktası" },
               { value: "10+", label: "Yıllık Deneyim" },
             ].map((s) => (
               <div key={s.label} className="rounded-2xl border border-border p-6 bg-card text-center hover:border-brand-aqua/30 transition-colors">
@@ -123,34 +115,6 @@ export default function HakkimizdaPage() {
                 </div>
                 <h3 className="font-heading font-semibold text-brand-navy mb-2">{v.title}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">{v.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Team */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <p className="text-brand-aqua font-semibold text-sm uppercase tracking-widest mb-3">Ekibimiz</p>
-            <h2 className="font-heading font-bold text-3xl sm:text-4xl text-brand-navy">
-              Uzman Kadromuz
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {team.map((member) => (
-              <div key={member.name} className="text-center rounded-2xl border border-border bg-card p-6 hover:border-brand-aqua/30 transition-colors">
-                <div className="w-16 h-16 rounded-full gradient-navy flex items-center justify-center mx-auto mb-4">
-                  <span className="text-white font-heading font-bold text-2xl">
-                    {member.name.charAt(0)}
-                  </span>
-                </div>
-                <h3 className="font-heading font-semibold text-brand-navy">{member.name}</h3>
-                <p className="text-muted-foreground text-sm mt-1 mb-2">{member.title}</p>
-                <Badge variant="outline" className="text-xs text-brand-aqua border-brand-aqua/30">
-                  {member.exp} deneyim
-                </Badge>
               </div>
             ))}
           </div>

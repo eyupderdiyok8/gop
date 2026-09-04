@@ -5,7 +5,7 @@ import { tr } from "date-fns/locale";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, ArrowLeft, ArrowRight, MapPin, Phone } from "lucide-react";
+import { Calendar, Clock, ArrowLeft, ArrowRight, MapPin, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ShareButton } from "@/components/public/blog/ShareButton";
@@ -187,12 +187,12 @@ export default async function BlogPostPage({ params }: Props) {
               <TableOfContents headings={headings} />
 
               <div 
-                className="prose prose-slate prose-lg max-w-none 
+                className="blog-content prose prose-slate prose-lg max-w-none
                   prose-headings:font-heading prose-headings:font-bold prose-headings:text-brand-navy
                   prose-h2:text-3xl prose-h2:mt-12 
                   prose-p:text-slate-600 prose-p:leading-relaxed
                   prose-strong:text-brand-navy
-                  prose-img:rounded-2xl prose-img:shadow-lg prose-a:text-brand-aqua hover:prose-a:text-brand-aqua-dark transition-colors"
+                  prose-img:rounded-lg prose-img:shadow-md prose-a:text-brand-aqua hover:prose-a:text-brand-aqua-dark transition-colors"
                 dangerouslySetInnerHTML={{ __html: contentWithIds }}
               />
 
@@ -280,13 +280,18 @@ export default async function BlogPostPage({ params }: Props) {
                   Cihazınız için servis mi gerekiyor?
                 </h2>
                 <p className="mt-3 text-sm leading-relaxed text-white/75">
-                  Sultangazi ve İstanbul Avrupa Yakası için montaj, bakım ve filtre değişimi talebi oluşturun.
+                  Sultangazi ve İstanbul Avrupa Yakası için montaj, bakım ve filtre değişimi hakkında WhatsApp&apos;tan bilgi alın.
                 </p>
-                <Button asChild className="mt-6 w-full bg-brand-aqua text-brand-navy hover:bg-white">
-                  <Link href="/iletisim" className="flex items-center justify-center gap-2">
-                    <Phone className="h-4 w-4" /> Servis Talebi Oluştur
+                <Button asChild className="mt-6 w-full bg-[#25D366] text-white hover:bg-[#1fb85a]">
+                  <a
+                    href="https://wa.me/905531142734?text=Merhaba%2C%20blog%20yaz%C4%B1n%C4%B1z%C4%B1%20okudum.%20Su%20ar%C4%B1tma%20servisi%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2"
+                  >
+                    <MessageCircle className="h-4 w-4" /> WhatsApp&apos;tan Yazın
                     <ArrowRight className="h-4 w-4" />
-                  </Link>
+                  </a>
                 </Button>
               </div>
             </section>

@@ -117,7 +117,7 @@ export function Testimonials() {
               {t.mediaType && t.mediaSrc && (
                 <button
                   onClick={() => setLightbox({ src: t.mediaSrc!, type: t.mediaType!, vertical: t.mediaType === "video" && t.mediaSrc?.includes("zjKagH_Oygg") })}
-                  className="relative w-full h-44 bg-muted overflow-hidden group block"
+                  className="relative w-full h-56 sm:h-64 lg:h-56 bg-muted/70 overflow-hidden group block"
                   aria-label={`${t.name} yorumunun fotoğrafını/videosunu görüntüle`}
                 >
                   {t.mediaType === "image" ? (
@@ -127,7 +127,7 @@ export function Testimonials() {
                       fill
                       sizes="(max-width: 768px) 100vw, 400px"
                       loading="lazy"
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="object-contain group-hover:scale-[1.02] transition-transform duration-300"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = `https://placehold.co/600x300/1e3a5f/ffffff?text=${encodeURIComponent(t.name)}`;
                       }}
@@ -213,10 +213,13 @@ export function Testimonials() {
               onClick={e => e.stopPropagation()}
             >
               {lightbox.type === "image" ? (
-                <img
+                <Image
                   src={lightbox.src}
                   alt="Müşteri yorumu"
-                  className="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl"
+                  width={1200}
+                  height={1600}
+                  sizes="100vw"
+                  className="w-auto max-w-full h-auto max-h-[85vh] object-contain rounded-xl shadow-2xl"
                 />
               ) : (
                 <div className="relative w-full" style={{ paddingTop: lightbox.vertical ? "177.78%" : "56.25%" }}>
