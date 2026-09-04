@@ -95,7 +95,7 @@ export function HeroSection({ title, subtitle, tdsValue, locationName, breadcrum
                 alt={`${locationName} Su Arıtma`} 
                 width={1200}
                 height={675}
-                loading="lazy"
+                priority
                 className="w-full h-auto object-cover opacity-90 group-hover:opacity-100 transition-opacity"
                />
                <div className="absolute inset-0 bg-gradient-to-t from-brand-navy/60 to-transparent pointer-events-none" />
@@ -110,11 +110,12 @@ export function HeroSection({ title, subtitle, tdsValue, locationName, breadcrum
             </div>
             <div className="text-left">
               <p className="text-white/60 text-xs font-semibold uppercase tracking-wider">
-                Bölgesel Su Sertlik Durumu
+                Bölgesel TDS Göstergesi
               </p>
               <p className="text-white font-bold text-lg">
-                <span className="text-amber-300">{tdsValue} TDS</span> Ortalama Seviye
+                <span className="text-amber-300">Yaklaşık {tdsValue} ppm</span> TDS
               </p>
+              <p className="text-white/50 text-xs">Su sertliği ölçümü değildir</p>
             </div>
           </div>
         )}

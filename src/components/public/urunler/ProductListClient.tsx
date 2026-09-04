@@ -5,6 +5,7 @@ import { Product, ProductCategory } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { Check, ArrowRight, Droplets } from "lucide-react";
 import Link from "next/link";
+import { formatTechnicalText } from "@/lib/products/formatTechnicalText";
 
 interface ProductListClientProps {
   initialProducts: (Product & { category: ProductCategory | null })[];
@@ -72,7 +73,7 @@ export function ProductListClient({ initialProducts, categories }: ProductListCl
                     {product.main_image ? (
                       <img 
                         src={product.main_image} 
-                        alt={product.name}
+                        alt={formatTechnicalText(product.name)}
                         className="w-full h-full object-contain p-8 group-hover:scale-110 transition-transform duration-700"
                       />
                     ) : (
@@ -102,7 +103,7 @@ export function ProductListClient({ initialProducts, categories }: ProductListCl
                         {product.category?.name}
                       </span>
                       <h3 className="text-2xl font-heading font-bold text-brand-navy mb-2 group-hover:text-brand-aqua transition-colors leading-tight text-brand-navy">
-                        {product.name}
+                        {formatTechnicalText(product.name)}
                       </h3>
                       <p className="text-sm text-muted-foreground line-clamp-2 italic">
                         {product.tagline}
@@ -115,7 +116,7 @@ export function ProductListClient({ initialProducts, categories }: ProductListCl
                           <div className="w-5 h-5 rounded-full bg-brand-aqua/10 flex items-center justify-center flex-shrink-0">
                             <Check className="w-3 h-3 text-brand-aqua" />
                           </div>
-                          {spec}
+                          {formatTechnicalText(spec)}
                         </li>
                       ))}
                     </ul>

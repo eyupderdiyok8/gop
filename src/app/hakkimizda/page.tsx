@@ -6,9 +6,9 @@ import Link from "next/link";
 import { CtaBand } from "@/components/sections/CtaBand";
 
 export const metadata: Metadata = {
-  title: "Hakkımızda – SuArıtmaServis34 Gaziosmanpaşa Su Arıtma",
+  title: "Hakkımızda | SuArıtmaServis34 Sultangazi",
   description:
-    "Gaziosmanpaşa ve çevre ilçelerde su arıtma çözümleri sunuyoruz. Sertifikalı ekip, güvenilir servis, kaliteli ürünler.",
+    "2016'dan beri Sultangazi ve İstanbul Avrupa Yakası'nda su arıtma cihazı, montaj, filtre değişimi ve teknik servis hizmetleri sunuyoruz.",
   alternates: {
     canonical: "/hakkimizda",
   },
@@ -28,7 +28,7 @@ const values = [
   {
     icon: MapPin,
     title: "Bölgeye Hakimiz",
-    desc: "Gaziosmanpaşa ve çevre ilçe su şebekesini iyi biliriz. İstanbul'un yoğun kireçli suyuna yerel çözümler.",
+    desc: "Sultangazi ve yakın ilçelerdeki farklı bina, basınç ve kullanım koşullarına uygun yerel çözümler sunuyoruz.",
   },
   {
     icon: Heart,
@@ -52,13 +52,13 @@ export default function HakkimizdaPage() {
         <div className="absolute inset-0 bg-dots opacity-20 pointer-events-none" />
         <div className="relative max-w-4xl mx-auto text-center">
           <Badge className="mb-6 bg-white/10 text-white border-white/20 px-4 py-1.5 text-xs tracking-wide">
-            ✦ 2016'dan Beri
+            2016&apos;dan Beri
           </Badge>
           <h1 className="font-heading font-extrabold text-4xl sm:text-5xl text-white mb-5">
             Hakkımızda
           </h1>
           <p className="text-white/70 text-lg leading-relaxed">
-            Gaziosmanpaşa ve çevre ilçelerde temiz suya erişimi kolaylaştırmak için 8 yıldır çalışıyoruz.
+            2016&apos;dan beri Sultangazi ve İstanbul Avrupa Yakası&apos;nda su arıtma hizmetleri sunuyoruz.
           </p>
         </div>
       </section>
@@ -69,20 +69,20 @@ export default function HakkimizdaPage() {
           <div>
             <p className="text-brand-aqua font-semibold text-sm uppercase tracking-widest mb-3">Hikayemiz</p>
             <h2 className="font-heading font-bold text-3xl sm:text-4xl text-brand-navy mb-6">
-              Gaziosmanpaşa'ın Su Kaynağı
+              Sultangazi&apos;den Avrupa Yakası&apos;na
             </h2>
             <div className="space-y-4 text-foreground/70 leading-relaxed">
               <p>
-                2016 yılında Gaziosmanpaşa'da küçük bir ofisle başladık. İstanbul'un yoğun kireçli su sorununu yakından gördükten sonra
-                insanlara kaliteli, erişilebilir su arıtma çözümleri sunmaya karar verdik.
+                2016 yılında başladığımız yolculuğu bugün Sultançiftliği&apos;ndeki merkezimizden sürdürüyoruz. Ev ve iş yerlerinin
+                farklı su tüketimi, basınç ve bakım ihtiyaçlarına uygun çözümler geliştiriyoruz.
               </p>
               <p>
-                Bugün 500'ü aşkın mutlu müşteri ve Sultangazi, Eyüp, Bağcılar'a uzanan hizmet ağımızla bölgenin en güvenilir su arıtma
-                firması olmayı sürdürüyoruz. Ekibimiz çevre, sağlık ve teknolojiyi bir araya getiriyor.
+                Sultangazi başta olmak üzere Gaziosmanpaşa, Eyüpsultan, Bayrampaşa ve Esenler&apos;e uzanan servis ağımızla
+                cihaz satışı, montaj, filtre değişimi ve arıza tespiti hizmetleri veriyoruz.
               </p>
               <p>
-                Her ev ve işyerinin suya olan ihtiyacı farklıdır. Bu yüzden standart paket yerine, ücretsiz su analizi
-                ile size özel en doğru sistemi öneriyoruz.
+                Her ev ve iş yerinin ihtiyacı farklıdır. Bu nedenle su basıncı, TDS, sertlik ölçümü, tüketim ve kurulum alanını
+                birlikte değerlendirerek uygun sistemi öneriyoruz.
               </p>
             </div>
             <Button asChild className="mt-8 gradient-teal text-white border-0 hover:opacity-90">
@@ -95,7 +95,7 @@ export default function HakkimizdaPage() {
               { value: "2016", label: "Kuruluş Yılı" },
               { value: "500+", label: "Mutlu Müşteri" },
               { value: "2", label: "Hizmet Noktası" },
-              { value: "8+", label: "Yıllık Deneyim" },
+              { value: "10+", label: "Yıllık Deneyim" },
             ].map((s) => (
               <div key={s.label} className="rounded-2xl border border-border p-6 bg-card text-center hover:border-brand-aqua/30 transition-colors">
                 <p className="font-heading font-extrabold text-4xl text-brand-navy mb-2">{s.value}</p>

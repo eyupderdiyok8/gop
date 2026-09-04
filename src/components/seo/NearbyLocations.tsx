@@ -29,7 +29,7 @@ export function NearbyLocations({
             {currentLocationName} ve Çevresindeki Hizmet Noktalarımız
           </h2>
           <p className="text-muted-foreground">
-            Gaziosmanpaşa, Sultangazi, Eyüp ve tüm çevre ilçelerde aynı gün servis garantisi.
+            Sultangazi merkezli ekibimizle İstanbul Avrupa Yakası&apos;ndaki yakın mahalle ve ilçelere servis planlıyoruz.
           </p>
         </div>
 

@@ -7,7 +7,7 @@ const features = [
   {
     icon: MapPin,
     title: "Bölgesel Hizmet",
-    desc: "Gaziosmanpaşa ve tüm çevre ilçelerde hızlı servis ve aynı gün teslimat.",
+    desc: "Sultangazi merkezli ekiple İstanbul Avrupa Yakası'nda yerinde servis.",
   },
   {
     icon: Clock,
@@ -31,8 +31,8 @@ const features = [
   },
   {
     icon: Headphones,
-    title: "7/24 Destek",
-    desc: "WhatsApp ve telefon ile her zaman yanınızdayız.",
+    title: "Hızlı İletişim",
+    desc: "Çalışma saatlerinde WhatsApp ve telefon üzerinden destek.",
   },
 ];
 

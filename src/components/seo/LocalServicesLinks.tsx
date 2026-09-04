@@ -3,6 +3,7 @@
 import { Wrench, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { formatTechnicalText } from "@/lib/products/formatTechnicalText";
 
 interface ServiceItem {
   id: string;
@@ -45,7 +46,7 @@ export function LocalServicesLinks({
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-muted border border-border text-sm font-medium text-foreground hover:border-brand-aqua hover:bg-brand-aqua/5 transition-colors group"
               >
                 <Wrench className="w-4 h-4 text-brand-aqua" />
-                {s.ad}
+                {formatTechnicalText(s.ad)}
                 <ArrowRight className="w-3.5 h-3.5 text-muted-foreground group-hover:translate-x-1 transition-transform" />
               </Link>
             </motion.div>

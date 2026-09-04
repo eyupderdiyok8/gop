@@ -1,43 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 
 const stats = [
-  { value: 500, suffix: "+", label: "Mutlu Müşteri", desc: "Gaziosmanpaşa & İstanbul'da" },
-  { value: 8, suffix: "+", label: "Yıllık Deneyim", desc: "Sektörde güvenilir isim" },
-  { value: 98, suffix: "%", label: "Memnuniyet Oranı", desc: "Google yorumları" },
-  { value: 7, suffix: "/24", label: "Acil Servis", desc: "Aynı gün hizmet garantisi" },
+  { value: "500+", label: "Mutlu Müşteri", desc: "Sultangazi ve çevresinde" },
+  { value: "10+", label: "Yıllık Deneyim", desc: "2016'dan beri hizmet" },
+  { value: "4", label: "Temel Hizmet", desc: "Satış, montaj, bakım, servis" },
+  { value: "6 Gün", label: "Servis Planlaması", desc: "Pazartesi-Cumartesi" },
 ];
-
-function Counter({ value, suffix }: { value: number; suffix: string }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true });
-
-  useEffect(() => {
-    if (!inView) return;
-    let start = 0;
-    const duration = 1800;
-    const step = Math.ceil(value / (duration / 16));
-    const timer = setInterval(() => {
-      start += step;
-      if (start >= value) {
-        setCount(value);
-        clearInterval(timer);
-      } else {
-        setCount(start);
-      }
-    }, 16);
-    return () => clearInterval(timer);
-  }, [inView, value]);
-
-  return (
-    <span ref={ref} className="tabular-nums">
-      {count}{suffix}
-    </span>
-  );
-}
 
 export function Stats() {
   return (
@@ -71,7 +41,7 @@ export function Stats() {
               className="text-center p-6 rounded-2xl bg-white/8 border border-white/10 backdrop-blur-sm"
             >
               <p className="font-heading font-extrabold text-4xl sm:text-5xl text-white mb-1">
-                <Counter value={stat.value} suffix={stat.suffix} />
+                <span className="tabular-nums">{stat.value}</span>
               </p>
               <p className="font-semibold text-brand-aqua-light mb-1 text-sm">{stat.label}</p>
               <p className="text-white/50 text-xs">{stat.desc}</p>

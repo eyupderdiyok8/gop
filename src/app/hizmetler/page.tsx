@@ -9,7 +9,7 @@ import { SERVICES_DATA } from "@/lib/constants/services";
 export const metadata: Metadata = {
   title: "Hizmetlerimiz – Su Arıtma Satış, Montaj, Bakım & Servis",
   description:
-    "Gaziosmanpaşa ve çevre ilçelerde su arıtma cihazı satışı, profesyonel montaj, periyodik filtre bakımı ve acil arıza servisi. Hizmetlerimiz için bizi arayın.",
+    "Sultangazi ve İstanbul Avrupa Yakası'nda su arıtma cihazı satışı, montaj, periyodik filtre bakımı ve teknik servis hizmetleri.",
   alternates: {
     canonical: "/hizmetler",
   },
@@ -25,7 +25,7 @@ export default function HizmetlerPage() {
         <div className="absolute inset-0 bg-dots opacity-20 pointer-events-none" />
         <div className="relative max-w-6xl mx-auto text-center">
           <Badge className="mb-6 bg-white/10 text-white border-white/20 px-4 py-1.5 text-xs tracking-wide">
-            ✦ Gaziosmanpaşa & İstanbul Bölgesi
+            Sultangazi · İstanbul Avrupa Yakası
           </Badge>
           <h1 className="font-heading font-extrabold text-4xl sm:text-5xl text-white mb-5">
             Hizmetlerimiz
@@ -99,7 +99,7 @@ export default function HizmetlerPage() {
           </div>
           <h2 className="text-2xl font-heading font-bold text-brand-navy mb-4">Size En Uygun Hizmet Hangisi?</h2>
           <p className="text-muted-foreground max-w-xl mx-auto mb-8">
-            Cihazınızın markası ne olursa olsun, Gaziosmanpaşa ve tüm çevre ilçelere profesyonel servis desteği sağlıyoruz.
+            Cihazınızın markası ne olursa olsun, Sultangazi ve İstanbul Avrupa Yakası&apos;nda servis desteği sağlıyoruz.
           </p>
           <Button asChild variant="outline" className="rounded-full px-8">
             <Link href="/iletisim">Bize Danışın</Link>

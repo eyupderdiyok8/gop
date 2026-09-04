@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Phone, ArrowRight, MessageCircle } from "lucide-react";
+import { Phone, ArrowRight } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 
 export function CtaBand() {
@@ -22,15 +22,15 @@ export function CtaBand() {
           className="text-center"
         >
           <h2 className="font-heading font-extrabold text-3xl sm:text-4xl lg:text-5xl text-white mb-4">
-            7/24 Yanınızdayız
+            Servis Talebinizi Hızla Planlayalım
           </h2>
           <p className="text-white/80 text-lg max-w-xl mx-auto mb-4 leading-relaxed">
-            Gaziosmanpaşa ve çevre semtlerde <strong>aynı gün servis garantisi</strong> ile hızlı çözüm sunuyoruz.
-            Günde 24 saat, haftada 7 gün ulaşılabilir tek su arıtma firmasıyız.
+            Sultangazi ve İstanbul Avrupa Yakası&apos;nda montaj, bakım, filtre değişimi ve arıza taleplerini
+            uygunluk durumuna göre aynı gün planlıyoruz.
           </p>
           <div className="inline-flex items-center gap-2 bg-white/15 rounded-full px-5 py-2 mb-8">
             <span className="text-amber-300 text-lg">⚡</span>
-            <span className="text-white text-sm font-semibold">Arayan her müşteriye gün içinde dönüş yapıyoruz</span>
+            <span className="text-white text-sm font-semibold">Pazartesi-Cumartesi 08:00-19:00 saatlerinde hizmet</span>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -72,7 +72,7 @@ export function CtaBand() {
           </div>
 
           <p className="text-white/60 text-sm mt-6">
-            Aynı gün servis garantisi · 7/24 acil destek
+            Sultangazi merkezli ekip · İstanbul Avrupa Yakası servis ağı
           </p>
         </motion.div>
       </div>

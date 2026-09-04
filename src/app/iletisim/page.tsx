@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import { Badge } from "@/components/ui/badge";
-import { Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
+import { Phone, MapPin, Clock } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { MultiStepRandevuForm } from "@/components/public/MultiStepRandevuForm";
 
 export const metadata: Metadata = {
-  title: "İletişim – Fiyat Teklifi & Randevu | SuArıtmaServis34 Gaziosmanpaşa",
+  title: "İletişim ve Servis Randevusu | SuArıtmaServis34 Sultangazi",
   description:
-    "Gaziosmanpaşa ve çevre ilçelerde su arıtma servisi için bize ulaşın. Telefon: 0553 114 27 34, WhatsApp destek hattı ve online randevu formu ile 7/24 hizmetinizdeyiz.",
+    "Sultangazi ve İstanbul Avrupa Yakası'nda su arıtma servisi için telefon, WhatsApp veya online randevu formuyla bize ulaşın. Pzt-Cmt 08:00-19:00.",
   openGraph: {
-    title: "İletişim – SuArıtmaServis34 Gaziosmanpaşa",
+    title: "İletişim – SuArıtmaServis34 Sultangazi",
     description:
       "Su arıtma satış, montaj, bakım ve acil servis için bize ulaşın. Telefon ve WhatsApp üzerinden hızlı destek.",
   },
@@ -59,7 +59,7 @@ export default function IletisimPage() {
             İletişim
           </h1>
           <p className="text-white/70 text-lg leading-relaxed">
-            Gaziosmanpaşa ve çevre ilçelerde su arıtma hizmetleri için randevu alın,
+            Sultangazi ve İstanbul Avrupa Yakası&apos;nda su arıtma hizmetleri için randevu alın,
             24 saat içinde dönüş yapıyoruz.
           </p>
         </div>

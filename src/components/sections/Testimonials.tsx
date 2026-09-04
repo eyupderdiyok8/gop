@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, Quote, Play, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { Star, Quote, Play, X } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
@@ -74,8 +74,6 @@ const testimonials: Testimonial[] = [
 
 export function Testimonials() {
   const [lightbox, setLightbox] = useState<{ src: string; type: "image" | "video"; vertical?: boolean } | null>(null);
-  const mediaItems = testimonials.filter(t => t.mediaType && t.mediaSrc);
-
   return (
     <section className="section-padding bg-muted/40">
       <div className="container-tight">
@@ -93,14 +91,14 @@ export function Testimonials() {
             Onlar Anlatsın
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto leading-relaxed">
-            Gaziosmanpaşa ve çevre semtlerdeki yüzlerce müşterimizden gelen gerçek deneyimler.
+            Sultangazi ve İstanbul Avrupa Yakası&apos;ndaki müşterilerimizin servis deneyimleri.
           </p>
           <div className="flex items-center justify-center gap-2 mt-4">
             {[1, 2, 3, 4, 5].map(i => (
               <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
             ))}
             <span className="ml-2 font-heading font-bold text-brand-navy">4.9</span>
-            <span className="text-muted-foreground text-sm">/ Google'da 120+ yorum</span>
+            <span className="text-muted-foreground text-sm">/ Google&apos;da 120+ yorum</span>
           </div>
         </motion.div>
 
@@ -162,7 +160,7 @@ export function Testimonials() {
 
               <div className="p-6">
                 <Quote className="w-8 h-8 text-brand-aqua/25 mb-4" />
-                <p className="text-foreground/75 text-sm leading-relaxed mb-5">"{t.text}"</p>
+                <p className="text-foreground/75 text-sm leading-relaxed mb-5">&ldquo;{t.text}&rdquo;</p>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full gradient-navy flex items-center justify-center flex-shrink-0">

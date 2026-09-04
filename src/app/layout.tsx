@@ -25,13 +25,16 @@ export const metadata: Metadata = {
     apple: "/logo.png",
   },
   title: {
-    default: "SuArıtmaServis34 | Gaziosmanpaşa Su Arıtma Servisi",
+    default: "SuArıtmaServis34 | Sultangazi Su Arıtma Servisi",
     template: "%s | SuArıtmaServis34",
   },
   description:
-    "SuArıtmaServis34: Gaziosmanpaşa ve çevre ilçelerde su arıtma cihazı satış, kurulum ve periyodik bakım hizmetleri. Hızlı servis, profesyonel montaj, garanti kapsamlı servis.",
+    "Sultangazi merkezli su arıtma cihazı satışı, montaj, filtre değişimi ve teknik servis. İstanbul Avrupa Yakası'nda yerinde servis desteği.",
   keywords: [
     "suaritmagop",
+    "sultangazi su arıtma",
+    "sultangazi su arıtma servisi",
+    "istanbul avrupa yakası su arıtma",
     "su arıtma gaziosmanpaşa",
     "su arıtma istanbul",
     "su arıtma cihazı",
@@ -45,9 +48,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "tr_TR",
     siteName: "SuArıtmaServis34",
-    title: "SuArıtmaServis34 | Gaziosmanpaşa Su Arıtma",
+    title: "SuArıtmaServis34 | Sultangazi Su Arıtma Servisi",
     description:
-      "Gaziosmanpaşa ve çevre ilçelerde profesyonel su arıtma çözümleri. Satış, montaj ve servis.",
+      "Sultangazi ve İstanbul Avrupa Yakası'nda su arıtma cihazı satışı, montaj, filtre değişimi ve teknik servis.",
     images: [
       {
         url: "https://www.suaritmaservis34.com/images/su-aritma-servis34.webp",
@@ -59,8 +62,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "SuArıtmaServis34 | Gaziosmanpaşa Su Arıtma",
-    description: "Gaziosmanpaşa ve çevre ilçelerde profesyonel su arıtma çözümleri.",
+    title: "SuArıtmaServis34 | Sultangazi Su Arıtma Servisi",
+    description: "Sultangazi merkezli su arıtma cihazı, montaj, bakım ve teknik servis hizmetleri.",
     images: ["/images/su-aritma-servis34.webp"],
   },
   robots: {

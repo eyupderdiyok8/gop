@@ -1,17 +1,16 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Clock, Calendar, ArrowRight } from "lucide-react";
+import { Clock, Calendar } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
 
 export const metadata: Metadata = {
-  title: "Blog – Su Arıtma Rehberi | SuArıtmaServis34 Gaziosmanpaşa",
+  title: "Su Arıtma Rehberi | Sultangazi ve İstanbul Avrupa Yakası",
   description:
-    "Gaziosmanpaşa su kalitesi, filtre bakımı, RO sistemleri ve su arıtma teknolojileri hakkında uzman bilgisi.",
+    "Su arıtma arızaları, filtre değişimi, TDS ölçümü, su basıncı ve ters ozmoz sistemleri hakkında teknik rehberler.",
   alternates: {
     canonical: "/blog",
   },
@@ -59,8 +58,8 @@ export default async function BlogPage() {
           </Badge>
           <h1 className="font-heading font-extrabold text-4xl sm:text-5xl text-white mb-5">Blog</h1>
           <p className="text-white/70 text-lg leading-relaxed max-w-xl mx-auto">
-            Su kalitesi, arıtma teknolojileri, bakım rehberleri ve Gaziosmanpaşa–İstanbul bölgesine
-            özel içerikler.
+            Arıza belirtileri, filtre değişim aralıkları, TDS ölçümü ve ters ozmoz sistemleri hakkında
+            teknik rehberler; Sultangazi ve İstanbul Avrupa Yakası&apos;na özel servis bilgileri.
           </p>
         </div>
       </section>

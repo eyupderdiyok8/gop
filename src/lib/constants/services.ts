@@ -10,7 +10,8 @@ import {
   Wind,
   Sparkles,
   DollarSign,
-  Waves
+  Waves,
+  type LucideIcon,
 } from "lucide-react";
 
 export interface ServiceDetail {
@@ -20,10 +21,10 @@ export interface ServiceDetail {
   title: string;
   shortDesc: string;
   longDesc: string;
-  icon: any;
+  icon: LucideIcon;
   color: string;
   features: string[];
-  benefits: { title: string; desc: string; icon: any }[];
+  benefits: { title: string; desc: string; icon: LucideIcon }[];
   faqs: { q: string; a: string }[];
 }
 
@@ -33,21 +34,21 @@ export const SERVICES_DATA: Record<string, ServiceDetail> = {
     id: "satis",
     badge: "Satış",
     title: "Su Arıtma Cihazı Satışı",
-    shortDesc: "Evinize ve bütçenize en uygun, NSF onaylı su arıtma sistemleri.",
-    longDesc: "SuArıtmaServis34 olarak, sadece su arıtma cihazı satmıyoruz; size ve ailenize sağlıklı bir yaşam sunuyoruz. Gaziosmanpaşa ve çevre ilçelerin su değerlerini (TDS) analiz ederek, İstanbul şebeke suyunun yoğun kireç, klor ve ağır metal yüküne en uygun filtrasyon sistemlerini öneriyoruz.",
+    shortDesc: "Evinizin su tüketimi, basıncı ve ölçüm sonuçlarına uygun su arıtma sistemleri.",
+    longDesc: "Sultangazi ve İstanbul Avrupa Yakası'nda ev ve iş yerleri için su arıtma cihazı seçimi yapıyoruz. TDS, su basıncı, günlük tüketim ve kurulum alanını birlikte değerlendirerek ihtiyaca uygun filtrasyon sistemlerini öneriyoruz. TDS toplam çözünmüş maddeyi gösterir; su sertliği için ayrıca ölçüm yapılması gerekir.",
     icon: ShoppingCart,
     color: "teal",
     features: [
-      "NSF ve ISO Sertifikalı Filtreler",
+      "Ürün Belgesine Göre Sertifikalı Filtre Seçenekleri",
       "8-12 Aşamalı Mineral Dengeli Sistemler",
       "Kompakt ve Şık Tasarımlar",
       "Basınç Düşürücü ve Tank Korumalı Modeller",
-      "2 Yıl Full Garanti",
-      "Ücretsiz Kurulum"
+      "Ürüne Göre Garanti Seçenekleri",
+      "Profesyonel Kurulum"
     ],
     benefits: [
       { title: "Taze ve Lezzetli", desc: "Damacana bekletme derdi olmadan her an taze suya ulaşın.", icon: Droplets },
-      { title: "Ekonomik Çözüm", desc: "Damacana maliyetlerini ortadan kaldırarak 6 ayda kendini amorti eder.", icon: Zap },
+      { title: "Ekonomik Çözüm", desc: "Kullanıma ve damacana maliyetine bağlı olarak uzun vadeli tasarruf sağlayabilir.", icon: Zap },
       { title: "Mutfakta Konfor", desc: "Yemeklerinizde, çayınızda ve kahvenizde gerçek lezzeti bulun.", icon: Settings }
     ],
     faqs: [
@@ -61,7 +62,7 @@ export const SERVICES_DATA: Record<string, ServiceDetail> = {
     badge: "Bakım",
     title: "Periyodik Filtre Değişimi",
     shortDesc: "Cihazınızın ömrünü uzatan, su kalitesini koruyan profesyonel bakım.",
-    longDesc: "Su arıtma cihazlarının performansı, filtrelerin zamanında değişmesine bağlıdır. Zamanı geçen filtreler sadece suyu temizleyememekle kalmaz, aynı zamanda bakteri üretmeye başlayabilir. Biz, periyodik hatırlatma servisimizle bu süreci sizin için takip ediyoruz.",
+    longDesc: "Su arıtma cihazlarının performansı, filtrelerin kullanım süresine ve giriş suyu koşullarına bağlıdır. Zamanı geçen filtrelerde debi, tat, koku ve filtrasyon performansı değişebilir. Periyodik bakım sırasında filtreler, membran, tank basıncı ve bağlantılar birlikte kontrol edilir.",
     icon: Settings,
     color: "amber",
     features: [
@@ -73,9 +74,9 @@ export const SERVICES_DATA: Record<string, ServiceDetail> = {
       "İç Hazne Dezenfeksiyonu"
     ],
     benefits: [
-      { title: "Sağlıklı İçim", desc: "Filtreler taze olduğunda suyunuzun mineral dengesi hep en üst seviyededir.", icon: ShieldCheck },
-      { title: "Cihaz Ömrü", desc: "Düzenli bakım, pahalı parçaların (pompa, membran) bozulmasını önler.", icon: Wrench },
-      { title: "Kesintisiz Servis", desc: "Gaziosmanpaşa ve tüm çevre ilçelerde aynı gün filtre değişim hizmeti.", icon: Truck }
+      { title: "Dengeli Performans", desc: "Zamanında değişen filtreler debi ve filtrasyon performansının korunmasına yardımcı olur.", icon: ShieldCheck },
+      { title: "Cihaz Ömrü", desc: "Düzenli bakım, pompa ve membran gibi parçaların erken yıpranma riskini azaltır.", icon: Wrench },
+      { title: "Bölgesel Servis", desc: "Sultangazi ve çevre ilçelerde rota uygunluğuna göre filtre değişimi.", icon: Truck }
     ],
     faqs: [
       { q: "Filtreler ne sıklıkla değişmeli?", a: "Ön üçlü filtre seti genellikle 6-8 ayda bir, membran ve post-karbon ise 12-18 ayda bir değişmelidir." },
@@ -85,10 +86,10 @@ export const SERVICES_DATA: Record<string, ServiceDetail> = {
   "su-aritma-servisi": {
     slug: "su-aritma-servisi",
     id: "ariza",
-    badge: "Acil Servis",
+    badge: "Teknik Servis",
     title: "Su Arıtma Servisi & Arıza",
     shortDesc: "Cihazınızdaki akıntı, düşük debi veya koku problemleri için anında müdahale.",
-    longDesc: "Eski veya bakımsız cihazlarda görülen su kaçırma, tankın dolmaması, atık suyun kesilmemesi gibi sorunlar ciddi su israfına yol açabilir. SuArıtmaServis34 teknik servis ekibi olarak Gaziosmanpaşa ve tüm çevre ilçelerde marka bağımsız her türlü su arıtma arızasına müdahale ediyoruz.",
+    longDesc: "Eski veya bakımsız cihazlarda görülen su kaçırma, tankın dolmaması, atık suyun kesilmemesi gibi sorunlar ciddi su israfına yol açabilir. Sultangazi merkezli teknik servis ekibimizle İstanbul Avrupa Yakası'nda marka bağımsız su arıtma arızalarını tespit ediyoruz.",
     icon: Wrench,
     color: "red",
     features: [
@@ -100,13 +101,13 @@ export const SERVICES_DATA: Record<string, ServiceDetail> = {
       "Musluk Değişimi"
     ],
     benefits: [
-      { title: "7/24 Destek", desc: "Acil sızıntı durumlarında telefonla ve yerinde hızlı destek.", icon: Clock },
+      { title: "Hızlı Destek", desc: "Çalışma saatlerinde telefonla bilgilendirme ve yerinde servis planlaması.", icon: Clock },
       { title: "Şeffaf Servis", desc: "İşlem öncesi arıza tespiti ve net fiyat bilgilendirmesi.", icon: ShieldCheck },
       { title: "Garantili Onarım", desc: "Yapılan her parça değişimi firmamız garantisi altındadır.", icon: ShieldCheck }
     ],
     faqs: [
-      { q: "Servis ücretiniz ne kadar?", a: "Gaziosmanpaşa merkez ve tüm çevre ilçeler için keşif ve arıza tespit randevularımız için bizi arayabilirsiniz." },
-      { q: "Cihazım çok gürültülü çalışıyor, normal mi?", a: "Hayır,ellikle pompa veya atık su valfi kaynaklı bir sorun olabilir. Kısa sürede bakılması gerekir." }
+      { q: "Servis ücretiniz ne kadar?", a: "Ücret; adres, cihaz modeli, arıza ve gerekli parçaya göre belirlenir. Sultangazi ve çevre ilçeler için güncel bilgi almak üzere bizi arayabilirsiniz." },
+      { q: "Cihazım çok gürültülü çalışıyor, normal mi?", a: "Hayır, özellikle pompa, su basıncı veya atık su valfi kaynaklı bir sorun olabilir. Cihazın kontrol edilmesi önerilir." }
     ]
   },
   "su-aritma-montaj": {
@@ -140,13 +141,13 @@ export const SERVICES_DATA: Record<string, ServiceDetail> = {
     slug: "reverse-osmosis",
     id: "ro",
     badge: "Teknoloji",
-    title: "Reverse Osmosis Sistemleri",
-    shortDesc: "Ters ozmoz teknolojisi ile %99.9 saflıkta içme suyu çözümü.",
-    longDesc: "Reverse Osmosis (Ters Ozmoz), suyu yarı geçirgen bir membran filtreleyerek %99.9 oranında saflaştıran ileri su arıtma teknolojisidir. İstanbul'un yüksek TDS ve kireç oranına sahip şebeke suyunda en etkili yöntemdir. Gaziosmanpaşa ve çevre ilçelerde profesyonel RO sistemi kurulumu ve bakımı sağlıyoruz.",
+    title: "Ters Ozmoz (RO) Sistemleri",
+    shortDesc: "Membran filtrasyonu ile çözünmüş madde miktarını azaltmaya yönelik içme suyu çözümü.",
+    longDesc: "Ters ozmoz (RO), suyu yarı geçirgen bir membrandan geçirerek çözünmüş maddelerin önemli bir bölümünü azaltmayı amaçlayan filtrasyon yöntemidir. Performans; giriş suyu, basınç, membran modeli ve bakım durumuna göre değişir. Sultangazi ve İstanbul Avrupa Yakası'nda RO sistemi kurulumu ve bakımı sağlıyoruz.",
     icon: Waves,
     color: "blue",
     features: [
-      "%99.9 Saflık Oranı",
+      "RO Membran Filtrasyonu",
       "5-7 Aşamalı Membran Filtrasyonu",
       "NSF Onaylı RO Membranları",
       "Otomatik Yıkama Sistemi",
@@ -154,13 +155,13 @@ export const SERVICES_DATA: Record<string, ServiceDetail> = {
       "Yüksek Basınç Pompa Desteği"
     ],
     benefits: [
-      { title: "Maksimum Saflık", desc: "Ağır metaller, klor, bakteri ve virüsleri %99.9 oranında filtreler.", icon: ShieldCheck },
-      { title: "Kireçsiz Su", desc: "İstanbul'un sert suyunda bile kristal berraklığında içme suyu elde edin.", icon: Droplets },
-      { title: "Uzun Ömür", desc: "Kaliteli membranlar 2-3 yıl dayanarak maliyet avantajı sağlar.", icon: Clock }
+      { title: "Membran Performansı", desc: "Çözünmüş maddeleri azaltma oranı membran ve giriş suyu koşullarına göre değişir.", icon: ShieldCheck },
+      { title: "Ölçülebilir Sonuç", desc: "Kurulum öncesi ve sonrası TDS ölçümüyle sistem performansı takip edilebilir.", icon: Droplets },
+      { title: "Planlı Bakım", desc: "Membran ömrü kullanım, basınç ve ön filtre bakımına bağlıdır.", icon: Clock }
     ],
     faqs: [
-      { q: "Reverse Osmosis suyu sağlıklı mı?", a: "Evet, RO sistemi zararlı maddeleri filtrelerken mineral takviyeli post-filtre ile sağlıklı mineral dengesi sağlar." },
-      { q: "RO sistemi ne kadar su israf eder?", a: "Modern sistemlerimiz 1:1 oranında atık/temiz su üretir. Eski sistemlere göre %50 daha verimlidir." }
+      { q: "Ters ozmoz sistemi nasıl seçilir?", a: "Giriş suyu basıncı, TDS değeri, günlük tüketim ve membran kapasitesi birlikte değerlendirilmelidir." },
+      { q: "RO sistemi ne kadar atık su üretir?", a: "Atık su oranı cihaz modeline, membrana, basınca ve su sıcaklığına göre değişir. Teklif sırasında ilgili modelin teknik değeri paylaşılır." }
     ]
   },
   "su-aritma-fiyati": {
@@ -169,7 +170,7 @@ export const SERVICES_DATA: Record<string, ServiceDetail> = {
     badge: "Fiyatlar",
     title: "Su Arıtma Cihazı Fiyatları",
     shortDesc: "Bütçenize uygun, garantili su arıtma cihazı fiyatları ve kampanyalar.",
-    longDesc: "Gaziosmanpaşa ve çevre ilçelerde en uygun su arıtma cihazı fiyatlarını sunuyoruz. Damacana maliyetlerini 6 ayda amorti eden ekonomik çözümlerden premium sistemlere kadar geniş ürün yelpazemizle her bütçeye hitap ediyoruz. Taksit imkanı ve ücretsiz kurulum dahil fiyatlarımızla hemen teklif alın.",
+    longDesc: "Sultangazi ve çevre ilçelerde farklı kapasite ve filtre yapılarına sahip su arıtma cihazları sunuyoruz. Toplam maliyet; cihaz modeli, pompa ihtiyacı, filtre yapısı ve kurulum koşullarına göre değişir. Güncel ürün ve ödeme seçenekleri için teklif alabilirsiniz.",
     icon: DollarSign,
     color: "green",
     features: [
@@ -181,7 +182,7 @@ export const SERVICES_DATA: Record<string, ServiceDetail> = {
       "Eski Cihaz Takas İndirimi"
     ],
     benefits: [
-      { title: "Hızlı Amortisman", desc: "Damacana masrafını 6 ayda sıfırlayarak uzun vadede büyük tasarruf sağlayın.", icon: Zap },
+      { title: "Maliyet Karşılaştırması", desc: "Cihaz, bakım ve mevcut damacana tüketimini birlikte karşılaştırabilirsiniz.", icon: Zap },
       { title: "Şeffaf Fiyat", desc: "Gizli maliyet yok — kurulum, garanti ve ilk bakım fiyata dahildir.", icon: ShieldCheck },
       { title: "Esnek Ödeme", desc: "Peşin, kredi kartı taksit veya havale seçenekleriyle bütçenize uygun çözüm.", icon: DollarSign }
     ],
@@ -196,7 +197,7 @@ export const SERVICES_DATA: Record<string, ServiceDetail> = {
     badge: "Yumuşatma",
     title: "Su Yumuşatma Sistemleri",
     shortDesc: "İstanbul'un sert suyuna karşı bina ve daire tipi yumuşatma çözümleri.",
-    longDesc: "İstanbul şebeke suyu yüksek sertlik (kireç) değerlerine sahiptir. Bu durum çamaşır makinelerinden musluklara kadar tüm tesisatta kireç birikimine yol açar. Su yumuşatma sistemleri iyon değiştirme reçinesi kullanarak kalsiyum ve magnezyumu sudan arındırır, böylece tesisatınız ve cildiniz korunur.",
+    longDesc: "Su sertliği, başta kalsiyum ve magnezyum olmak üzere çözünmüş minerallerle ilişkilidir ve TDS'den farklı bir ölçümdür. Sertlik analizi yüksek çıktığında iyon değiştirme reçineli sistemler tesisattaki kireçlenmeyi azaltmak için kullanılabilir.",
     icon: Wind,
     color: "purple",
     features: [
@@ -209,8 +210,8 @@ export const SERVICES_DATA: Record<string, ServiceDetail> = {
     ],
     benefits: [
       { title: "Tesisatı Korur", desc: "Kireç birikimini önleyerek kombi, çamaşır ve bulaşık makinesi ömrünü uzatır.", icon: ShieldCheck },
-      { title: "Yumuşak Cilt", desc: "Sert su cildi kurutur; yumuşatılmış su ile cildiniz ve saçlarınız daha sağlıklı olur.", icon: Droplets },
-      { title: "Deterjan Tasarrufu", desc: "Yumuşak suda %50 daha az deterjan kullanarak hem bütçenizi hem doğayı koruyun.", icon: Zap }
+      { title: "Kullanım Konforu", desc: "Yumuşatılmış su yüzeylerdeki kireç lekelerinin azalmasına yardımcı olabilir.", icon: Droplets },
+      { title: "Deterjan Kullanımı", desc: "Daha düşük sertlik, kullanım koşullarına bağlı olarak deterjan ihtiyacını azaltabilir.", icon: Zap }
     ],
     faqs: [
       { q: "Su yumuşatma cihazı ne kadar dayanır?", a: "Kaliteli reçine yatakları 10-15 yıl dayanır. Periyodik tuz takviyesi ile uzun ömürlü kullanım sağlarsınız." },
@@ -222,26 +223,26 @@ export const SERVICES_DATA: Record<string, ServiceDetail> = {
     id: "ozonlama",
     badge: "Hijyen",
     title: "Sebil Ozonlama",
-    shortDesc: "Sebillerinizde ozon gazı ile %99.9 bakterisiz ve sağlıklı içme suyu.",
-    longDesc: "Su sebilleri zamanla bakteri ve mikroorganizma barındırabilir. Ozonlama işlemi, doğanın en güçlü dezenfektanı olan ozon gazı (O₃) kullanarak sebilin iç haznesi, musluklar ve su kanallarını tamamen sterilize eder. Gaziosmanpaşa ve tüm İstanbul'da ofis, ev ve iş yeri sebilleriniz için profesyonel ozonlama hizmeti sağlıyoruz.",
+    shortDesc: "Su sebillerinde hazne, musluk ve su kanallarına yönelik ozon destekli bakım.",
+    longDesc: "Su sebillerinin haznesi, muslukları ve su kanalları düzenli bakım gerektirir. Ozonlama, uygun ekipman ve prosedürle uygulandığında temizlik ve dezenfeksiyon sürecini destekler. Sultangazi ve İstanbul Avrupa Yakası'nda ev ve iş yeri sebilleri için bakım hizmeti sağlıyoruz.",
     icon: Wind,
     color: "cyan",
     features: [
-      "Ozon Gazı ile Derin Sterilizasyon",
-      "Bakteri ve Virüs İmhası (%99.9)",
+      "Ozon Destekli Dezenfeksiyon",
+      "Hazne ve Su Kanalı Bakımı",
       "Koku ve Tat Giderimi",
       "Musluk ve Hazne Dezenfeksiyonu",
-      "Kimyasalsız Doğal Temizlik",
+      "Kontrollü Ozon Uygulaması",
       "Periyodik Bakım Planı"
     ],
     benefits: [
-      { title: "Kimyasalsız", desc: "Ozon doğal bir dezenfektandır, suya zararlı kalıntı bırakmaz.", icon: ShieldCheck },
-      { title: "Hızlı İşlem", desc: "15-20 dakikada tam sterilizasyon, bekleme süresi olmadan kullanıma hazır.", icon: Clock },
-      { title: "Sağlıklı Su", desc: "Ozonlanmış su, klorlu suya göre çok daha etkili ve sağlıklı dezenfeksiyon sağlar.", icon: Droplets }
+      { title: "Kontrollü Uygulama", desc: "Ozon işlemi cihazın yapısına uygun süre ve ekipmanla uygulanır.", icon: ShieldCheck },
+      { title: "Planlı İşlem", desc: "İşlem süresi sebilin tipi ve bakım ihtiyacına göre belirlenir.", icon: Clock },
+      { title: "Bakım Desteği", desc: "Ozonlama, fiziksel temizlik ve parça kontrolüyle birlikte planlanabilir.", icon: Droplets }
     ],
     faqs: [
       { q: "Sebil ozonlama ne sıklıkla yapılmalı?", a: "Ayda 1 kez ozonlama yapılması idealdir. Yoğun kullanılan ofis sebillerinde 2 haftada 1 önerilir." },
-      { q: "Ozonlama sebilime zarar verir mi?", a: "Hayır, ozon gazı plastik ve metal yüzeylere zarar vermez. Aksine, ömrünü uzatan bir bakım işlemidir." }
+      { q: "Ozonlama sebilime zarar verir mi?", a: "Uygun yoğunluk ve sürede, cihaz malzemeleri dikkate alınarak uygulanmalıdır. İşlem öncesinde sebilin modeli ve parçaları kontrol edilir." }
     ]
   },
   "sebil-temizligi": {
@@ -262,12 +263,12 @@ export const SERVICES_DATA: Record<string, ServiceDetail> = {
       "Filtre Kontrolü ve Değişimi"
     ],
     benefits: [
-      { title: "Sağlık Güvencesi", desc: "Düzenli temizlik bakteri ve yosun oluşumunu tamamen engeller.", icon: ShieldCheck },
+      { title: "Düzenli Hijyen", desc: "Periyodik temizlik birikinti, koku ve mikrobiyal oluşum riskini azaltmaya yardımcı olur.", icon: ShieldCheck },
       { title: "Lezzetli Su", desc: "Temiz sebilden akan suyun tadı fark edilir şekilde daha taze ve doğal olur.", icon: Droplets },
-      { title: "Uzun Ömür", desc: "Periyodik bakım sebilinizin ömrünü 2 katına çıkarır.", icon: Wrench }
+      { title: "Cihaz Bakımı", desc: "Periyodik kontrol, aşınan veya kirlenen parçaların zamanında fark edilmesini sağlar.", icon: Wrench }
     ],
     faqs: [
-      { q: "Sebil temizliği ile ozonlama farkı nedir?", a: "Sebil temizliği fiziksel yıkama ve sanitasyondur, ozonlama ise gaz ile derin sterilizasyondur. İkisi birlikte en iyi sonucu verir." },
+      { q: "Sebil temizliği ile ozonlama farkı nedir?", a: "Sebil temizliği fiziksel yıkama ve sanitasyon adımlarını içerir; ozonlama ise dezenfeksiyon sürecini destekleyen ayrı bir uygulamadır. İhtiyaç cihazın durumuna göre belirlenir." },
       { q: "Temizlik sırasında sebilimi kullanabilir miyim?", a: "Temizlik işlemi yaklaşık 20-30 dakika sürer. İşlem sonrası hemen kullanabilirsiniz." }
     ]
   }

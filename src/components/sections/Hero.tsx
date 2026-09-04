@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Phone, ShieldCheck, Star, Droplets } from "lucide-react";
+import { ArrowRight, Phone, ShieldCheck, Star, Droplets, MapPin, Clock } from "lucide-react";
 import { MultiStepRandevuForm } from "@/components/public/MultiStepRandevuForm";
 
 export function Hero() {
@@ -25,7 +25,7 @@ export function Hero() {
               transition={{ duration: 0.5 }}
             >
               <Badge className="mb-6 bg-white/10 text-white border-white/20 hover:bg-white/15 backdrop-blur-sm px-3 py-1.5 text-[11px] sm:text-xs font-medium tracking-wide leading-relaxed text-center whitespace-normal sm:whitespace-nowrap">
-                ⚡ Gaziosmanpaşa & Çevresi Aynı Gün Servis
+                <MapPin className="mr-1.5 h-3.5 w-3.5" /> Sultangazi Merkezli · İstanbul Avrupa Yakası
               </Badge>
             </motion.div>
 
@@ -35,9 +35,9 @@ export function Hero() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="font-heading font-extrabold text-white text-4xl sm:text-5xl lg:text-6xl leading-tight mb-6"
             >
-              Gaziosmanpaşa{" "}
+              Sultangazi{" "}
               <span className="text-brand-aqua-light">Su Arıtma</span>{" "}
-              Çözümleri
+              Servisi ve Cihazları
             </motion.h1>
 
             <motion.p
@@ -46,8 +46,8 @@ export function Hero() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-white/70 text-lg leading-relaxed mb-8 max-w-xl"
             >
-              İstanbul Gaziosmanpaşa ve çevre semtlerde ev, ofis ve işyeriniz için profesyonel su arıtma sistemleri.
-              Uzman montaj, yıllık bakım garantisi.
+              Sultangazi, Gaziosmanpaşa, Eyüpsultan, Bayrampaşa ve İstanbul Avrupa Yakası&apos;nda
+              ev ve iş yerleri için cihaz satışı, montaj, filtre değişimi ve teknik servis.
             </motion.p>
 
             <motion.div
@@ -89,7 +89,7 @@ export function Hero() {
               {[
                 { icon: ShieldCheck, text: "2 Yıl Garanti" },
                 { icon: Star, text: "500+ Mutlu Müşteri" },
-                { icon: Droplets, text: "%99.9 Saflık" },
+                { icon: Droplets, text: "Su Değerine Göre Sistem" },
               ].map(({ icon: Icon, text }) => (
                 <div key={text} className="flex items-center gap-2 text-white/70 text-sm">
                   <Icon className="w-4 h-4 text-brand-aqua-light" />
@@ -97,8 +97,8 @@ export function Hero() {
                 </div>
               ))}
               <div className="flex items-center gap-2 text-amber-300 text-sm font-semibold">
-                <span className="w-4 h-4 text-amber-300 text-base leading-none">⚡</span>
-                7/24 Acil Servis
+                <Clock className="h-4 w-4" />
+                Pzt-Cmt 08:00-19:00
               </div>
             </motion.div>
           </div>

@@ -6,20 +6,20 @@ import { Button } from "@/components/ui/button";
 import {
    Check,
    ChevronLeft,
-   MessageCircle,
    ShieldCheck,
    Zap,
    Droplets,
    Settings,
-   Star,
    Truck,
-   ArrowRight
+   ArrowRight,
+   type LucideIcon,
 } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { ProductImageGallery } from "@/components/public/urunler/ProductImageGallery";
+import { formatTechnicalText } from "@/lib/products/formatTechnicalText";
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
@@ -32,17 +32,19 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 
   if (!product) return { title: "Ürün Bulunamadı" };
 
-  const categoryName = product.category 
-    ? (Array.isArray(product.category) ? product.category[0]?.name : (product.category as any).name)
+  const category = product.category as { name: string } | { name: string }[] | null;
+  const categoryName = category
+    ? (Array.isArray(category) ? category[0]?.name : category.name)
     : undefined;
+  const productName = formatTechnicalText(product.name);
 
   return {
-    title: `${product.name} – ${categoryName || "Su Arıtma Cihazı"} | SuArıtmaServis34`,
-    description: product.tagline || product.description?.slice(0, 160) || `${product.name} su arıtma cihazı. En uygun fiyat, ücretsiz montaj ve 2 yıl garanti ile.`,
+    title: `${productName} – ${categoryName || "Su Arıtma Cihazı"}`,
+    description: product.tagline || product.description?.slice(0, 160) || `${productName} su arıtma cihazı. Sultangazi merkezli montaj ve servis desteği.`,
     openGraph: {
-      title: `${product.name} – SuArıtmaServis34`,
+      title: `${productName} – SuArıtmaServis34`,
       description: product.tagline || product.description?.slice(0, 160) || "",
-      images: product.main_image ? [{ url: product.main_image, width: 1200, height: 1200, alt: product.name }] : [],
+      images: product.main_image ? [{ url: product.main_image, width: 1200, height: 1200, alt: productName }] : [],
     },
     alternates: {
       canonical: `/urunler/${slug}`,
@@ -54,7 +56,7 @@ interface ProductPageProps {
    params: Promise<{ slug: string }>;
 }
 
-const iconMap: Record<string, any> = {
+const iconMap: Record<string, LucideIcon> = {
    zap: Zap,
    shield: ShieldCheck,
    droplet: Droplets,
@@ -77,6 +79,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
    const features = product.features || [];
    const gallery = [product.main_image, ...(product.gallery || [])].filter(Boolean);
+   const productName = formatTechnicalText(product.name);
 
    return (
       <div className="bg-background min-h-screen">
@@ -89,10 +92,10 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                <div className="hidden sm:flex items-center gap-4">
                   <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{product.category?.name}</span>
                   <div className="h-4 w-px bg-border" />
-                  <span className="text-xs font-bold text-brand-navy truncate max-w-[200px]">{product.name}</span>
+                  <span className="text-xs font-bold text-brand-navy truncate max-w-[200px]">{productName}</span>
                </div>
                <Button asChild size="sm" className="gradient-teal text-white border-0 hover:opacity-90">
-                  <a href={`https://wa.me/905531142734?text=Merhaba, ${product.name} ürünü hakkında bilgi almak istiyorum.`}>
+                  <a href={`https://wa.me/905531142734?text=Merhaba, ${productName} ürünü hakkında bilgi almak istiyorum.`}>
                      Hızlı Teklif
                   </a>
                </Button>
@@ -136,18 +139,15 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                            {product.category?.name}
                         </span>
                         <h1 className="text-4xl sm:text-5xl font-heading font-extrabold text-brand-navy mb-4 tracking-tight leading-tight">
-                           {product.name}
+                           {productName}
                         </h1>
                         <p className="text-xl text-muted-foreground italic leading-relaxed">
                            {product.tagline}
                         </p>
 
-                        <div className="flex items-center gap-2 mt-6">
-                           <div className="flex text-amber-400">
-                              {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
-                           </div>
-                           <span className="text-sm font-bold text-brand-navy">5.0</span>
-                           <span className="text-sm text-muted-foreground">(240+ Müşteri Memnuniyeti)</span>
+                        <div className="flex items-center gap-2 mt-6 text-sm font-medium text-brand-navy">
+                           <ShieldCheck className="h-4 w-4 text-brand-aqua" />
+                           Sultangazi merkezli montaj ve servis desteği
                         </div>
                      </div>
 
@@ -166,8 +166,8 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                               <Button asChild size="lg" className="w-full bg-brand-aqua hover:bg-brand-aqua/80 text-white border-0 h-14 rounded-2xl font-bold transition-colors">
-                                 <a href={`https://wa.me/905531142734?text=Merhaba, ${product.name} ürünü hakkında bilgi almak istiyorum.`}>
-                                    <WhatsAppIcon className="w-5 h-5 mr-2" /> WhatsApp'tan Sor
+                                 <a href={`https://wa.me/905531142734?text=Merhaba, ${productName} ürünü hakkında bilgi almak istiyorum.`}>
+                                     <WhatsAppIcon className="w-5 h-5 mr-2" /> WhatsApp&apos;tan Sor
                                  </a>
                               </Button>
                               <Button asChild size="lg" className="w-full border border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white h-14 rounded-2xl font-bold shadow-none">
@@ -191,7 +191,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                                  <div className="w-5 h-5 rounded-lg bg-brand-aqua/10 flex items-center justify-center flex-shrink-0">
                                     <Check className="w-3 h-3 text-brand-aqua" />
                                  </div>
-                                 {spec}
+                                 {formatTechnicalText(spec)}
                               </li>
                            ))}
                         </ul>
@@ -204,10 +204,10 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                   <section className="py-24 border-t border-border mt-24">
                      <div className="text-center mb-16">
                         <Badge variant="outline" className="mb-4 text-brand-aqua border-brand-aqua/20">Teknoloji & Konfor</Badge>
-                        <h2 className="text-3xl font-heading font-extrabold text-brand-navy">Neden {product.name}?</h2>
+                        <h2 className="text-3xl font-heading font-extrabold text-brand-navy">Neden {productName}?</h2>
                      </div>
                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {features.map((f: any, i: number) => {
+                        {features.map((f: Product["features"][number], i: number) => {
                            const Icon = iconMap[f.icon] || Droplets;
                            return (
                               <div key={i} className="p-8 rounded-[2rem] bg-muted/30 border border-border group hover:bg-white hover:shadow-xl hover:border-brand-aqua/20 transition-all duration-500">
@@ -240,7 +240,8 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                            <h3 className="text-xl font-heading font-bold mb-6">Teknik Tablo</h3>
                            <div className="space-y-4">
                               {product.specs?.map((spec: string, i: number) => {
-                                 const [label, val] = spec.includes(':') ? spec.split(':') : [spec, ''];
+                                 const formattedSpec = formatTechnicalText(spec);
+                                 const [label, val] = formattedSpec.includes(':') ? formattedSpec.split(':') : [formattedSpec, ''];
                                  return (
                                     <div key={i} className="flex flex-col pb-3 border-b border-white/10 last:border-0 last:pb-0">
                                        <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">{label}</span>

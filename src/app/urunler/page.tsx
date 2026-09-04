@@ -6,8 +6,8 @@ import { CtaBand } from "@/components/sections/CtaBand";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Ürün Kataloğu – Su Arıtma Cihazları Gaziosmanpaşa & İstanbul",
-  description: "Ev, ofis ve endüstriyel su arıtma çözümleri. En iyi fiyatlar, ücretsiz montaj ve 2 yıl garantili ürünlerimizi inceleyin.",
+  title: "Su Arıtma Cihazları | Sultangazi ve İstanbul Avrupa Yakası",
+  description: "Ev, ofis ve iş yerleri için su arıtma cihazlarını inceleyin. Sultangazi merkezli montaj, filtre değişimi ve teknik servis desteği.",
   alternates: {
     canonical: "/urunler",
   },
@@ -37,18 +37,18 @@ export default async function UrunlerPage() {
         <div className="absolute inset-0 bg-dots opacity-20 pointer-events-none" />
         <div className="relative max-w-6xl mx-auto text-center">
           <Badge className="mb-6 bg-white/10 text-white border-white/20 px-4 py-1.5 text-xs tracking-wide">
-            ✦ %100 NSF Onaylı & Garantili
+            Sultangazi Merkezli Montaj ve Servis
           </Badge>
           <h1 className="font-heading font-extrabold text-4xl sm:text-6xl text-white mb-6 tracking-tight">
             Akıllı Su Teknolojileri <br/> <span className="text-brand-aqua">Ürün Kataloğu</span>
           </h1>
           <p className="text-white/70 text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-            Gaziosmanpaşa ve çevre ilçelerde en iyi fiyat garantisi ve profesyonel montaj desteğiyle sağlıklı suya kavuşun.
+            Sultangazi ve İstanbul Avrupa Yakası&apos;nda ihtiyacınıza uygun cihaz seçimi, profesyonel montaj ve periyodik bakım desteği.
           </p>
           
           <ProductListClient 
-            initialProducts={(products || []) as any} 
-            categories={categories || []} 
+            initialProducts={(products || []) as (Product & { category: ProductCategory | null })[]}
+            categories={(categories || []) as ProductCategory[]}
           />
         </div>
       </section>

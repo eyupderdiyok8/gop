@@ -15,7 +15,7 @@ const organizationSchema = {
   "@type": "LocalBusiness",
   "name": "SuArıtmaServis34",
   "image": "https://www.suaritmaservis34.com/logo.png",
-  "description": "Gaziosmanpaşa ve çevre ilçelerde su arıtma cihazı satışı, montajı ve periyodik bakım hizmetleri.",
+  "description": "Sultangazi merkezli su arıtma cihazı satışı, montajı, filtre değişimi ve teknik servis hizmetleri.",
   "url": "https://www.suaritmaservis34.com",
   "telephone": "+905531142734",
   "priceRange": "₺₺",
@@ -40,22 +40,26 @@ const organizationSchema = {
       "closes": "19:00"
     }
   ],
-  "sameAs": [
-    "https://wa.me/905531142734"
+  "areaServed": [
+    "Sultangazi",
+    "Gaziosmanpaşa",
+    "Eyüpsultan",
+    "Bayrampaşa",
+    "Esenler",
+    "İstanbul Avrupa Yakası"
   ],
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.9",
-    "reviewCount": "240",
-    "bestRating": "5",
-    "worstRating": "1"
-  }
+  "sameAs": [
+    "https://wa.me/905531142734",
+    "https://www.instagram.com/suaritmateknikservis34",
+    "https://www.facebook.com/suaritmaistabulavrupa",
+    "https://share.google/GFjeps99t7x2pgmNx"
+  ],
 };
 
 export const metadata: Metadata = {
-  title: "SuArıtmaServis34 | Gaziosmanpaşa Su Arıtma Satış, Montaj, Servis",
+  title: "Sultangazi Su Arıtma Servisi ve Cihazları | SuArıtmaServis34",
   description:
-    "Gaziosmanpaşa ve çevre İstanbul ilçelerinde ev ve ofis tipi su arıtma cihazı satış, montaj ve periyodik bakım hizmetleri. Fiyat teklifi için hemen arayın.",
+    "Sultangazi merkezli ekibimizle İstanbul Avrupa Yakası'nda su arıtma cihazı satışı, montaj, filtre değişimi ve teknik servis hizmetleri.",
   alternates: {
     canonical: "/",
   },
@@ -70,10 +74,10 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
       />
       <Hero />
-      <DeviceRenewal />
-      <Features />
-      <FeaturedProducts />
       <Services />
+      <Features />
+      <DeviceRenewal />
+      <FeaturedProducts />
       <Stats />
       <SavingsCalculator />
       <Testimonials />

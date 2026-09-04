@@ -3,13 +3,13 @@ const SITE_URL = "https://www.suaritmaservis34.com";
 // Helper functions for programmatic SEO schemas
 
 export function generateLocalBusinessSchema(locationName: string, serviceName?: string, lat?: number, lng?: number) {
-  const schema: any = {
+  const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": `SuArıtmaServis34 ${locationName} ${serviceName ? serviceName : 'Su Arıtma Servisi'}`,
     "@id": `${SITE_URL}/#localbusiness`,
     "image": `${SITE_URL}/images/su-aritma-servis34.webp`,
-    "description": `${locationName} bölgesinde güvenilir, 7/24 hizmetinizde su arıtma çözümleri. Gaziosmanpaşa ve tüm İstanbul'a aynı gün servis.`,
+    "description": `${locationName} bölgesinde su arıtma cihazı satışı, montajı, filtre değişimi ve teknik servis. Sultangazi merkezli ekip İstanbul Avrupa Yakası'nda hizmet verir.`,
     "url": SITE_URL,
     "telephone": "+905531142734",
     "priceRange": "₺₺",
@@ -33,7 +33,6 @@ export function generateLocalBusinessSchema(locationName: string, serviceName?: 
         "Wednesday",
         "Thursday",
         "Friday",
-        "Saturday",
         "Saturday"
       ],
       "opens": "08:00",
@@ -54,7 +53,7 @@ export function generateLocalBusinessSchema(locationName: string, serviceName?: 
 }
 
 export function generateServiceSchema(serviceName: string, serviceDesc: string, providerName: string, areaServed: string) {
-  const schema: any = {
+  const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Service",
     "name": serviceName,

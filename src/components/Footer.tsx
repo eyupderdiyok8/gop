@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Droplets, Phone, Mail, MapPin, Clock, MessageCircle } from "lucide-react";
+import Image from "next/image";
+import { Phone, MapPin, Clock } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 
@@ -24,10 +25,9 @@ const footerLinks = {
     { href: "/iletisim", label: "İletişim" },
   ],
   bolgeler: [
-    { href: "/istanbul/gaziosmanpasa", label: "Gaziosmanpaşa Servisi" },
     { href: "/istanbul/sultangazi", label: "Sultangazi Servisi" },
-    { href: "/istanbul/eyup", label: "Eyüp Servisi" },
-    { href: "/istanbul/bagcilar", label: "Bağcılar Servisi" },
+    { href: "/istanbul/gaziosmanpasa", label: "Gaziosmanpaşa Servisi" },
+    { href: "/istanbul/eyup", label: "Eyüpsultan Servisi" },
     { href: "/istanbul/bayrampasa", label: "Bayrampaşa Servisi" },
     { href: "/istanbul/esenler", label: "Esenler Servisi" },
   ]
@@ -41,10 +41,10 @@ export function Footer() {
           {/* Brand */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-block mb-2">
-              <img src="/logo.png" alt="SuArıtmaServis34" className="h-20 w-auto -ml-2" />
+              <Image src="/logo.png" alt="SuArıtmaServis34" width={190} height={80} className="h-20 w-auto -ml-2" />
             </Link>
             <p className="text-white/60 text-sm leading-relaxed mb-6 max-w-xs">
-              Gaziosmanpaşa ve çevre ilçelerde güvenilir su arıtma çözümleri. İstanbul'un sert suyuna karşı sağlıklı ve temiz suya ulaşmak artık çok kolay.
+              Sultangazi merkezli ekibimizle İstanbul Avrupa Yakası&apos;nda su arıtma cihazı satışı, montaj, filtre değişimi ve teknik servis hizmetleri sunuyoruz.
             </p>
             <div className="flex flex-col gap-3 text-sm text-white/60">
               <div className="flex items-start gap-3">

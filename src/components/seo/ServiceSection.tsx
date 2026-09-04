@@ -8,6 +8,7 @@ interface Props {
   customContent?: string;
   serviceType: "transactional" | "commercial" | "informational";
   featuredImage?: string;
+  serviceArea?: string;
 }
 
 const STOCK_IMAGES = [
@@ -27,9 +28,9 @@ function getHash(str: string) {
   return Math.abs(hash);
 }
 
-export function ServiceSection({ locationName, serviceName, customContent, serviceType, tdsValue, featuredImage }: Props) {
-  const baseTitle = `${locationName} ${serviceName} Hizmeti`;
-  const baseDesc = `${locationName} bölgesinde İstanbul'un yoğun kireçli suyuna karşı profesyonel ${serviceName.toLowerCase()} hizmeti sunuyoruz. Sertifikalı teknisyenlerimizle aynı gün servis, garantili işçilik ve uygun fiyat avantajıyla sizlere hizmet vermekten mutluluk duyuyoruz. Gaziosmanpaşa merkez olmak üzere Sultangazi, Eyüp, Bağcılar ve tüm çevre ilçelere 7/24 servis desteği sağlıyoruz. Bize ulaşın, aynı gün hızlı çözüm imkânından yararlanın.`;
+export function ServiceSection({ locationName, serviceName, customContent, tdsValue, serviceArea }: Props) {
+  const baseTitle = `${locationName} Bölgesinde ${serviceName}`;
+  const baseDesc = `${locationName} bölgesinde ${serviceName.toLowerCase()} hizmeti sunuyoruz. Sultançiftliği'ndeki merkezimizden Sultangazi ve İstanbul Avrupa Yakası'na ulaşan ekibimiz; cihazın durumu, su basıncı ve ölçüm sonuçlarına göre uygulanacak işlemi belirler. ${serviceArea || `${locationName} ve yakın çevresi`} düzenli servis güzergâhımızdadır.`;
 
   // Deterministik olarak o sayfaya özel hep aynı görseli atar
   const imageIndex = getHash(`${locationName}-${serviceName}`) % STOCK_IMAGES.length;
@@ -59,10 +60,10 @@ export function ServiceSection({ locationName, serviceName, customContent, servi
           <div className="space-y-4">
             {[
               { icon: Wrench, text: "Alanında uzman, sertifikalı teknik ekip" },
-              { icon: Truck, text: `${locationName} ve tüm çevre ilçelere aynı gün servis aracı` },
-              { icon: ShieldCheck, text: "Orijinal yedek parça, NSF onaylı filtreler ve 2 yıl tam garanti" },
-              { icon: Clock, text: "Sabah arayın, öğleden önce kapınızdayız" },
-              { icon: Droplets, text: `İstanbul'un sert suyuna (${tdsValue ? tdsValue + ' TDS' : '300+ TDS'}) özel RO çözümleri` },
+              { icon: Truck, text: `${locationName} için rota uygunluğuna göre aynı gün planlama` },
+              { icon: ShieldCheck, text: "Cihaz modeline uygun filtre ve yedek parça seçenekleri" },
+              { icon: Clock, text: "Pazartesi-Cumartesi 08:00-19:00 servis desteği" },
+              { icon: Droplets, text: `TDS, su basıncı ve kullanım ihtiyacına göre filtrasyon seçimi${tdsValue ? ` (yaklaşık ${tdsValue} ppm TDS)` : ""}` },
             ].map((item, i) => (
               <div key={i} className="flex items-center gap-3 bg-muted/40 p-3 rounded-xl border border-border">
                 <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center flex-shrink-0 shadow-sm">
@@ -95,7 +96,7 @@ export function ServiceSection({ locationName, serviceName, customContent, servi
                     {locationName} İçin Özel Çözümler
                   </p>
                   <p className="text-white/70 text-sm leading-relaxed">
-                    Bölgenizdeki su sertlik derecelerini {tdsValue ? `(Ortalama ${tdsValue} TDS)` : ""} analiz ediyor, dairenize veya işletmenize en uygun filtrasyon mimarisini kuruyoruz.
+                    TDS toplam çözünmüş maddeyi gösterir; sertlik ise ayrı bir ölçümdür. Su basıncı, tüketim ve ölçüm sonuçlarını birlikte değerlendirerek eviniz veya işletmeniz için uygun sistemi belirliyoruz.
                   </p>
                 </div>
               </div>

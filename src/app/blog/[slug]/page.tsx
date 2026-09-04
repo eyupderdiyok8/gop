@@ -5,7 +5,7 @@ import { tr } from "date-fns/locale";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, ArrowLeft } from "lucide-react";
+import { Calendar, Clock, ArrowLeft, ArrowRight, MapPin, Phone } from "lucide-react";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ShareButton } from "@/components/public/blog/ShareButton";
@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   
   const { data: blog } = await supabase
     .from("blogs")
-    .select("title, seo_title, seo_description, excerpt, featured_image")
+    .select("title, seo_title, seo_description, excerpt, featured_image, published_at, updated_at")
     .eq("slug", slug)
     .single();
 
@@ -32,9 +32,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: blog.seo_title || `${blog.title} | SuArıtmaServis34 Blog`,
     description: blog.seo_description || blog.excerpt,
     openGraph: {
+      type: "article",
       title: blog.seo_title || blog.title,
       description: blog.seo_description || blog.excerpt,
       images: blog.featured_image ? [{ url: blog.featured_image }] : [],
+      publishedTime: blog.published_at,
+      modifiedTime: blog.updated_at,
     },
     alternates: {
       canonical: `/blog/${slug}`,
@@ -55,6 +58,14 @@ export default async function BlogPostPage({ params }: Props) {
     .single();
 
   if (!blog || !blog.is_published) notFound();
+
+  const { data: recentBlogs } = await supabase
+    .from("blogs")
+    .select("slug, title, featured_image, published_at, category")
+    .eq("is_published", true)
+    .neq("slug", slug)
+    .order("published_at", { ascending: false })
+    .limit(4);
 
   // Extract headings and inject IDs
   const headings: { id: string; text: string; level: number }[] = [];
@@ -91,13 +102,24 @@ export default async function BlogPostPage({ params }: Props) {
     "@type": "BlogPosting",
     "headline": blog.title,
     "image": blog.featured_image,
+    "mainEntityOfPage": `${process.env.NEXT_PUBLIC_SITE_URL || "https://www.suaritmaservis34.com"}/blog/${slug}`,
     "datePublished": blog.published_at,
     "dateModified": blog.updated_at,
     "author": {
       "@type": "Organization",
-      "name": "SuArıtmaServis34 Gaziosmanpaşa",
-      "url": process.env.NEXT_PUBLIC_SITE_URL
+      "name": "SuArıtmaServis34 Sultangazi",
+      "url": process.env.NEXT_PUBLIC_SITE_URL || "https://www.suaritmaservis34.com"
     },
+    "publisher": {
+      "@type": "Organization",
+      "name": "SuArıtmaServis34",
+      "logo": {
+        "@type": "ImageObject",
+        "url": `${process.env.NEXT_PUBLIC_SITE_URL || "https://www.suaritmaservis34.com"}/logo.png`
+      }
+    },
+    "articleSection": blog.category,
+    "inLanguage": "tr-TR",
     "description": blog.excerpt,
   };
 
@@ -144,8 +166,9 @@ export default async function BlogPostPage({ params }: Props) {
 
       {/* Content Area - White Sheet Overlay */}
       <section className="px-4 -mt-24 pb-24 relative z-10">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-[2rem] shadow-2xl shadow-brand-navy/5 border border-white overflow-hidden">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] gap-8 lg:gap-10 items-start">
+          <div className="min-w-0" data-blog-content>
+          <div className="bg-white rounded-xl shadow-2xl shadow-brand-navy/5 border border-white overflow-hidden">
             {blog.featured_image && (
               <div className="aspect-video md:aspect-[16/7] w-full overflow-hidden relative">
                 <Image 
@@ -189,12 +212,85 @@ export default async function BlogPostPage({ params }: Props) {
             </div>
           </div>
           
-          {/* Bottom CTA or Related would go here */}
           <div className="mt-12 text-center">
              <Button asChild variant="outline" className="rounded-full border-slate-200 text-slate-500 hover:bg-white hover:text-brand-navy transition-all">
                 <Link href="/blog">Diğer Yazıları Keşfet</Link>
              </Button>
           </div>
+          </div>
+
+          <aside className="space-y-6 lg:sticky lg:top-28" aria-label="Blog yan menüsü">
+            <section className="bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
+              <div className="flex items-center justify-between gap-4 mb-5">
+                <h2 className="text-xl font-heading font-bold text-brand-navy">Son Yazılar</h2>
+                <Link
+                  href="/blog"
+                  className="text-xs font-semibold text-brand-aqua-dark hover:text-brand-navy transition-colors"
+                >
+                  Tümü
+                </Link>
+              </div>
+
+              <div className="divide-y divide-slate-100">
+                {(recentBlogs || []).map((recentBlog) => (
+                  <Link
+                    key={recentBlog.slug}
+                    href={`/blog/${recentBlog.slug}`}
+                    className="group flex gap-3 py-4 first:pt-0 last:pb-0"
+                  >
+                    {recentBlog.featured_image ? (
+                      <div className="relative w-20 h-16 shrink-0 overflow-hidden rounded-md bg-slate-100">
+                        <Image
+                          src={recentBlog.featured_image}
+                          alt=""
+                          fill
+                          sizes="80px"
+                          className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                      </div>
+                    ) : null}
+                    <div className="min-w-0">
+                      <p className="line-clamp-2 text-sm font-semibold leading-snug text-brand-navy group-hover:text-brand-aqua-dark transition-colors">
+                        {recentBlog.title}
+                      </p>
+                      <p className="mt-2 text-xs text-slate-400">
+                        {format(new Date(recentBlog.published_at), "d MMM yyyy", { locale: tr })}
+                      </p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+
+            <section className="relative min-h-[360px] overflow-hidden rounded-lg bg-brand-navy text-white shadow-lg">
+              <Image
+                src="/images/su-aritma-servis34.webp"
+                alt="Sultangazi su arıtma servisi"
+                fill
+                sizes="(max-width: 1024px) 100vw, 320px"
+                className="object-cover opacity-35"
+              />
+              <div className="absolute inset-0 bg-brand-navy/70" />
+              <div className="relative flex min-h-[360px] flex-col justify-end p-6">
+                <div className="mb-auto inline-flex w-fit items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-semibold">
+                  <MapPin className="h-3.5 w-3.5" />
+                  Sultangazi merkezli servis
+                </div>
+                <h2 className="text-2xl font-heading font-bold leading-tight">
+                  Cihazınız için servis mi gerekiyor?
+                </h2>
+                <p className="mt-3 text-sm leading-relaxed text-white/75">
+                  Sultangazi ve İstanbul Avrupa Yakası için montaj, bakım ve filtre değişimi talebi oluşturun.
+                </p>
+                <Button asChild className="mt-6 w-full bg-brand-aqua text-brand-navy hover:bg-white">
+                  <Link href="/iletisim" className="flex items-center justify-center gap-2">
+                    <Phone className="h-4 w-4" /> Servis Talebi Oluştur
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
+            </section>
+          </aside>
         </div>
       </section>
     </article>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Droplets, Check } from "lucide-react";
+import { formatTechnicalText } from "@/lib/products/formatTechnicalText";
 
 export async function FeaturedProducts() {
   const supabase = await createClient();
@@ -49,7 +50,7 @@ export async function FeaturedProducts() {
                   {product.main_image ? (
                     <Image
                       src={product.main_image}
-                      alt={product.name}
+                      alt={formatTechnicalText(product.name)}
                       fill
                       sizes="(max-width: 768px) 100vw, 33vw"
                       className="object-contain p-8 group-hover/card:scale-110 transition-transform duration-700"
@@ -81,7 +82,7 @@ export async function FeaturedProducts() {
                       {product.category?.name}
                     </span>
                     <h3 className="font-heading font-bold text-2xl text-brand-navy mb-2 group-hover:text-brand-aqua transition-colors">
-                      {product.name}
+                      {formatTechnicalText(product.name)}
                     </h3>
                     <p className="text-sm font-medium text-brand-aqua italic mb-4">
                       {product.tagline}
@@ -92,7 +93,7 @@ export async function FeaturedProducts() {
                     {product.specs?.slice(0, 4).map((spec: string, i: number) => (
                       <li key={i} className="flex items-center gap-2.5 text-sm text-muted-foreground">
                         <Check className="w-4 h-4 text-brand-aqua flex-shrink-0" />
-                        {spec}
+                        {formatTechnicalText(spec)}
                       </li>
                     ))}
                   </ul>
