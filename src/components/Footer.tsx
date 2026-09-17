@@ -141,7 +141,7 @@ export function Footer() {
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
                 </a>
                 <a
-                  href="https://share.google/GFjeps99t7x2pgmNx"
+                  href="https://share.google/WT0lMbUXynTZeGOZ6"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-9 h-9 rounded-lg bg-white/10 hover:bg-brand-aqua flex items-center justify-center transition-colors"

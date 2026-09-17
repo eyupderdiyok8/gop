@@ -51,7 +51,7 @@ const organizationSchema = {
     "https://wa.me/905531142734",
     "https://www.instagram.com/suaritmateknikservis34",
     "https://www.facebook.com/suaritmaistabulavrupa",
-    "https://share.google/GFjeps99t7x2pgmNx"
+    "https://share.google/WT0lMbUXynTZeGOZ6"
   ],
 };
 

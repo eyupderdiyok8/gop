@@ -97,8 +97,7 @@ export function Testimonials() {
             {[1, 2, 3, 4, 5].map(i => (
               <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
             ))}
-            <span className="ml-2 font-heading font-bold text-brand-navy">4.9</span>
-            <span className="text-muted-foreground text-sm">/ Google&apos;da 120+ yorum</span>
+            <span className="ml-2 font-heading font-bold text-brand-navy">5.0</span>
           </div>
         </motion.div>
 
