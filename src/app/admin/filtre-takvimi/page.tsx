@@ -3,10 +3,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { FilterPlan } from "@/lib/types";
-import { Filter, AlertTriangle, Clock, CheckCircle, Plus, Bell, Edit2, Trash2 } from "lucide-react";
+import { Filter, AlertTriangle, Clock, CheckCircle, MessageCircle, Trash2 } from "lucide-react";
 import { format, differenceInDays, parseISO } from "date-fns";
 import { tr } from "date-fns/locale";
-import { Button } from "@/components/ui/button";
 
 type FilterWithRelations = FilterPlan & {
   devices: {
@@ -34,12 +33,20 @@ const urgencyConfig = {
   normal: { label: "Planlandı", color: "bg-brand-aqua/15 text-brand-aqua border-brand-aqua/20" },
 };
 
+function reminderUrl(plan: { customer_name?: string | null; customer_phone?: string | null; next_date: string }) {
+  const digits = plan.customer_phone?.replace(/\D/g, "") ?? "";
+  const phone = digits.startsWith("90") ? digits : digits.startsWith("0") ? `9${digits}` : `90${digits}`;
+  if (!/^905\d{9}$/.test(phone)) return null;
+
+  const date = format(parseISO(plan.next_date), "d MMMM yyyy", { locale: tr });
+  const message = `Merhaba ${plan.customer_name || "Değerli müşterimiz"},\n\nSu arıtma cihazınız için planlanan bakım tarihi ${date}. Filtre değişimi veya bakım için uygun olduğunuz zamanı bu numaradan bize yazabilirsiniz.\n\nSu Arıtma Servis 34`;
+  return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+}
+
 export default function FiltreTablimiPage() {
   const [plans, setPlans] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<View>("tumu");
-  const [sendingId, setSendingId] = useState<string | null>(null);
-  const [sentIds, setSentIds] = useState<Set<string>>(new Set());
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
 
@@ -97,19 +104,6 @@ export default function FiltreTablimiPage() {
   }, []);
 
   useEffect(() => { fetchPlans(); }, [fetchPlans]);
-
-  const sendNotification = async (plan: FilterWithRelations) => {
-    setSendingId(plan.id);
-    try {
-      const res = await fetch("/api/bildirim/filtre", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ planId: plan.id }),
-      });
-      if (res.ok) setSentIds((s) => new Set([...s, plan.id]));
-    } catch {}
-    setSendingId(null);
-  };
 
   const markChanged = async (plan: FilterWithRelations) => {
     const today = new Date().toISOString().split("T")[0];
@@ -232,8 +226,7 @@ export default function FiltreTablimiPage() {
               const u = urgencyLevel(plan.next_date);
               const cfg = urgencyConfig[u];
               const days = differenceInDays(parseISO(plan.next_date), new Date());
-              const isSent = sentIds.has(plan.id);
-              const sending = sendingId === plan.id;
+              const whatsappUrl = reminderUrl(plan);
  
               return (
                 <div key={plan.id} className="px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center gap-4 hover:bg-slate-50 transition">
@@ -284,18 +277,28 @@ export default function FiltreTablimiPage() {
   
                     {/* Actions */}
                     <div className="flex items-center gap-2 flex-shrink-0">
-                      <button
-                      onClick={() => sendNotification(plan)}
-                      disabled={sending || isSent}
-                      title="Bildirim Gönder"
-                      className={`p-2 rounded-lg text-xs transition-all flex items-center gap-1.5 ${
-                        isSent
-                          ? "bg-brand-aqua/10 text-brand-aqua cursor-default"
-                          : "bg-blue-500/10 text-blue-400 hover:bg-blue-500/20"
-                      } disabled:opacity-50`}
-                    >
-                      {isSent ? <CheckCircle className="w-4 h-4" /> : <Bell className="w-4 h-4" />}
-                    </button>
+                      {whatsappUrl ? (
+                        <a
+                          href={whatsappUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title="WhatsApp'ta hazır hatırlatma mesajını aç"
+                          className="p-2 rounded-lg bg-green-50 text-green-700 hover:bg-green-100 transition text-xs flex items-center gap-1.5"
+                        >
+                          <MessageCircle className="w-4 h-4" />
+                          <span>Hatırlat</span>
+                        </a>
+                      ) : (
+                        <button
+                          type="button"
+                          disabled
+                          title="Geçerli bir cep telefonu numarası yok"
+                          className="p-2 rounded-lg bg-slate-100 text-slate-400 text-xs flex items-center gap-1.5 cursor-not-allowed"
+                        >
+                          <MessageCircle className="w-4 h-4" />
+                          <span>Hatırlat</span>
+                        </button>
+                      )}
                     {plan.type === 'device' && (
                       <button
                         onClick={() => markChanged(plan)}
