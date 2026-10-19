@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard, Users, Wrench, Package, Filter, CalendarDays,
   LogOut, ChevronRight, Settings, Wallet, FileText,
-  ExternalLink, Clock, Menu, X,
+  ExternalLink, Clock, Menu, X, MapPin,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
@@ -22,6 +22,7 @@ const navItems = [
   { href: "/admin/saat-islemleri", label: "Saat Kapatma", icon: Clock },
   { href: "/admin/finans",      label: "Finans & Kasa",   icon: Wallet },
   { href: "/admin/blog",        label: "Blog Yazıları",   icon: FileText },
+  { href: "/admin/bolge-icerikleri", label: "Bölge İçerikleri", icon: MapPin },
   { href: "/admin/ayarlar",     label: "Ayarlar",         icon: Settings },
   { href: "/admin/urunler",     label: "Ürün Yönetimi",   icon: Package },
 ];

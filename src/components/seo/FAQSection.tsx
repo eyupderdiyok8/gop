@@ -1,6 +1,3 @@
-"use client";
-
-import { Disclosure, Transition } from "@headlessui/react";
 import { ChevronDown } from "lucide-react";
 
 interface FAQ {
@@ -13,10 +10,11 @@ interface Props {
   locationName: string;
 }
 
+// Cevaplar <details> içinde HTML'de her zaman bulunur; böylece arama motorları kapalı
+// sorulardaki metni de görür ve FAQPage şeması görünür içerikle örtüşür.
 export function FAQSection({ faqs, locationName }: Props) {
   if (!faqs || faqs.length === 0) return null;
 
-  // Generate JSON-LD
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -32,13 +30,11 @@ export function FAQSection({ faqs, locationName }: Props) {
 
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background">
-      {/* Inject FAQ Schema */}
       <script
-        id={`faq-schema-${locationName}`}
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-      
+
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="font-heading font-bold text-3xl text-brand-navy mb-4">
@@ -51,30 +47,19 @@ export function FAQSection({ faqs, locationName }: Props) {
 
         <div className="space-y-4">
           {faqs.map((faq, index) => (
-            <Disclosure key={index}>
-              {({ open }) => (
-                <div className={`rounded-xl border transition-colors ${open ? 'border-brand-aqua bg-brand-aqua/5' : 'border-border bg-card hover:border-brand-aqua/40'}`}>
-                  <Disclosure.Button className="flex w-full items-center justify-between px-6 py-5 text-left focus:outline-none">
-                    <span className="font-semibold text-foreground pr-4 font-heading">{faq.q}</span>
-                    <ChevronDown
-                      className={`h-5 w-5 text-brand-aqua transition-transform duration-300 flex-shrink-0 ${open ? 'rotate-180' : ''}`}
-                    />
-                  </Disclosure.Button>
-                  <Transition
-                    enter="transition duration-200 ease-out"
-                    enterFrom="transform scale-95 opacity-0"
-                    enterTo="transform scale-100 opacity-100"
-                    leave="transition duration-75 ease-out"
-                    leaveFrom="transform scale-100 opacity-100"
-                    leaveTo="transform scale-95 opacity-0"
-                  >
-                    <Disclosure.Panel className="px-6 pb-5 text-muted-foreground text-sm leading-relaxed prose prose-teal">
-                      <div dangerouslySetInnerHTML={{ __html: faq.a }} />
-                    </Disclosure.Panel>
-                  </Transition>
-                </div>
-              )}
-            </Disclosure>
+            <details
+              key={index}
+              className="group rounded-xl border border-border bg-card transition-colors hover:border-brand-aqua/40 open:border-brand-aqua open:bg-brand-aqua/5"
+            >
+              <summary className="flex w-full cursor-pointer list-none items-center justify-between px-6 py-5 text-left focus:outline-none [&::-webkit-details-marker]:hidden">
+                <span className="font-semibold text-foreground pr-4 font-heading">{faq.q}</span>
+                <ChevronDown className="h-5 w-5 text-brand-aqua transition-transform duration-300 flex-shrink-0 group-open:rotate-180" />
+              </summary>
+              <div
+                className="px-6 pb-5 text-muted-foreground text-sm leading-relaxed prose prose-teal"
+                dangerouslySetInnerHTML={{ __html: faq.a }}
+              />
+            </details>
           ))}
         </div>
       </div>

@@ -62,8 +62,16 @@ export async function proxy(request: NextRequest) {
   return supabaseResponse;
 }
 
+// Oturum kontrolü sadece giriş gerektiren sayfalarda çalışır; herkese açık sayfalar
+// (bölge sayfaları, blog, ürünler) her istekte Supabase'e gitmeden hızlı yanıt verir.
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/admin/:path*",
+    "/musteri/:path*",
+    "/giris",
+    "/login",
+    "/kayit",
+    "/api/admin/:path*",
+    "/api/auth/:path*",
   ],
 };

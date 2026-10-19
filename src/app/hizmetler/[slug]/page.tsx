@@ -13,6 +13,7 @@ import {
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import Link from "next/link";
 import { FAQSection } from "@/components/seo/FAQSection";
+import { ServiceAreaLinks } from "@/components/seo/ServiceAreaLinks";
 import { CtaBand } from "@/components/sections/CtaBand";
 import type { Metadata } from "next";
 
@@ -169,6 +170,8 @@ export default async function ServiceDetailPage({ params }: Props) {
           <FAQSection faqs={service.faqs} locationName={service.title} />
         </div>
       </section>
+
+      <ServiceAreaLinks serviceSlug={service.slug} serviceTitle={service.title} />
 
       <CtaBand />
     </div>

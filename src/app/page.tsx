@@ -7,11 +7,13 @@ import { BlogPreview } from "@/components/sections/BlogPreview";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { SavingsCalculator } from "@/components/sections/SavingsCalculator";
 import { DeviceRenewal } from "@/components/sections/DeviceRenewal";
+import { ServiceAreaLinks } from "@/components/seo/ServiceAreaLinks";
 import type { Metadata } from "next";
 
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
+  "@id": "https://www.suaritmaservis34.com/#localbusiness",
   "name": "SuArıtmaServis34",
   "image": "https://www.suaritmaservis34.com/logo.png",
   "description": "Sultangazi merkezli su arıtma cihazı satışı, montajı, filtre değişimi ve teknik servis hizmetleri.",
@@ -80,6 +82,7 @@ export default function HomePage() {
       <SavingsCalculator />
       <Testimonials />
       <BlogPreview />
+      <ServiceAreaLinks />
       <CtaBand />
     </>
   );

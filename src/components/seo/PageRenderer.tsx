@@ -4,7 +4,11 @@ import { HeroSection } from "@/components/seo/HeroSection";
 import { ServiceSection } from "@/components/seo/ServiceSection";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { NearbyLocations } from "@/components/seo/NearbyLocations";
-import { LocalServicesLinks } from "@/components/seo/LocalServicesLinks";
+import { LocalServicesLinks, type ServiceLink } from "@/components/seo/LocalServicesLinks";
+import { ServiceDetails } from "@/components/seo/ServiceDetails";
+import { SERVICES_DATA } from "@/lib/constants/services";
+import { isCoreService, isIndexablePage } from "@/lib/seo/indexPolicy";
+import Link from "next/link";
 import { generateLocalBusinessSchema, generateServiceSchema } from "@/lib/seo/schema";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { formatLocationName } from "@/lib/seo/locationNames";
@@ -104,6 +108,7 @@ export async function PageRenderer({ params }: Props) {
   }
 
   const allLocalServices = await getActiveServices();
+  const serviceDetail = service ? SERVICES_DATA[service.slug] : undefined;
 
   const customPage = await getCustomPage(location.id, service?.id);
 
@@ -136,7 +141,7 @@ export async function PageRenderer({ params }: Props) {
     neighbors = await getNearbyDistricts(location.il, location.slug) || [];
   }
 
-  const faqs = [
+  const locationFaqs = [
     {
       q: `${locName} için cihaz seçerken hangi su değerleri ölçülmeli?`,
       a: `${locName} için kayıtlı yaklaşık TDS değeri ${location.tds_degeri || 320} ppm'dir; gerçek değer bina ve zamana göre değişebilir. TDS toplam çözünmüş madde miktarını gösterir, su sertliğiyle aynı ölçüm değildir. Sertlik için kalsiyum ve magnezyum değerleri ayrıca değerlendirilmelidir.`
@@ -154,9 +159,30 @@ export async function PageRenderer({ params }: Props) {
       a: `Tek bir sistem her ev için doğru değildir. Giriş suyu basıncı, TDS ölçümü, sertlik analizi, günlük tüketim ve cihazın kurulacağı alan birlikte değerlendirilerek ters ozmoz (RO) veya ihtiyaca uygun başka bir filtrasyon sistemi seçilir.`
     }
   ];
+  const faqs = serviceDetail ? [...serviceDetail.faqs, ...locationFaqs.slice(1)] : locationFaqs;
 
-  const localBusinessSchema = generateLocalBusinessSchema(locName, serviceName || undefined, location.lat, location.lng);
-  const serviceSchemaObj = service ? generateServiceSchema(serviceName!, service.aciklama, `SuArıtmaServis34 ${locName}`, locName) : null;
+  // Hizmet linkleri indekslenen sayfalara gider: ilçe × ana hizmet sayfası ya da genel /hizmetler sayfası.
+  // Böylece mahalle × hizmet gibi noindex sayfalara iç link akışı oluşmaz.
+  const ilceName = location.ilce ? formatLocationName(location.ilce) : null;
+  const ilceBase = location.ilce ? `/${location.il}/${location.ilce}` : null;
+  const currentPath = `/${locationSlug}${hizmetSlug ? `/${hizmetSlug}` : ""}`;
+  const serviceLinks: ServiceLink[] = allLocalServices
+    .map((s: { slug: string; ad: string }): ServiceLink | null => {
+      const detail = SERVICES_DATA[s.slug];
+      const label = formatTechnicalText(s.ad);
+      if (ilceBase && isCoreService(s.slug)) {
+        return { href: `${ilceBase}/${s.slug}`, label: `${ilceName} ${label}`, description: detail?.shortDesc };
+      }
+      if (detail) return { href: `/hizmetler/${s.slug}`, label, description: detail.shortDesc };
+      return null;
+    })
+    .filter((l: ServiceLink | null): l is ServiceLink => !!l && l.href !== currentPath);
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.suaritmaservis34.com";
+  const localBusinessSchema = generateLocalBusinessSchema(locName);
+  const serviceSchemaObj = service
+    ? generateServiceSchema(serviceName!, serviceDetail?.shortDesc || service.aciklama, locName, `${siteUrl}${currentPath}`)
+    : null;
 
   const breadcrumbs = [];
   let cum = "";
@@ -205,12 +231,23 @@ export async function PageRenderer({ params }: Props) {
         serviceArea={districtContext.serviceArea}
       />
 
-      {allLocalServices.length > 0 && (
-        <LocalServicesLinks
-          services={allLocalServices}
-          baseUrl={`/${locationSlug}`}
-          currentServiceId={service?.id}
-        />
+      {serviceDetail && <ServiceDetails detail={serviceDetail} locationName={locName} />}
+
+      <LocalServicesLinks
+        links={serviceLinks}
+        title={ilceName ? `${ilceName} Su Arıtma Hizmetlerimiz` : "Su Arıtma Hizmetlerimiz"}
+      />
+
+      {location.mahalle && ilceBase && (
+        <section className="px-4 sm:px-6 lg:px-8 pb-4">
+          <p className="max-w-6xl mx-auto text-muted-foreground">
+            {locName}, {ilceName} ilçesine bağlıdır. İlçedeki tüm mahallelere verdiğimiz hizmetler için{" "}
+            <Link href={ilceBase} className="font-semibold text-brand-aqua hover:underline">
+              {ilceName} su arıtma servisi
+            </Link>{" "}
+            sayfamıza göz atabilirsiniz.
+          </p>
+        </section>
       )}
 
       <NearbyLocations neighbors={neighbors} currentLocationName={locName} />
@@ -284,7 +321,7 @@ export async function generateDynamicMetadata({ params }: Props): Promise<Metada
       canonical: canonicalUrl,
     },
     robots: {
-      index: true,
+      index: isIndexablePage(location, hizmetSlug),
       follow: true,
       "max-image-preview": "large",
       "max-snippet": -1,
