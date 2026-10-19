@@ -1,27 +1,105 @@
-import { createClient } from "@/lib/supabase/server";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Droplets, Check } from "lucide-react";
-import { formatTechnicalText } from "@/lib/products/formatTechnicalText";
+import { ArrowRight, Droplets } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-export async function FeaturedProducts() {
-  const supabase = await createClient();
-  const { data: products } = await supabase
-    .from("products")
-    .select("*, category:product_categories(*)")
-    .eq("is_active", true)
-    .eq("is_highlight", true)
-    .limit(3)
-    .order("created_at", { ascending: false });
+type FeaturedProduct = {
+  title: string;
+  /** Kısa alt başlık, fiyat içermez */
+  subtitle: string;
+  image?: string;
+  /** Ürün tanıtım sayfası; boşsa kart "Yakında" olarak gösterilir */
+  href?: string;
+};
 
-  if (!products || products.length === 0) return null;
+// Ana sayfadaki 4 sabit ürün. Yeni bir ürün sayfası hazır olunca ilgili
+// satıra title, image ve href girmek yeterli.
+const FEATURED_PRODUCTS: FeaturedProduct[] = [
+  {
+    title: "3.2 Prada",
+    subtitle: "Şeffaf kasa · 5 aşamalı filtreleme",
+    image: "/images/urunler/prada-3-2.webp",
+    href: "/3-2-su-aritma-cihazi",
+  },
+  { title: "Yeni Ürün", subtitle: "Tanıtım sayfası hazırlanıyor" },
+  { title: "Yeni Ürün", subtitle: "Tanıtım sayfası hazırlanıyor" },
+  { title: "Yeni Ürün", subtitle: "Tanıtım sayfası hazırlanıyor" },
+];
 
+function ProductCard({ product }: { product: FeaturedProduct }) {
+  const ready = Boolean(product.href && product.image);
+
+  const body = (
+    <>
+      <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem] bg-[radial-gradient(circle_at_50%_40%,#ffffff_0%,var(--secondary)_70%)]">
+        <div className="absolute inset-0 bg-dots opacity-20 pointer-events-none" />
+        {ready ? (
+          <Image
+            src={product.image!}
+            alt={`${product.title} su arıtma cihazı`}
+            fill
+            sizes="(max-width: 1024px) 50vw, 25vw"
+            className="object-contain p-5 sm:p-8 transition-transform duration-700 group-hover:scale-105"
+          />
+        ) : (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-brand-navy/20">
+            <Droplets className="w-12 h-12 sm:w-16 sm:h-16" />
+          </div>
+        )}
+        <span
+          className={cn(
+            "absolute top-3 left-3 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider",
+            ready ? "bg-brand-aqua text-white" : "bg-brand-navy/10 text-brand-navy/50"
+          )}
+        >
+          {ready ? "Yeni" : "Yakında"}
+        </span>
+      </div>
+
+      <div className="px-1 pt-4 sm:pt-5 flex items-end justify-between gap-3">
+        <div className="min-w-0">
+          <h3
+            className={cn(
+              "font-heading font-bold text-lg sm:text-xl leading-tight",
+              ready ? "text-brand-navy group-hover:text-brand-aqua transition-colors" : "text-brand-navy/40"
+            )}
+          >
+            {product.title}
+          </h3>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-1">{product.subtitle}</p>
+        </div>
+        {ready && (
+          <span className="hidden sm:flex shrink-0 w-10 h-10 rounded-full gradient-teal text-white items-center justify-center shadow-md transition-transform group-hover:translate-x-0.5">
+            <ArrowRight className="w-4 h-4" />
+          </span>
+        )}
+      </div>
+    </>
+  );
+
+  const cardClass =
+    "group block rounded-[2rem] border bg-card p-3 sm:p-4 transition-all duration-300";
+
+  return ready ? (
+    <Link
+      href={product.href!}
+      className={cn(cardClass, "border-brand-aqua/30 shadow-sm hover:shadow-2xl hover:-translate-y-1.5 hover:border-brand-aqua/60")}
+    >
+      {body}
+    </Link>
+  ) : (
+    <div className={cn(cardClass, "border-dashed border-border")} aria-disabled="true">
+      {body}
+    </div>
+  );
+}
+
+export function FeaturedProducts() {
   return (
     <section className="section-padding bg-secondary/30 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-14">
+        <div className="text-center mb-10 sm:mb-14">
           <p className="text-brand-aqua font-semibold text-sm uppercase tracking-widest mb-3">
             Öne Çıkan Ürünler
           </p>
@@ -33,90 +111,9 @@ export async function FeaturedProducts() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {products.map((product) => (
-            <div
-              key={product.id}
-              className={`rounded-[2.5rem] border flex flex-col overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 ${
-                product.is_highlight
-                  ? "border-brand-aqua/40 shadow-lg ring-1 ring-brand-aqua/20 bg-brand-aqua/[0.02]"
-                  : "border-border bg-card"
-              }`}
-            >
-              <div className="relative group/card overflow-hidden">
-                {/* Product Image Section */}
-                <div className="relative aspect-square overflow-hidden bg-white">
-                  <div className="absolute inset-0 bg-dots opacity-20 pointer-events-none" />
-                  {product.main_image ? (
-                    <Image
-                      src={product.main_image}
-                      alt={formatTechnicalText(product.name)}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      className="object-contain p-8 group-hover/card:scale-110 transition-transform duration-700"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center opacity-20">
-                       <Droplets className="w-16 h-16 text-white" />
-                    </div>
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
-
-                  {/* Icon & Badge Overlay */}
-                  <div className="absolute top-6 left-6 right-6 flex items-start justify-between z-10">
-                    <div className="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center">
-                      <Droplets className="w-5 h-5 text-brand-aqua" />
-                    </div>
-                    {product.badge && (
-                      <Badge className={`text-[10px] font-bold border-0 uppercase tracking-tighter ${product.badge_color || 'bg-brand-aqua text-white'}`}>
-                        {product.badge}
-                      </Badge>
-                    )}
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="p-8 flex flex-col flex-1">
-                  <div className="mb-6">
-                    <span className="text-[10px] font-black text-brand-aqua uppercase tracking-[0.2em] mb-1 block">
-                      {product.category?.name}
-                    </span>
-                    <h3 className="font-heading font-bold text-2xl text-brand-navy mb-2 group-hover:text-brand-aqua transition-colors">
-                      {formatTechnicalText(product.name)}
-                    </h3>
-                    <p className="text-sm font-medium text-brand-aqua italic mb-4">
-                      {product.tagline}
-                    </p>
-                  </div>
-
-                  <ul className="flex flex-col gap-3 mb-8 flex-1">
-                    {product.specs?.slice(0, 4).map((spec: string, i: number) => (
-                      <li key={i} className="flex items-center gap-2.5 text-sm text-muted-foreground">
-                        <Check className="w-4 h-4 text-brand-aqua flex-shrink-0" />
-                        {formatTechnicalText(spec)}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="mt-auto pt-6 border-t border-border flex items-center justify-between">
-                    <div>
-                      <p className="font-heading font-extrabold text-2xl text-brand-navy">
-                        {product.price ? `₺${product.price.toLocaleString('tr-TR')}` : 'Teklif Al'}
-                      </p>
-                      <p className="text-[10px] uppercase tracking-wider text-muted-foreground mt-0.5">Montaj Dahil</p>
-                    </div>
-                    <Button
-                      asChild
-                      className="rounded-full w-12 h-12 p-0 gradient-teal text-white border-0 hover:scale-110 transition-transform shadow-lg"
-                    >
-                      <Link href={`/urunler/${product.slug}`}>
-                        <ArrowRight className="w-5 h-5" />
-                      </Link>
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+          {FEATURED_PRODUCTS.map((product, i) => (
+            <ProductCard key={product.href ?? `yakinda-${i}`} product={product} />
           ))}
         </div>
 

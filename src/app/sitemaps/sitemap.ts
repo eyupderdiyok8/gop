@@ -9,6 +9,17 @@ const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.suaritmaservis3
 // Yeni bir id eklenirse src/app/sitemap.xml/route.ts içindeki listeye de eklenmeli.
 const SITEMAP_IDS = ['sayfalar', 'blog', 'urunler', 'bolgeler'];
 
+type BlogRow = { slug: string; published_at: string | null; updated_at: string | null; featured_image: string | null };
+type ProductRow = { slug: string; updated_at: string | null; main_image: string | null; gallery: unknown };
+type LocationRow = {
+  slug: string;
+  ilce: string | null;
+  mahalle: string | null;
+  updated_at?: string | null;
+  created_at?: string | null;
+};
+type ServiceRow = { slug: string | null };
+
 export async function generateSitemaps() {
   return SITEMAP_IDS.map((id) => ({ id }));
 }
@@ -28,6 +39,7 @@ function staticEntries(): MetadataRoute.Sitemap {
     { url: baseUrl, changeFrequency: 'weekly', priority: 1.0 },
     { url: `${baseUrl}/hizmetler`, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${baseUrl}/urunler`, changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${baseUrl}/3-2-su-aritma-cihazi`, changeFrequency: 'monthly', priority: 0.9 },
     { url: `${baseUrl}/blog`, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${baseUrl}/iletisim`, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${baseUrl}/gizlilik-politikasi`, changeFrequency: 'yearly', priority: 0.3 },
@@ -41,9 +53,9 @@ async function blogEntries(): Promise<MetadataRoute.Sitemap> {
     .select('slug, published_at, updated_at, featured_image')
     .eq('is_published', true);
 
-  return ((blogs as any[]) || []).map((blog) => ({
+  return ((blogs as BlogRow[] | null) || []).map((blog) => ({
     url: `${baseUrl}/blog/${blog.slug}`,
-    lastModified: new Date(blog.updated_at || blog.published_at),
+    lastModified: new Date(blog.updated_at || blog.published_at || Date.now()),
     changeFrequency: 'monthly',
     priority: 0.7,
     images: blog.featured_image ? [blog.featured_image] : undefined,
@@ -57,11 +69,11 @@ async function productEntries(): Promise<MetadataRoute.Sitemap> {
     .select('slug, updated_at, main_image, gallery')
     .eq('is_active', true);
 
-  return ((products as any[]) || []).map((product) => {
+  return ((products as ProductRow[] | null) || []).map((product) => {
     const productImages: string[] = [];
     if (product.main_image) productImages.push(product.main_image);
     if (product.gallery && Array.isArray(product.gallery)) {
-      productImages.push(...product.gallery);
+      productImages.push(...product.gallery.filter((g): g is string => typeof g === 'string'));
     }
 
     return {
@@ -81,12 +93,12 @@ async function locationEntries(): Promise<MetadataRoute.Sitemap> {
   if (!locations || locations.length === 0) return [];
 
   const entries: MetadataRoute.Sitemap = [];
-  const lastModified = (loc: any) => new Date(loc.updated_at || loc.created_at);
+  const lastModified = (loc: LocationRow) => new Date(loc.updated_at || loc.created_at || Date.now());
 
   // İl ve ilçe kayıtları (mahalle alanı boş olanlar), ardından mahalleler
-  const sorted = [...locations].sort((a: any, b: any) => Number(!!a.mahalle) - Number(!!b.mahalle));
+  const sorted = [...(locations as LocationRow[])].sort((a, b) => Number(!!a.mahalle) - Number(!!b.mahalle));
 
-  sorted.forEach((loc: any) => {
+  sorted.forEach((loc) => {
     entries.push({
       url: `${baseUrl}/${loc.slug}`,
       lastModified: lastModified(loc),
@@ -94,7 +106,7 @@ async function locationEntries(): Promise<MetadataRoute.Sitemap> {
       priority: loc.mahalle ? 0.6 : loc.ilce ? 0.9 : 1.0,
     });
 
-    services.forEach((srv: any) => {
+    (services as ServiceRow[]).forEach((srv) => {
       if (!srv.slug || !isIndexablePage(loc, srv.slug)) return;
       entries.push({
         url: `${baseUrl}/${loc.slug}/${srv.slug}`,

@@ -69,7 +69,7 @@ function NavItemWithDropdown({ link, isSolid, pathname }: { link: NavLink; isSol
       <Link
         href={link.href}
         className={cn(
-          "px-4 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-1",
+          "px-4 lg:px-2.5 xl:px-4 py-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors flex items-center gap-1",
           isSolid
             ? "text-white/80 hover:text-white hover:bg-white/10"
             : "text-white/80 hover:text-white hover:bg-white/10"
@@ -189,11 +189,11 @@ export function Navbar() {
         <div className="flex items-center justify-between h-20 lg:h-24">
           {/* Logo */}
           <Link href="/" className="flex items-center group">
-            <BrandLogo preload className="shrink-0 transition-transform group-hover:scale-105 duration-300" emblemClassName="h-11 xl:h-14" wordmarkClassName="h-7 xl:h-9" />
+            <BrandLogo preload className="shrink-0 transition-transform group-hover:scale-105 duration-300" emblemClassName="h-11 lg:h-10 xl:h-14" wordmarkClassName="h-7 lg:h-6 xl:h-9" />
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1 ml-6">
             {navLinks.map((link) =>
               link.hasDropdown ? (
                 <NavItemWithDropdown key={link.href} link={link} isSolid={isSolid} pathname={pathname} />
@@ -202,7 +202,7 @@ export function Navbar() {
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "px-4 py-2 rounded-md text-sm font-medium transition-colors",
+                    "px-4 lg:px-2.5 xl:px-4 py-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors",
                     isSolid
                       ? "text-white/80 hover:text-white hover:bg-white/10"
                       : "text-white/80 hover:text-white hover:bg-white/10"

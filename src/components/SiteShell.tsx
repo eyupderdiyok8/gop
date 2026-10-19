@@ -4,11 +4,19 @@ import { usePathname } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 
+// Ürün tanıtım sayfaları (kendi header/footer'ları var). Yeni ürün sayfası eklenince buraya da ekleyin.
+const LANDING_PAGES = ["/3-2-su-aritma-cihazi"];
+
 export function SiteShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAdmin = pathname.startsWith("/admin");
   const isRandevu = pathname.startsWith("/randevu");
   const isLogin = pathname === "/login";
+
+  if (LANDING_PAGES.some((p) => pathname.startsWith(p))) {
+    // Ürün tanıtım landing page'leri kendi header/footer'ına sahip
+    return <main className="min-h-screen">{children}</main>;
+  }
 
   if (isAdmin) {
     // Admin kendi layout'una sahip

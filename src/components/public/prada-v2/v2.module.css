@@ -1,0 +1,439 @@
+/* 3.2 Prada v2 — sinematik ürün sayfası stilleri */
+
+.root {
+  --p2-ink: #050505;
+  --p2-red: #ff3b3b;
+  --p2-bone: #f4efe9;
+  font-family: var(--font-p2-sans), ui-sans-serif, system-ui, sans-serif;
+  background: var(--p2-ink);
+  color: var(--p2-bone);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+
+.root ::selection {
+  background: rgba(255, 59, 59, 0.35);
+  color: #fff;
+}
+
+/* Sayfa açıkken lastik bant kaydırmada beyaz zemin görünmesin */
+:global(body):has(.root) {
+  background: #050505;
+}
+
+.root h1,
+.root h2,
+.root h3 {
+  font-family: var(--font-p2-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Ekran dışındaki bölümlerin yerleşim/çizimi, kullanıcı yaklaşana kadar ertelenir.
+   "auto" anahtarı bir kez çizilen gerçek yüksekliği hatırlar; tahmini değer yalnızca ilk sefer içindir. */
+.cv {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1100px;
+}
+
+.cvTall {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 4800px;
+}
+
+.serif {
+  font-family: var(--font-p2-serif), ui-serif, Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+.mono {
+  font-family: var(--font-p2-mono), ui-monospace, SFMono-Regular, monospace;
+}
+
+.accent {
+  background-image: linear-gradient(100deg, #ff3b3b 10%, #ff8f70 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding-right: 0.08em;
+}
+
+/* ───────── Hero ───────── */
+
+.grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+.beam {
+  position: absolute;
+  left: 50%;
+  top: -10%;
+  width: min(1100px, 140vw);
+  height: 95%;
+  transform: translateX(-50%);
+  background: radial-gradient(50% 100% at 50% 0%, rgba(255, 255, 255, 0.09), transparent 70%);
+  clip-path: polygon(38% 0, 62% 0, 100% 100%, 0 100%);
+  pointer-events: none;
+}
+
+.wordmark {
+  background-image: linear-gradient(180deg, rgba(255, 70, 70, 0.55) 0%, rgba(255, 40, 40, 0.18) 45%, rgba(255, 40, 40, 0) 82%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.glintMask {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.glintBand {
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: 0;
+  width: 38%;
+  /* Karışım modu yok: sadece transform animasyonu, GPU'da ucuz */
+  background: linear-gradient(100deg, transparent 0%, rgba(255, 255, 255, 0.16) 50%, transparent 100%);
+  transform: translateX(-120%) skewX(-14deg);
+  animation: glint 7.5s cubic-bezier(0.45, 0, 0.2, 1) 2.4s infinite;
+}
+
+@keyframes glint {
+  0% {
+    transform: translateX(-120%) skewX(-14deg);
+  }
+  38%,
+  100% {
+    transform: translateX(320%) skewX(-14deg);
+  }
+}
+
+/* Açılış animasyonları: JS beklemeden CSS ile başlar.
+   Yalnızca transform/opacity kullanılır (GPU'da çalışır, ana iş parçacığını yormaz). */
+
+/* Ürün görseli baştan tam görünür boyanır (LCP hemen ölçülür);
+   "ışıklar yanıyor" etkisini üstündeki, ürün şeklinde maskelenmiş karartma verir. */
+.introLift {
+  animation: lift 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
+@keyframes lift {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.introShade {
+  pointer-events: none;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  animation: shade 1.3s cubic-bezier(0.33, 0, 0.2, 1) 0.1s both;
+}
+
+@keyframes shade {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.introGlow {
+  animation: glowIn 2.4s cubic-bezier(0.16, 1, 0.3, 1) 0.45s both;
+}
+
+@keyframes glowIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.introRise {
+  animation: rise 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--d, 0s);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.introMask {
+  display: inline-block;
+  animation: maskUp 1.15s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--d, 0s);
+}
+
+@keyframes maskUp {
+  from {
+    transform: translateY(112%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.introLine {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 1.1s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  animation-delay: var(--d, 0s);
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.introFade {
+  animation: fadeIn 0.9s ease both;
+  animation-delay: var(--d, 0s);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Nabız halkası: box-shadow yerine transform/opacity (her karede yeniden boyama yok) */
+.pulseDot {
+  position: relative;
+}
+
+.pulseDot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: rgba(255, 59, 59, 0.6);
+  animation: pulseRing 2.2s ease-out infinite;
+}
+
+@keyframes pulseRing {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  70%,
+  100% {
+    transform: scale(3.4);
+    opacity: 0;
+  }
+}
+
+.scrollCue {
+  animation: scrollCue 2.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@keyframes scrollCue {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+/* ───────── Damla yolculuğu ───────── */
+
+.drift {
+  animation: drift 9s ease-in-out infinite;
+}
+
+.paused .drift,
+.paused .bubble,
+.paused .twinkle {
+  animation-play-state: paused;
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(4px, -6px);
+  }
+  66% {
+    transform: translate(-5px, 3px);
+  }
+}
+
+.bubble {
+  animation: bubble 5s ease-in infinite;
+}
+
+@keyframes bubble {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-190px);
+    opacity: 0;
+  }
+}
+
+.twinkle {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: twinkle 2.6s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    transform: scale(0.2);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ───────── Röntgen merceği ───────── */
+
+.scan {
+  background-image: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.045) 0 1px, transparent 1px 3px);
+}
+
+.lensSweep {
+  animation: lensSweep 2.8s ease-in-out infinite alternate;
+}
+
+@keyframes lensSweep {
+  from {
+    transform: translateY(-46%);
+  }
+  to {
+    transform: translateY(46%);
+  }
+}
+
+/* ───────── Ölçüler ───────── */
+
+.blueprint {
+  background-image:
+    linear-gradient(rgba(255, 70, 70, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 70, 70, 0.07) 1px, transparent 1px),
+    linear-gradient(rgba(255, 70, 70, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 70, 70, 0.035) 1px, transparent 1px);
+  background-size:
+    80px 80px,
+    80px 80px,
+    16px 16px,
+    16px 16px;
+  background-position: center;
+}
+
+/* ───────── Kutu içeriği ───────── */
+
+.ping {
+  animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  80%,
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+/* ───────── Kapanış ───────── */
+
+.ripple {
+  animation: ripple 3.6s cubic-bezier(0.2, 0.6, 0.35, 1) infinite;
+  animation-delay: var(--d, 0s);
+}
+
+@keyframes ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(0.6);
+    opacity: 0.55;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2.6);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .introLift,
+  .introGlow,
+  .introRise,
+  .introMask,
+  .introFade {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+  .introShade {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+  .introMask,
+  .introRise,
+  .introLift {
+    transform: none !important;
+  }
+  .introGlow {
+    transform: translate(-50%, -50%) !important;
+  }
+  .introLine {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+  .glintBand,
+  .drift,
+  .bubble,
+  .twinkle,
+  .lensSweep,
+  .ripple,
+  .ping,
+  .pulseDot::after,
+  .scrollCue {
+    animation: none !important;
+  }
+}
