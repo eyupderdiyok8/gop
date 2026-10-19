@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Phone, Droplets, MapPin } from "lucide-react";
-import { MultiStepRandevuForm } from "@/components/public/MultiStepRandevuForm";
+import { HeroHelpMenu } from "@/components/public/HeroHelpMenu";
 
 export function Hero() {
   return (
@@ -102,7 +102,7 @@ export function Hero() {
             id="randevu"
           >
             <div className="w-full relative z-20 max-w-md lg:max-w-none">
-              <MultiStepRandevuForm />
+              <HeroHelpMenu />
             </div>
           </motion.div>
         </div>

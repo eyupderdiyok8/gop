@@ -20,9 +20,9 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.suaritmaservis34.com"),
   icons: {
     icon: [
-      { url: "/logo.png", type: "image/png" },
+      { url: "/images/logo/favicon-64.png", type: "image/png", sizes: "64x64" },
     ],
-    apple: "/logo.png",
+    apple: "/images/logo/apple-icon-180.png",
   },
   title: {
     default: "SuArıtmaServis34 | Sultangazi Su Arıtma Servisi",

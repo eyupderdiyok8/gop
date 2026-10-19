@@ -5,9 +5,31 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Droplets, Phone, Home, Wrench, Package, Info, FileText, MessageSquare, ChevronDown, ChevronRight, RefreshCw } from "lucide-react";
+import { Menu, Phone, Home, Wrench, Package, Info, FileText, MessageSquare, ChevronDown, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SERVICES_DATA } from "@/lib/constants/services";
+import { YouTubeIcon } from "@/components/icons/YouTubeIcon";
+import { XIcon } from "@/components/icons/XIcon";
+import { BrandLogo } from "@/components/BrandLogo";
+
+function InstagramIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+  );
+}
+
+function FacebookIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+  );
+}
+
+const socialLinks = [
+  { href: "https://www.instagram.com/suaritmateknikservis34", label: "Instagram", icon: InstagramIcon },
+  { href: "https://www.facebook.com/suaritmaistabulavrupa", label: "Facebook", icon: FacebookIcon },
+  { href: "https://www.youtube.com/@suaritmateknikservis34", label: "YouTube", icon: YouTubeIcon },
+  { href: "https://x.com/suaritmateknik", label: "X", icon: XIcon },
+];
 
 const serviceMenuItems = Object.values(SERVICES_DATA).map((s) => ({
   href: `/hizmetler/${s.slug}`,
@@ -24,7 +46,9 @@ const navLinks = [
   { href: "/iletisim", label: "İletişim", icon: MessageSquare },
 ];
 
-function NavItemWithDropdown({ link, isSolid, pathname }: { link: any; isSolid: boolean; pathname: string }) {
+type NavLink = (typeof navLinks)[number];
+
+function NavItemWithDropdown({ link, isSolid, pathname }: { link: NavLink; isSolid: boolean; pathname: string }) {
   const [open, setOpen] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -83,7 +107,7 @@ function NavItemWithDropdown({ link, isSolid, pathname }: { link: any; isSolid: 
   );
 }
 
-function MobileNavItemWithDropdown({ link, pathname, setOpen }: { link: any; pathname: string; setOpen: (v: boolean) => void }) {
+function MobileNavItemWithDropdown({ link, pathname, setOpen }: { link: NavLink; pathname: string; setOpen: (v: boolean) => void }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -165,7 +189,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-20 lg:h-24">
           {/* Logo */}
           <Link href="/" className="flex items-center group">
-            <img src="/logo.png" alt="SuArıtmaServis34" className="h-12 lg:h-16 w-auto transition-transform group-hover:scale-105 duration-300" />
+            <BrandLogo preload className="shrink-0 transition-transform group-hover:scale-105 duration-300" emblemClassName="h-11 xl:h-14" wordmarkClassName="h-7 xl:h-9" />
           </Link>
 
           {/* Desktop Nav */}
@@ -216,7 +240,7 @@ export function Navbar() {
               <div className="p-6 border-b border-white/10">
                 <div className="flex items-center justify-between">
                   <Link href="/" onClick={() => setOpen(false)} className="">
-                    <img src="/logo.png" alt="SuArıtmaServis34" className="h-12 w-auto" />
+                    <BrandLogo emblemClassName="h-11" wordmarkClassName="h-7" />
                   </Link>
                 </div>
               </div>
@@ -260,15 +284,22 @@ export function Navbar() {
                     0553 114 27 34
                   </a>
 
-                  <div className="flex items-center justify-between px-2">
+                  <div className="flex flex-col gap-3 px-2">
                     <p className="text-xs text-white/40 font-medium uppercase tracking-widest">Bizi Takip Edin</p>
-                    <div className="flex gap-4">
-                      <a href="#" className="p-2 bg-white/5 rounded-lg text-white/60 hover:text-brand-aqua transition-colors">
-                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-                      </a>
-                      <a href="#" className="p-2 bg-white/5 rounded-lg text-white/60 hover:text-brand-aqua transition-colors">
-                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
-                      </a>
+                    <div className="flex gap-2">
+                      {socialLinks.map(({ href, label, icon: Icon }) => (
+                        <a
+                          key={href}
+                          href={href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={label}
+                          title={label}
+                          className="p-2.5 bg-white/5 rounded-lg text-white/60 hover:text-brand-aqua transition-colors"
+                        >
+                          <Icon className="w-5 h-5" />
+                        </a>
+                      ))}
                     </div>
                   </div>
 

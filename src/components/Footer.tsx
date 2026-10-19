@@ -1,8 +1,10 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Phone, MapPin, Clock } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
+import { BrandLogo } from "@/components/BrandLogo";
+import { YouTubeIcon } from "@/components/icons/YouTubeIcon";
+import { XIcon } from "@/components/icons/XIcon";
 
 const footerLinks = {
   hizmetler: [
@@ -41,7 +43,7 @@ export function Footer() {
           {/* Brand */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-block mb-2">
-              <Image src="/logo.png" alt="SuArıtmaServis34" width={190} height={80} className="h-20 w-auto -ml-2" />
+              <BrandLogo emblemClassName="h-14" wordmarkClassName="h-9" />
             </Link>
             <p className="text-white/60 text-sm leading-relaxed mb-6 max-w-xs">
               Sultangazi merkezli ekibimizle İstanbul Avrupa Yakası&apos;nda su arıtma cihazı satışı, montaj, filtre değişimi ve teknik servis hizmetleri sunuyoruz.
@@ -123,7 +125,7 @@ export function Footer() {
             </ul>
             <div className="mt-6">
               <h4 className="font-heading font-semibold text-white mb-3 text-sm uppercase tracking-wider">Sosyal Medya</h4>
-              <div className="flex gap-3">
+              <div className="flex flex-wrap gap-3">
                 <a
                   href="https://www.instagram.com/suaritmateknikservis34"
                   target="_blank"
@@ -139,6 +141,24 @@ export function Footer() {
                   className="w-9 h-9 rounded-lg bg-white/10 hover:bg-brand-aqua flex items-center justify-center transition-colors"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                </a>
+                <a
+                  href="https://www.youtube.com/@suaritmateknikservis34"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="YouTube"
+                  className="w-9 h-9 rounded-lg bg-white/10 hover:bg-brand-aqua flex items-center justify-center transition-colors"
+                >
+                  <YouTubeIcon className="w-4 h-4" />
+                </a>
+                <a
+                  href="https://x.com/suaritmateknik"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="X"
+                  className="w-9 h-9 rounded-lg bg-white/10 hover:bg-brand-aqua flex items-center justify-center transition-colors"
+                >
+                  <XIcon className="w-4 h-4" />
                 </a>
                 <a
                   href="https://share.google/WT0lMbUXynTZeGOZ6"

@@ -51,10 +51,10 @@
 
 :root {
   /* ─── Brand Colors ───────────────────────────────── */
-  --brand-navy:       #0a1f3d;               /* Deep navy — hero bg, dark surfaces   */
-  --brand-navy-light: #0d2a52;               /* Mid navy — hover states, card tints  */
-  --brand-aqua:       #00b4d8;               /* Vivid aqua — primary accent/CTA      */
-  --brand-aqua-light: #90e0ef;               /* Pale aqua — highlights, badges       */
+  --brand-navy:       #071a3f;               /* Deep royal navy — hero bg, dark surfaces */
+  --brand-navy-light: #0c2c66;               /* Mid royal navy — hover states, card tints */
+  --brand-aqua:       #1a8cff;               /* Electric blue (logo) — primary accent/CTA */
+  --brand-aqua-light: #7cd4ff;               /* Ice blue (logo highlight) — badges   */
 
   /* ─── Core Tokens ────────────────────────────────── */
   --background:          oklch(0.99 0.002 220);   /* Near-white with cool undertone      */
@@ -69,12 +69,12 @@
   --secondary-foreground:oklch(0.17 0.07  243);
   --muted:               oklch(0.95 0.005 220);
   --muted-foreground:    oklch(0.48 0.03  220);   /* Slate-blue secondary text           */
-  --accent:              oklch(0.68 0.14  211);   /* Aqua (#00b4d8 equivalent)           */
+  --accent:              oklch(0.64 0.19  255);   /* Electric blue (#1a8cff equivalent)  */
   --accent-foreground:   oklch(1    0     0  );
   --destructive:         oklch(0.60 0.18   25);
   --border:              oklch(0.91 0.008 220);
   --input:               oklch(0.91 0.008 220);
-  --ring:                oklch(0.68 0.14  211);   /* Focus ring — aqua                   */
+  --ring:                oklch(0.64 0.19  255);   /* Focus ring — electric blue          */
   --radius: 0.75rem;
 
   /* ─── Sidebar ────────────────────────────────────── */
@@ -85,7 +85,7 @@
   --sidebar-accent:             oklch(0.95 0.005 220);
   --sidebar-accent-foreground:  oklch(0.17 0.07  243);
   --sidebar-border:             oklch(0.91 0.008 220);
-  --sidebar-ring:               oklch(0.68 0.14  211);
+  --sidebar-ring:               oklch(0.64 0.19  255);
 }
 
 @layer base {
@@ -112,21 +112,21 @@
 
 /* Dark navy card/avatar backgrounds */
 .gradient-navy {
-  background: linear-gradient(135deg, #0d2a52 0%, #0a1f3d 100%);
+  background: linear-gradient(135deg, #0c2c66 0%, #071a3f 100%);
 }
 
-/* CTA band, primary buttons — aqua punch */
+/* CTA band, primary buttons — logo electric blue */
 .gradient-teal {
-  background: linear-gradient(135deg, #00b4d8 0%, #0096b4 100%);
+  background: linear-gradient(135deg, #1e90ff 0%, #0b5bd3 100%);
 }
 
-/* Hero — deep navy fading to a subtle aqua glow at bottom-right */
+/* Hero — deep navy fading to a royal-blue glow at bottom-right */
 .gradient-hero {
   background: linear-gradient(
     150deg,
-    #0a1f3d 0%,
-    #0d2a52 55%,
-    #005f73 100%
+    #071a3f 0%,
+    #0c2c66 55%,
+    #0b4fb3 100%
   );
 }
 

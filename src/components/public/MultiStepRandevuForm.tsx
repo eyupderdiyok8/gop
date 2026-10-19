@@ -184,12 +184,12 @@ export function MultiStepRandevuForm() {
   };
 
   return (
-    <div className="w-full max-w-xl mx-auto bg-brand-navy/95 border border-brand-aqua/30 rounded-[2rem] p-6 md:p-10 backdrop-blur-3xl shadow-[0_0_50px_-12px_rgba(0,180,216,0.3)] relative overflow-hidden">
+    <div className="w-full max-w-xl mx-auto bg-brand-navy/95 border border-brand-aqua/30 rounded-[2rem] p-6 md:p-10 backdrop-blur-3xl shadow-[0_0_50px_-12px_rgba(26,140,255,0.3)] relative overflow-hidden">
       {/* Progress Bar */}
       {step < 4 && (
         <div className="absolute top-0 left-0 w-full h-2 bg-white/5">
           <motion.div 
-            className="h-full bg-gradient-to-r from-brand-aqua to-brand-aqua shadow-[0_0_10px_rgba(0,180,216,0.5)]"
+            className="h-full bg-gradient-to-r from-brand-aqua to-brand-aqua shadow-[0_0_10px_rgba(26,140,255,0.5)]"
             initial={{ width: "33%" }}
             animate={{ width: `${(step / 3) * 100}%` }}
             transition={{ duration: 0.3 }}
