@@ -13,7 +13,11 @@ export function slugify(text: string): string {
   }
 
   return text
+    // â, î, û gibi şapkalı harfler ve diğer aksanlar: harfi koru, işareti at
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
     .toLowerCase()
+    .trim()
     .replace(/[^\w\s-]/g, '') // Remove non-word characters (except spaces and hyphens)
     .replace(/[\s_-]+/g, '-')  // Replace spaces and underscores with a single hyphen
     .replace(/^-+|-+$/g, '');  // Remove leading and trailing hyphens

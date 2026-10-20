@@ -18,6 +18,7 @@ import {
   Image as ImageFormIcon 
 } from "lucide-react";
 import Link from "next/link";
+import { slugify } from "@/lib/slugify";
 
 interface BlogFormProps {
   initialData?: any;
@@ -56,14 +57,8 @@ export function BlogForm({ initialData }: BlogFormProps) {
     }
   }, [initialData]);
 
-  const generateSlug = (text: string) => {
-    return text
-      .toLowerCase()
-      .trim()
-      .replace(/[^\w\s-]/g, "")
-      .replace(/[\s_-]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-  };
+  // Türkçe karakterleri (ç, ğ, ı, İ, ö, ş, ü) silmek yerine Latin karşılığına çevirir
+  const generateSlug = slugify;
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const title = e.target.value;
@@ -105,6 +100,8 @@ export function BlogForm({ initialData }: BlogFormProps) {
 
     const payload = {
       ...formData,
+      // Elle yazılan slug da kayıttan önce temizlenir (Türkçe karakterler korunarak çevrilir)
+      slug: slugify(formData.slug || formData.title),
       published_at: formData.is_published ? new Date().toISOString() : null,
     };
 
@@ -173,6 +170,7 @@ export function BlogForm({ initialData }: BlogFormProps) {
             <Input 
               value={formData.slug} 
               onChange={(e: any) => setFormData(p => ({ ...p, slug: e.target.value.toLowerCase() }))}
+              onBlur={() => setFormData(p => ({ ...p, slug: slugify(p.slug) }))}
               placeholder="url-slug-yapisi"
               className="bg-white border-slate-200 text-slate-400 font-mono text-sm"
             />
