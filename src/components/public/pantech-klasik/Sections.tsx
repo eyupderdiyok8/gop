@@ -105,10 +105,10 @@ export function Tankless() {
 /* ───────── 02 · 4 aşamalı filtreleme ───────── */
 
 const STAGES = [
-  { no: "01", name: "PP Sediment Filtre", img: "/images/pantech/filtre-pp.webp", w: 155, h: 415, desc: "Sudaki tortu, kum, pas ve askıda katı maddeleri tutar." },
-  { no: "02", name: "CTO Karbon Filtre", img: "/images/pantech/filtre-cto.webp", w: 160, h: 415, desc: "Klor, koku ve zararlı organik maddeleri azaltır." },
-  { no: "03", name: "600 GPD RO Membran", img: "/images/pantech/filtre-ro.webp", w: 300, h: 525, desc: "Suyun içindeki ağır metaller, kimyasallar ve zararlı yapıların arıtılmasını sağlar." },
-  { no: "04", name: "Easywell Post Carbon", img: "/images/pantech/filtre-post.webp", w: 140, h: 475, desc: "Suyun tadını ve kokusunu düzenleyerek daha berrak bir içim sağlar." },
+  { no: "01", name: "PP Sediment Filtre", img: "/images/pantech/filtre-pp.webp", alt: "PP sediment su arıtma filtresi", w: 155, h: 415, desc: "Sudaki tortu, kum, pas ve askıda katı maddeleri tutar." },
+  { no: "02", name: "CTO Karbon Filtre", img: "/images/pantech/filtre-cto.webp", alt: "CTO karbon blok su arıtma filtresi", w: 160, h: 415, desc: "Klor, koku ve zararlı organik maddeleri azaltır." },
+  { no: "03", name: "Vontron 600 GPD RO Membran", img: "/images/pantech/vontron-ulp3012-600-gpd-ro-membran.webp", alt: "Vontron ULP3012-600 600 GPD ters ozmoz (RO) membran filtresi", w: 154, h: 532, desc: "Suyun içindeki ağır metaller, kimyasallar ve zararlı yapıların arıtılmasını sağlar." },
+  { no: "04", name: "Easywell Post Karbon Filtre", img: "/images/pantech/easywell-aic-10-inline-post-karbon-filtre.webp", alt: "Easywell AIC-10 inline post karbon su arıtma filtresi", w: 127, h: 549, desc: "Suyun tadını ve kokusunu düzenleyerek daha berrak bir içim sağlar." },
 ];
 
 export function Filtration() {
@@ -138,7 +138,7 @@ export function Filtration() {
                 <li className="flex h-full flex-col rounded-[28px] border border-white/[0.07] bg-gradient-to-b from-[#0e0e0e] to-[#070707] p-5">
                   <div className="relative mx-auto flex h-[240px] w-full items-center justify-center overflow-hidden rounded-2xl bg-black">
                     <div aria-hidden className="absolute inset-x-[15%] bottom-0 h-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(62,166,255,0.22),transparent)]" />
-                    <Image src={st.img} alt={st.name} width={st.w} height={st.h} className="relative h-[210px] w-auto rounded-lg object-contain" />
+                    <Image src={st.img} alt={st.alt} width={st.w} height={st.h} className="relative h-[210px] w-auto rounded-lg object-contain" />
                   </div>
                   <div className="mt-5 flex items-center gap-3">
                     <span className={cn(s.mono, "flex h-9 w-9 items-center justify-center rounded-full border border-[#3ea6ff] text-[11px] font-semibold text-[#7fe0ff]")}>
