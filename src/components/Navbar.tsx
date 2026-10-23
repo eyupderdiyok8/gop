@@ -31,15 +31,63 @@ const socialLinks = [
   { href: "https://x.com/suaritmateknik", label: "X", icon: XIcon },
 ];
 
-const serviceMenuItems = Object.values(SERVICES_DATA).map((s) => ({
+type MenuItem = { label: string; href?: string; soon?: boolean; children?: MenuItem[] };
+
+const serviceMenuItems: MenuItem[] = Object.values(SERVICES_DATA).map((s) => ({
   href: `/hizmetler/${s.slug}`,
   label: s.title,
 }));
 
-const navLinks = [
+// Ürün menüsü: ana gruplar ve altındaki ürünler. Sayfası olmayan gruplar şimdilik /urunler'e gider.
+const productMenuItems: MenuItem[] = [
+  {
+    label: "Evsel Su Arıtma Sistemleri",
+    href: "/urunler",
+    children: [
+      { label: "Prada Su Arıtma", href: "/3-2-prada-su-aritma-cihazi" },
+      { label: "Headon Su Arıtma", href: "/urunler/22-evsel-su-aritma-cihazi" },
+    ],
+  },
+  {
+    label: "Direkt Akış Su Arıtma Sistemleri",
+    href: "/urunler",
+    children: [
+      { label: "Pantech Su Arıtma", href: "/pantech-su-aritma-cihazi" },
+      { label: "Quantum Plus Su Arıtma", href: "/quantum-plus-su-aritma-cihazi" },
+    ],
+  },
+  {
+    label: "Sebiller",
+    href: "/urunler",
+    children: [
+      {
+        label: "Tezgah Üstü Sebiller",
+        href: "/urunler",
+        children: [
+          { label: "OD-3TT02 Masaüstü Sebil", href: "/urunler/od-3tt02-masaustu-su-aritma-sebili" },
+          { label: "KS-06 Masaüstü Sebil", href: "/urunler/ks-06-masaustu-su-aritma-sebili" },
+        ],
+      },
+      {
+        label: "Arıtmalı Su Sebilleri",
+        href: "/urunler",
+        children: [
+          { label: "KS07 Arıtmalı Su Sebili", href: "/urunler/ks07-aritmali-su-sebili" },
+          { label: "OD-3FS01 Arıtmalı Su Sebili", href: "/urunler/od-3fs01-aritmali-su-sebili-gaziosmanpasa" },
+        ],
+      },
+    ],
+  },
+  { label: "Filtreler", href: "/urunler/su-aritma-cihazi-filtre-cesitleri" },
+  { label: "Tanklar", href: "/urunler/su-aritma-cihazi-tank-cesitleri" },
+  { label: "Musluklar", href: "/urunler/su-aritma-musluk-cesitleri-paslanmaz-krom-3-yollu" },
+  { label: "Yedek Parça", href: "/urunler" },
+];
+
+const navLinks: { href: string; label: string; icon: typeof Home; mega?: boolean; menu?: { all: string; items: MenuItem[] } }[] = [
   { href: "/", label: "Ana Sayfa", icon: Home },
-  { href: "/hizmetler", label: "Hizmetler", icon: Wrench, hasDropdown: true },
-  { href: "/urunler", label: "Ürünler", icon: Package },
+  { href: "/urunler", label: "Ürünler", icon: Package, mega: true, menu: { all: "Tüm Ürünler", items: productMenuItems } },
+  { href: "/hizmetler", label: "Hizmetler", icon: Wrench, menu: { all: "Tüm Hizmetler", items: serviceMenuItems } },
   { href: "/cihaz-yenileme", label: "Cihaz Yenileme", icon: RefreshCw },
   { href: "/hakkimizda", label: "Hakkımızda", icon: Info },
   { href: "/blog", label: "Blog", icon: FileText },
@@ -47,6 +95,46 @@ const navLinks = [
 ];
 
 type NavLink = (typeof navLinks)[number];
+
+/** Menü satırı: alt öğesi olan grup başlığı, normal bağlantı ya da "yakında" etiketi */
+function MenuRows({ items, pathname, onPick, variant, depth = 0 }: { items: MenuItem[]; pathname: string; onPick: () => void; variant: "desktop" | "mobile"; depth?: number }) {
+  const row = variant === "desktop" ? "block px-4 py-2 text-sm" : "block py-2.5 px-3 text-sm rounded-lg";
+  return (
+    <>
+      {items.map((item) => {
+        const active = item.href !== undefined && item.href !== "/urunler" && pathname === item.href;
+        const isGroup = Boolean(item.children?.length);
+        return (
+          <div key={item.label}>
+            {item.soon || !item.href ? (
+              <span className={cn(row, "flex items-center gap-2 text-white/35")}>
+                {item.label}
+                <span className="rounded-full bg-white/10 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white/45">Yakında</span>
+              </span>
+            ) : (
+              <Link
+                href={item.href}
+                onClick={onPick}
+                className={cn(
+                  row,
+                  "transition-colors hover:bg-white/10",
+                  isGroup || depth === 0 ? "font-semibold text-white" : active ? "font-semibold text-brand-aqua" : variant === "desktop" ? "text-white/80" : "text-white/60"
+                )}
+              >
+                {item.label}
+              </Link>
+            )}
+            {isGroup && (
+              <div className={cn("border-l border-white/10", variant === "desktop" ? "ml-4 mb-1" : "ml-3 mb-1")}>
+                <MenuRows items={item.children!} pathname={pathname} onPick={onPick} variant={variant} depth={depth + 1} />
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </>
+  );
+}
 
 function NavItemWithDropdown({ link, isSolid, pathname }: { link: NavLink; isSolid: boolean; pathname: string }) {
   const [open, setOpen] = useState(false);
@@ -80,27 +168,100 @@ function NavItemWithDropdown({ link, isSolid, pathname }: { link: NavLink; isSol
       </Link>
 
       {open && (
-        <div className="absolute top-full left-0 mt-1 w-64 bg-brand-navy/95 backdrop-blur-lg rounded-xl shadow-2xl border border-white/10 py-2 z-50 animate-in fade-in-0 slide-in-from-top-2 duration-200">
+        <div className="absolute top-full left-0 mt-1 w-72 max-h-[75vh] overflow-y-auto bg-brand-navy/95 backdrop-blur-lg rounded-xl shadow-2xl border border-white/10 py-2 z-50 animate-in fade-in-0 slide-in-from-top-2 duration-200">
           <Link
             href={link.href}
             onClick={() => setOpen(false)}
             className="block px-4 py-2.5 text-sm text-brand-aqua font-semibold hover:bg-white/10 transition-colors border-b border-white/10 mb-1"
           >
-            Tüm Hizmetler
+            {link.menu!.all}
           </Link>
-          {serviceMenuItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setOpen(false)}
-              className={cn(
-                "block px-4 py-2 text-sm transition-colors hover:bg-white/10",
-                pathname === item.href ? "text-brand-aqua font-semibold" : "text-white/80"
-              )}
-            >
-              {item.label}
-            </Link>
-          ))}
+          <MenuRows items={link.menu!.items} pathname={pathname} onPick={() => setOpen(false)} variant="desktop" />
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Masaüstü ürün mega menüsü: alt grubu olan her başlık bir sütun, tekil kalemler son sütunda toplanır */
+function NavItemMega({ link, pathname }: { link: NavLink; pathname: string }) {
+  const [open, setOpen] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const items = link.menu!.items;
+  const columns: MenuItem[] = [
+    ...items.filter((i) => i.children?.length),
+    { label: "Filtre & Yedek Parça", children: items.filter((i) => !i.children?.length) },
+  ];
+  const close = () => setOpen(false);
+  const leaf = (item: MenuItem) =>
+    item.href ? (
+      <Link
+        key={item.label}
+        href={item.href}
+        onClick={close}
+        className={cn(
+          "block rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-white/10 hover:text-white",
+          item.href !== "/urunler" && pathname === item.href ? "font-semibold text-brand-aqua" : "text-white/70"
+        )}
+      >
+        {item.label}
+      </Link>
+    ) : null;
+
+  return (
+    <div
+      onMouseEnter={() => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        setOpen(true);
+      }}
+      onMouseLeave={() => {
+        timeoutRef.current = setTimeout(close, 150);
+      }}
+      onFocus={() => setOpen(true)}
+    >
+      <Link
+        href={link.href}
+        className="px-4 lg:px-2.5 xl:px-4 py-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors flex items-center gap-1 text-white/80 hover:text-white hover:bg-white/10"
+      >
+        {link.label}
+        <ChevronDown className={cn("w-3.5 h-3.5 transition-transform duration-200", open && "rotate-180")} />
+      </Link>
+
+      {open && (
+        <div className="absolute left-1/2 top-[calc(100%-2.5rem)] z-50 w-[min(94vw,1040px)] -translate-x-1/2 pt-[calc(2.5rem+4px)]">
+          <div className="rounded-2xl border border-white/10 bg-brand-navy/95 p-6 shadow-2xl backdrop-blur-lg animate-in fade-in-0 slide-in-from-top-2 duration-200">
+            <div className="grid grid-cols-4 gap-6">
+              {columns.map((col) => (
+                <div key={col.label}>
+                  {col.href ? (
+                    <Link href={col.href} onClick={close} className="mb-2 block px-2 text-xs font-bold uppercase tracking-wider text-brand-aqua hover:text-brand-aqua-light">
+                      {col.label}
+                    </Link>
+                  ) : (
+                    <p className="mb-2 px-2 text-xs font-bold uppercase tracking-wider text-brand-aqua">{col.label}</p>
+                  )}
+                  <div className="space-y-0.5">
+                    {col.children!.map((item) =>
+                      item.children?.length ? (
+                        <div key={item.label} className="pt-1">
+                          <p className="px-2 pb-0.5 pt-1 text-[13px] font-semibold text-white">{item.label}</p>
+                          <div className="ml-2 border-l border-white/10 pl-1">{item.children.map(leaf)}</div>
+                        </div>
+                      ) : (
+                        leaf(item)
+                      )
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-4">
+              <p className="text-sm text-white/50">Ev, ofis ve iş yerleri için su arıtma çözümleri</p>
+              <Link href={link.href} onClick={close} className="text-sm font-semibold text-brand-aqua hover:text-brand-aqua-light">
+                {link.menu!.all} →
+              </Link>
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -128,6 +289,8 @@ function MobileNavItemWithDropdown({ link, pathname, setOpen }: { link: NavLink;
         </Link>
         <button
           onClick={() => setExpanded(!expanded)}
+          aria-expanded={expanded}
+          aria-label={`${link.label} alt menüsünü aç`}
           className="p-3 text-white/40 hover:text-white transition-colors"
         >
           <ChevronDown className={cn("w-4 h-4 transition-transform duration-200", expanded && "rotate-180")} />
@@ -141,21 +304,9 @@ function MobileNavItemWithDropdown({ link, pathname, setOpen }: { link: NavLink;
             onClick={() => setOpen(false)}
             className="block py-2.5 px-3 text-sm text-brand-aqua font-semibold hover:bg-white/5 rounded-lg transition-colors"
           >
-            Tüm Hizmetler
+            {link.menu!.all}
           </Link>
-          {serviceMenuItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setOpen(false)}
-              className={cn(
-                "block py-2.5 px-3 text-sm rounded-lg transition-colors hover:bg-white/5",
-                pathname === item.href ? "text-brand-aqua font-semibold" : "text-white/60"
-              )}
-            >
-              {item.label}
-            </Link>
-          ))}
+          <MenuRows items={link.menu!.items} pathname={pathname} onPick={() => setOpen(false)} variant="mobile" />
         </div>
       )}
     </div>
@@ -195,7 +346,9 @@ export function Navbar() {
           {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-1 ml-6">
             {navLinks.map((link) =>
-              link.hasDropdown ? (
+              link.mega ? (
+                <NavItemMega key={link.href} link={link} pathname={pathname} />
+              ) : link.menu ? (
                 <NavItemWithDropdown key={link.href} link={link} isSolid={isSolid} pathname={pathname} />
               ) : (
                 <Link
@@ -249,7 +402,7 @@ export function Navbar() {
               <nav className="flex-1 overflow-y-auto p-4 py-6">
                 <div className="space-y-1">
                   {navLinks.map((link) => (
-                    link.hasDropdown ? (
+                    link.menu ? (
                       <MobileNavItemWithDropdown key={link.href} link={link} pathname={pathname} setOpen={setOpen} />
                     ) : (
                       <Link
