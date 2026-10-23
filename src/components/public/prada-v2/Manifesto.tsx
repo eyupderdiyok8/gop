@@ -55,7 +55,7 @@ function Word({
   const opacity = useTransform(progress, range, [0.13, 1]);
   return (
     <>
-      <motion.span style={{ opacity }} className={cn(accent && cn(s.serif, s.accent, "italic tracking-[-0.015em]"))}>
+      <motion.span style={{ opacity }} className={cn(accent && cn(s.accent, "font-light tracking-[-0.03em]"))}>
         {children}
       </motion.span>{" "}
     </>

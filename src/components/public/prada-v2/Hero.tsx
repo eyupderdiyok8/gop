@@ -86,7 +86,7 @@ export function Hero() {
         style={reduce ? undefined : { y: wordY }}
         className="pointer-events-none absolute inset-x-0 top-[13%] -z-10 flex justify-center sm:top-[9%] xl:top-[5%]"
       >
-        <span className={cn(s.serif, "flex select-none text-[44vw] leading-[0.85] tracking-[-0.055em] md:text-[31vw] xl:text-[27vw]")}>
+        <span className="flex select-none text-[34vw] font-semibold leading-[0.85] tracking-[-0.075em] md:text-[25vw] xl:text-[21vw]">
           {"Prada".split("").map((ch, i) => (
             <span key={i} className={cn(s.introRise, s.wordmark, "inline-block")} style={d(0.1 + i * 0.08)}>
               {ch}
@@ -233,7 +233,7 @@ export function Hero() {
                     {wi > 0 && " "}
                     <span className="-mb-[0.14em] -mt-[0.06em] inline-block overflow-hidden pb-[0.14em] pt-[0.06em] align-bottom">
                       <span
-                        className={cn(s.introMask, w.accent && cn(s.serif, s.accent, "italic tracking-[-0.02em]"))}
+                        className={cn(s.introMask, w.accent && cn(s.accent, "font-light tracking-[-0.04em]"))}
                         style={d(0.55 + (li + wi) * 0.1)}
                       >
                         {w.t}

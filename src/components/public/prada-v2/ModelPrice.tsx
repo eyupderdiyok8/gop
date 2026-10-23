@@ -5,22 +5,20 @@ import { motion, useInView } from "framer-motion";
 import { Check, Phone } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { cn } from "@/lib/utils";
-import { PRICES, TEL, waLink } from "./contact";
-import { Chapter, EASE, Headline, Reveal } from "./primitives";
+import { TEL, waLink } from "./contact";
+import { Chapter, Headline, Reveal } from "./primitives";
 import s from "./v2.module.css";
 
 const MODELS = [
   {
     key: "pompasiz",
     name: "Pompasız",
-    price: PRICES.pompasiz,
     for: "Şebeke basıncı yeterli olan evler için",
     points: ["Sade ve sessiz çalışma", "Basınç düşürücü ile korunan sistem"],
   },
   {
     key: "pompali",
     name: "Pompalı",
-    price: PRICES.pompali,
     for: "Su basıncı düşük evler ve üst katlar için",
     points: ["Pompa, membranın ihtiyaç duyduğu basıncı sağlar", "Düşük basınçta da verimli arıtma"],
   },
@@ -33,13 +31,13 @@ export function ModelPrice() {
   const play = useInView(sectionRef, { margin: "100px 0px" });
   const selected = MODELS[model];
   const wa = waLink(
-    `Merhaba, 3.2 Prada su arıtma cihazının ${selected.name.toLowerCase()} modeli (${selected.price}) hakkında bilgi almak istiyorum.`
+    `Merhaba, 3.2 Prada su arıtma cihazının ${selected.name.toLowerCase()} modeli hakkında bilgi almak istiyorum.`
   );
 
   return (
-    <section ref={sectionRef} id="fiyat" className={cn(s.cv, "relative scroll-mt-16 overflow-hidden px-5 py-[12vh] md:px-10")}>
+    <section ref={sectionRef} id="model" className={cn(s.cv, "relative scroll-mt-16 overflow-hidden px-5 py-[12vh] md:px-10")}>
       <div className="mx-auto max-w-[1440px]">
-        <Chapter no="07" label="Fiyat" />
+        <Chapter no="07" label="Model Seçimi" />
         <div className="mt-8 grid gap-6 lg:grid-cols-[1.2fr_1fr] lg:items-end">
           <Headline text="Evinize uygun *Prada'yı* seçin." className="text-[clamp(2.7rem,7.4vw,6.4rem)] leading-[0.95] text-white" />
           <p className="max-w-md text-base leading-relaxed text-white/55 lg:justify-self-end lg:text-right">
@@ -86,16 +84,12 @@ export function ModelPrice() {
                       </li>
                     ))}
                   </ul>
-                  <span className="mt-auto flex items-baseline justify-between gap-3 border-t border-white/10 pt-5">
-                    <span className={cn(s.mono, "text-[10.5px] uppercase tracking-[0.22em] text-white/50")}>Fiyat</span>
-                    <span className="text-2xl font-semibold tracking-[-0.03em] text-white">{m.price}</span>
-                  </span>
                 </button>
               </Reveal>
             ))}
           </div>
 
-          {/* Fiyat kartı */}
+          {/* Seçilen model ve iletişim */}
           <Reveal delay={0.16} className="h-full">
             <div className="relative flex h-full flex-col overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-br from-[#1a0505] via-[#0d0d0d] to-[#0b0b0b] p-6 md:p-8">
               <div
@@ -105,9 +99,9 @@ export function ModelPrice() {
               <p className={cn(s.mono, "relative text-[10.5px] uppercase tracking-[0.24em] text-white/55")}>
                 3.2 Prada · {selected.name}
               </p>
-              <Odometer value={selected.price} />
+              <p className="relative mt-4 text-[clamp(3.2rem,8vw,5.6rem)] font-semibold leading-none tracking-[-0.05em] text-white">{selected.name}</p>
               <p className="relative mt-3 text-[15px] text-white/60">
-                Kurulum ve tüm detaylar için bizi arayın.
+                Fiyat ve kurulum bilgisi için bizi arayın; su basıncınıza göre doğru modeli birlikte seçelim.
               </p>
               <div className="relative mt-auto flex flex-col gap-3 pt-8 sm:flex-row lg:flex-col xl:flex-row">
                 <a
@@ -131,58 +125,6 @@ export function ModelPrice() {
   );
 }
 
-/** Rakamları slot makinesi gibi yuvarlayarak gösteren fiyat; model değişince yeni fiyata kısa bir turla geçer */
-function Odometer({ value }: { value: string }) {
-  const ref = useRef<HTMLParagraphElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.6 });
-  const [revealed, setRevealed] = useState(false);
-  const chars = value.split("");
-  const lastDigit = chars.filter((c) => /\d/.test(c)).length - 1;
-
-  return (
-    <p ref={ref} className="relative mt-4 flex items-baseline text-[clamp(3.6rem,9vw,6.2rem)] font-semibold leading-none tracking-[-0.05em] text-white">
-      <span className="sr-only">{value}</span>
-      <span aria-hidden className="flex items-end">
-        {chars.map((ch, i) => {
-          if (!/\d/.test(ch)) {
-            return (
-              <span
-                key={i}
-                className={cn(
-                  "inline-block leading-none",
-                  ch === "₺" ? "ml-1.5 pb-[0.1em] text-[0.55em] text-white/70" : "h-[1em]"
-                )}
-              >
-                {ch}
-              </span>
-            );
-          }
-          const d = Number(ch);
-          const order = chars.slice(0, i).filter((c) => /\d/.test(c)).length;
-          return (
-            <span key={i} className="relative inline-block h-[1em] overflow-hidden">
-              <motion.span
-                className="block"
-                initial={{ y: "0%" }}
-                animate={inView ? { y: `${-(10 + d) * 5}%` } : { y: "0%" }}
-                transition={revealed ? { duration: 0.7, ease: EASE } : { duration: 1.6 + order * 0.18, ease: EASE }}
-                onAnimationComplete={() => {
-                  if (inView && order === lastDigit) setRevealed(true);
-                }}
-              >
-                {Array.from({ length: 20 }, (_, k) => (
-                  <span key={k} className="block h-[1em] leading-none">
-                    {k % 10}
-                  </span>
-                ))}
-              </motion.span>
-            </span>
-          );
-        })}
-      </span>
-    </p>
-  );
-}
 
 function PressureIcon({ pump, active }: { pump: boolean; active: boolean }) {
   return (

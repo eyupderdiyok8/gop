@@ -20,10 +20,20 @@ const FEATURED_PRODUCTS: FeaturedProduct[] = [
     title: "3.2 Prada",
     subtitle: "Şeffaf kasa · 5 aşamalı filtreleme",
     image: "/images/urunler/prada-3-2.webp",
-    href: "/3-2-su-aritma-cihazi",
+    href: "/3-2-prada-su-aritma-cihazi",
   },
-  { title: "Yeni Ürün", subtitle: "Tanıtım sayfası hazırlanıyor" },
-  { title: "Yeni Ürün", subtitle: "Tanıtım sayfası hazırlanıyor" },
+  {
+    title: "Pantech",
+    subtitle: "Tanksız · 600 GPD · LED ekran",
+    image: "/images/urunler/pantech.webp",
+    href: "/pantech-su-aritma-cihazi",
+  },
+  {
+    title: "Quantum Plus",
+    subtitle: "Dijital ekran · 6 aşama · Alkali + B12",
+    image: "/images/urunler/quantum-plus.webp",
+    href: "/quantum-plus-su-aritma-cihazi",
+  },
   { title: "Yeni Ürün", subtitle: "Tanıtım sayfası hazırlanıyor" },
 ];
 

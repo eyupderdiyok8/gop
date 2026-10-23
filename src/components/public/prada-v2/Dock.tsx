@@ -46,7 +46,7 @@ export function Dock() {
           transition={{ type: "spring", stiffness: 260, damping: 28 }}
         >
           <div className="pointer-events-auto flex w-full max-w-[520px] items-center gap-2 rounded-full border border-white/10 bg-[#121212]/95 p-1.5 pl-3 shadow-[0_20px_60px_rgba(0,0,0,0.65)] md:w-auto md:gap-2.5">
-            {/* Fiyat bilinçli olarak yok: yalnızca sayfanın sonundaki fiyat bölümünde gösteriliyor */}
+            {/* Fiyat sayfada gösterilmiyor; fiyat bilgisi telefonla veriliyor */}
             <div className="mr-auto flex items-center gap-2.5 md:mr-5">
               <Image src="/images/prada-v2/logo-amblem.webp" alt="" width={320} height={226} className="h-8 w-auto" />
               <div className="hidden leading-tight sm:block">

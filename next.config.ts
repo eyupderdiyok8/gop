@@ -40,8 +40,10 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       // 3.2 Prada tanıtım sayfası kalıcı adresine taşındı
-      { source: '/3-2-v2', destination: '/3-2-su-aritma-cihazi', permanent: true },
-      { source: '/3-2-prada-su-aritma-cihazi', destination: '/3-2-su-aritma-cihazi', permanent: true },
+      { source: '/3-2-v2', destination: '/3-2-prada-su-aritma-cihazi', permanent: true },
+      { source: '/3-2-su-aritma-cihazi', destination: '/3-2-prada-su-aritma-cihazi', permanent: true },
+      // Pantech sayfası model kodsuz adrese taşındı
+      { source: '/pantech-dr-c60-su-aritma-cihazi', destination: '/pantech-su-aritma-cihazi', permanent: true },
       // 028: tekrar eden mahalle kayıtları resmi adlı kayıtlarla birleştirildi
       ...[
         ['/istanbul/gaziosmanpasa/barbaros', '/istanbul/gaziosmanpasa/barbaros-hayrettinpasa'],

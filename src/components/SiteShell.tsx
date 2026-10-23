@@ -5,7 +5,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 
 // Ürün tanıtım sayfaları (kendi header/footer'ları var). Yeni ürün sayfası eklenince buraya da ekleyin.
-const LANDING_PAGES = ["/3-2-su-aritma-cihazi"];
+const LANDING_PAGES = ["/3-2-prada-su-aritma-cihazi", "/pantech-su-aritma-cihazi", "/quantum-plus-su-aritma-cihazi"];
 
 export function SiteShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

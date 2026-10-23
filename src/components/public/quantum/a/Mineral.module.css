@@ -1,0 +1,40 @@
+/* Konsept A · Mineral bölümü: yükselen mineral kabarcıkları (yalnızca transform / opacity).
+   Duraklatma: üst kapsayıcıya theme.module.css içindeki .paused verilir. */
+
+.rise {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  animation: mnRise var(--dur, 4.2s) cubic-bezier(0.3, 0, 0.5, 1) var(--d, 0s) infinite;
+}
+
+@keyframes mnRise {
+  0% {
+    transform: translateY(0) scale(0.6);
+    opacity: 0;
+  }
+  15% {
+    opacity: var(--o, 0.7);
+  }
+  70% {
+    opacity: var(--o, 0.7);
+  }
+  100% {
+    transform: translateY(var(--ry, -120px)) scale(1);
+    opacity: 0;
+  }
+}
+
+/* HTML kabarcıklar (tüp kartı): px cinsinden yükselir */
+.riseUp {
+  opacity: 0;
+  animation: mnRise var(--dur, 3.4s) cubic-bezier(0.3, 0, 0.5, 1) var(--d, 0s) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise,
+  .riseUp {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+}

@@ -1,0 +1,511 @@
+/* Quantum Plus · Konsept A "GÜÇ AÇIK" — ortak tema.
+   Not: bu dosyadaki kurallar katmansızdır ve Tailwind sınıflarını ezer;
+   arka plan/renk gibi değiştirilebilir şeyler Tailwind ile verilir, burada yalnızca değişkenler ve efektler var. */
+
+.root {
+  /* İnci dünyası (fotoğraf kenarlarından örneklendi) */
+  --qa-pearl: #f4f8fd;
+  --qa-mist: #e6f0fb;
+  --qa-sky: #cfe4fa;
+  --qa-cloud: #ffffff;
+  --qa-ink-text: #0b0f17;
+  --qa-slate: #475467;
+  /* Mürekkep dünyası (panel camı) */
+  --qa-glass: #06070a;
+  --qa-glass-2: #0d0f14;
+  --qa-paper: #f5f7fa;
+  /* İris: TDS halkasından */
+  --qa-magenta: #ff3dc8;
+  --qa-violet: #8b5cf6;
+  --qa-indigo: #5b6cff;
+  --qa-cyan: #22d3ee;
+  --qa-iris: linear-gradient(90deg, #ff3dc8 0%, #8b5cf6 45%, #22d3ee 100%);
+  --qa-iris-deep: linear-gradient(90deg, #d1179e 0%, #6d3ae0 45%, #0891b2 100%);
+  --qa-iris-ring: conic-gradient(from 210deg, #ff3dc8, #8b5cf6, #5b6cff, #22d3ee, #ff3dc8);
+  /* LED */
+  --qa-led: #34e37a;
+  --qa-led-2: #2ee6d6;
+  --qa-led-grad: linear-gradient(90deg, #34e37a, #2ee6d6);
+  --qa-seg-off: #1b1f24;
+  --qa-amber: #ffb020;
+  --qa-wa: #25d366;
+  --qa-steel: linear-gradient(180deg, #c9ced6, #8a919c);
+  /* Yerleşim */
+  --qa-header-h: 56px;
+  --qa-dock-space: calc(88px + env(safe-area-inset-bottom, 0px));
+  --qa-ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  font-family: var(--font-qa-sans), ui-sans-serif, system-ui, sans-serif;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Dünya değişkenleri: .root varsayılanı inci; .ink / .pearl iç içe kullanılabilir */
+.root,
+.pearl {
+  --qa-bg: #f4f8fd;
+  --qa-fg: #0b0f17;
+  --qa-fg-2: #475467;
+  --qa-line: rgba(11, 15, 23, 0.08);
+  --qa-line-2: rgba(11, 15, 23, 0.16);
+  --qa-accent: var(--qa-iris-deep);
+  --qa-led-off: #dce3ec;
+  --qa-chip: rgba(255, 255, 255, 0.78);
+  --qa-btn: #0b0f17;
+  --qa-btn-fg: #ffffff;
+  --qa-focus: #6d3ae0;
+}
+
+.ink {
+  --qa-bg: #06070a;
+  --qa-fg: #f5f7fa;
+  --qa-fg-2: rgba(255, 255, 255, 0.62);
+  --qa-line: rgba(255, 255, 255, 0.08);
+  --qa-line-2: rgba(255, 255, 255, 0.16);
+  --qa-accent: var(--qa-iris);
+  --qa-led-off: #1b1f24;
+  --qa-chip: rgba(255, 255, 255, 0.06);
+  --qa-btn: #f5f7fa;
+  --qa-btn-fg: #0b0f17;
+  --qa-focus: #22d3ee;
+}
+
+/* Lastik bant kaydırmada beyaz/gri zemin görünmesin */
+:global(body):has(.root) {
+  background: #f4f8fd;
+}
+
+/* Site geneli başlık fontunu (Plus Jakarta) bu sayfada ez */
+.root :is(h1, h2, h3, h4) {
+  font-family: var(--font-qa-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+.root ::selection {
+  background: rgba(139, 92, 246, 0.28);
+}
+
+.section {
+  scroll-margin-top: var(--qa-header-h);
+}
+
+/* Ekran dışındaki bölümlerin çizimi ertelenir. "auto" gerçek yüksekliği hatırlar.
+   Sticky ya da useScroll sahnesi içeren bölümlerde KULLANMAYIN. */
+.cv {
+  content-visibility: auto;
+  contain-intrinsic-block-size: auto var(--qa-cis, 1000px);
+}
+
+/* Sabit alt dock'un altında kalmaması gereken içerik için */
+.dockSafe {
+  padding-bottom: var(--qa-dock-space);
+}
+
+.focus:focus-visible {
+  outline: 2px solid var(--qa-focus);
+  outline-offset: 3px;
+}
+
+/* ───────── Tipografi ───────── */
+
+.mono {
+  font-family: var(--font-qa-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.display {
+  font-family: var(--font-qa-display), var(--font-qa-sans), ui-sans-serif, sans-serif;
+}
+
+.micro {
+  font-family: var(--font-qa-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  line-height: 1.3;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+/* Vurgu kelimesi: aynı aile, ince ağırlık, iris dolgu (+ tek seferlik parıltı katmanı) */
+.accent {
+  font-weight: 280;
+  letter-spacing: -0.035em;
+  background-image:
+    linear-gradient(100deg, transparent 38%, rgba(255, 255, 255, 0.85) 50%, transparent 62%),
+    var(--qa-accent);
+  background-size:
+    250% 100%,
+    var(--qa-gs, 100%) 100%;
+  background-position:
+    130% 0,
+    var(--qa-gp, 0%) 0;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding-right: 0.06em;
+  margin-right: -0.06em;
+}
+
+.shimmer {
+  animation: qaShimmer 1.5s cubic-bezier(0.4, 0, 0.2, 1) var(--qa-sd, 0s) both;
+}
+
+@keyframes qaShimmer {
+  from {
+    background-position:
+      130% 0,
+      var(--qa-gp, 0%) 0;
+  }
+  to {
+    background-position:
+      -30% 0,
+      var(--qa-gp, 0%) 0;
+  }
+}
+
+/* Başlık dışı iris metin (bölüm numarası, rozet) */
+.irisText {
+  background-image: var(--qa-accent);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.irisLine {
+  background-image: var(--qa-iris);
+}
+
+.wordmark {
+  font-family: var(--font-qa-display), var(--font-qa-sans), ui-sans-serif, sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.wordmark b {
+  font-weight: 700;
+  background-image: var(--qa-accent);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  /* izleme boşluğu son harften sonra da eklenir; görsel ortalama için geri al */
+  margin-right: -0.32em;
+}
+
+/* ───────── Dokunmatik tuş (paneldeki On/Off ve Function tuşlarının dili) ───────── */
+
+.key {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1.5px solid transparent;
+  color: #fff;
+  background:
+    linear-gradient(var(--qa-key-bg, #0d0f14), var(--qa-key-bg, #0d0f14)) padding-box,
+    var(--qa-key-ring, linear-gradient(rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.18))) border-box;
+}
+
+.ringIris {
+  --qa-key-ring: var(--qa-iris-ring);
+}
+
+.ringCyan {
+  --qa-key-ring: linear-gradient(#22d3ee, #22d3ee);
+}
+
+.ringSoft {
+  --qa-key-ring: linear-gradient(rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.18));
+}
+
+.ringNone {
+  --qa-key-ring: linear-gradient(transparent, transparent);
+}
+
+.tapRipple {
+  position: absolute;
+  inset: -1.5px;
+  border-radius: 9999px;
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  pointer-events: none;
+  animation: qaRipple 0.6s ease-out forwards;
+}
+
+@keyframes qaRipple {
+  from {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  to {
+    transform: scale(1.75);
+    opacity: 0;
+  }
+}
+
+/* Cam parlaması: statik çapraz bant (bulanıklık yok) */
+.sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.07) 46%, transparent 62%);
+}
+
+/* ───────── 7 segment ───────── */
+
+.segOff {
+  fill: var(--qa-seg-off, #1b1f24);
+}
+
+.segIn {
+  animation: qaSegIn 0.18s ease-out var(--d, 0s) both;
+}
+
+@keyframes qaSegIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.flicker {
+  animation: qaFlicker 0.24s steps(1, end) var(--d, 0s) both;
+}
+
+@keyframes qaFlicker {
+  0% {
+    opacity: 0.1;
+  }
+  30% {
+    opacity: 1;
+  }
+  55% {
+    opacity: 0.25;
+  }
+  80%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Segment kovalamaca: dış halkadaki segmentler sırayla yanar (dekoratif, sayı değil) */
+.chase {
+  opacity: 0;
+  animation: qaChase var(--dur, 0.54s) linear var(--d, 0s) var(--it, infinite) both;
+}
+
+@keyframes qaChase {
+  0% {
+    opacity: 0;
+  }
+  1%,
+  17% {
+    opacity: 1;
+  }
+  18%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ───────── Ortak animasyonlar (transform/opacity) ───────── */
+
+.introMask {
+  display: inline-block;
+  animation: qaMaskUp 1.1s var(--qa-ease) var(--d, 0s) both;
+}
+
+@keyframes qaMaskUp {
+  from {
+    transform: translateY(115%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+.introRise {
+  animation: qaRise 0.9s var(--qa-ease) var(--d, 0s) both;
+}
+
+@keyframes qaRise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.fadeIn {
+  animation: qaFadeIn var(--dur, 0.6s) ease var(--d, 0s) both;
+}
+
+@keyframes qaFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fadeOut {
+  animation: qaFadeOut var(--dur, 0.4s) ease var(--d, 0s) both;
+}
+
+@keyframes qaFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* SVG çizgi çizimi: elemana pathLength={1} verin */
+.draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: qaDraw var(--dur, 0.9s) cubic-bezier(0.65, 0, 0.35, 1) var(--d, 0s) forwards;
+}
+
+@keyframes qaDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Soldan büyüyen çizgi (SVG için transform-box ile) */
+.growX {
+  transform-box: fill-box;
+  transform-origin: left center;
+  animation: qaGrowX var(--dur, 0.6s) var(--qa-ease) var(--d, 0s) both;
+}
+
+@keyframes qaGrowX {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.spin {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: qaSpin var(--dur, 40s) linear var(--d, 0s) infinite;
+}
+
+@keyframes qaSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Nabız halkası: tek sefer (.pulseOnce) ya da döngü (.pulse) */
+.pulse,
+.pulseOnce {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  animation: qaPulse var(--dur, 2.4s) cubic-bezier(0.2, 0.6, 0.35, 1) var(--d, 0s) infinite;
+}
+
+.pulseOnce {
+  animation-iteration-count: 1;
+}
+
+@keyframes qaPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  80%,
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+.blink {
+  animation: qaBlink var(--dur, 1.6s) steps(1, end) var(--d, 0s) infinite;
+}
+
+@keyframes qaBlink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+}
+
+/* Işık bandı geçişi: bandı kutunun hemen soluna (gizli konuma) yerleştirin; --sx1 kadar sağa kayar.
+   Hareket azaltılınca bant gizli konumda kalır. SVG'de px = viewBox birimi. */
+.sweep {
+  animation: qaSweep var(--dur, 8s) cubic-bezier(0.45, 0, 0.2, 1) var(--d, 0s) infinite;
+}
+
+.sweepOnce {
+  animation: qaSweep var(--dur, 1.2s) cubic-bezier(0.45, 0, 0.2, 1) var(--d, 0s) 1 both;
+}
+
+@keyframes qaSweep {
+  0% {
+    transform: translateX(var(--sx0, 0px));
+  }
+  40%,
+  100% {
+    transform: translateX(var(--sx1, 400%));
+  }
+}
+
+/* Görünmezken (ya da hareket azaltılmışken) tüm döngüleri dondur */
+.paused,
+.paused * {
+  animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer,
+  .introMask,
+  .introRise,
+  .fadeIn,
+  .segIn,
+  .flicker,
+  .growX,
+  .tapRipple {
+    animation: none !important;
+  }
+  .introMask,
+  .introRise,
+  .growX {
+    transform: none !important;
+  }
+  .draw {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+  .fadeOut {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+  .chase,
+  .spin,
+  .pulse,
+  .pulseOnce,
+  .blink,
+  .sweep,
+  .sweepOnce {
+    animation: none !important;
+  }
+}

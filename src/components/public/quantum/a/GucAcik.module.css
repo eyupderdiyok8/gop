@@ -1,0 +1,156 @@
+/* Konsept A · GÜÇ AÇIK hero — yalnızca bu bölümün efektleri.
+   Zemin ve renkler Tailwind'de; burada ölçü, maske ve animasyonlar var (katmansız, Tailwind'i ezer). */
+
+/* Cihaz kutusu: mobilde ekranın %88'i, masaüstünde ekran yüksekliğine sığar (690/770 = 0.896) */
+.device {
+  width: min(88vw, 360px);
+}
+
+@media (min-width: 768px) {
+  .device {
+    width: min(58vw, 440px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .device {
+    width: min(40vw, 560px, calc((100svh - 150px) * 0.896));
+  }
+}
+
+/* Yörünge halesi: cihaz kutusuna ortalı kare, çapı kutu genişliğinin --k katı.
+   Cihaz silueti maskesi satır içi verilir; maske görseli 3 × fotoğraf genişliğinde olduğundan --k ile ölçeklenir. */
+.halo {
+  --k: 1.36;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--k) * 100%);
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  pointer-events: none;
+  -webkit-mask-size: calc(3 / var(--k) * 100%) calc(3 / var(--k) * 100%);
+  mask-size: calc(3 / var(--k) * 100%) calc(3 / var(--k) * 100%);
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+/* Üst etiket: mono, dar ekranda sığsın diye kademeli küçülür */
+.kicker {
+  font-family: var(--font-qa-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  text-transform: uppercase;
+  line-height: 1.3;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+}
+
+@media (min-width: 360px) {
+  .kicker {
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+  }
+}
+
+@media (min-width: 400px) {
+  .kicker {
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+  }
+}
+
+@media (min-width: 1024px) {
+  .kicker {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+  }
+}
+
+/* Güç LED'i: ilk karede bir kez kırpışıp yanar */
+.power {
+  background: linear-gradient(135deg, #34e37a, #2ee6d6);
+  box-shadow: 0 0 0 3px rgba(52, 227, 122, 0.18);
+  animation: gaPower 0.9s steps(1, end) 0.35s both;
+}
+
+@keyframes gaPower {
+  0% {
+    opacity: 0.15;
+  }
+  30% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 0.3;
+  }
+  60%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Açılışta camın arkadan aydınlanması (iris parıltısı, yalnızca opaklık) */
+.bloom {
+  opacity: 0;
+  animation: gaBloom 1.3s cubic-bezier(0.2, 0.7, 0.3, 1) 0.08s both;
+}
+
+@keyframes gaBloom {
+  0% {
+    opacity: 0;
+  }
+  14% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* "Ekrana yaklaşın" LED kovalamacası (yukarıdan aşağı) */
+.cueSeg {
+  opacity: 0;
+  animation: gaCue 1.5s linear var(--d, 0s) infinite;
+}
+
+@keyframes gaCue {
+  0% {
+    opacity: 0;
+  }
+  8%,
+  30% {
+    opacity: 1;
+  }
+  45%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Mobilde yatay kayan çip satırı: kaydırma çubuğu gizli */
+.row {
+  scrollbar-width: none;
+}
+
+.row::-webkit-scrollbar {
+  display: none;
+}
+
+/* Masaüstünde sağ kenardaki dikey ray */
+@media (min-width: 1024px) {
+  .railText {
+    writing-mode: vertical-rl;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .power,
+  .bloom,
+  .cueSeg {
+    animation: none !important;
+  }
+  .cueSeg {
+    opacity: 1;
+  }
+}

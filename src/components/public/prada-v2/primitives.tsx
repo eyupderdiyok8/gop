@@ -31,7 +31,7 @@ export function Reveal({
   );
 }
 
-/** "*yıldızlı*" kısımları serif italik vurguya çevirir */
+/** "*yıldızlı*" kısımları ince, renkli vurguya çevirir */
 export function parseAccent(text: string) {
   return text
     .split("*")
@@ -76,7 +76,7 @@ export function Headline({
             >
               <motion.span
                 variants={wordVariants}
-                className={cn("inline-block", seg.accent && cn(s.serif, s.accent, "italic tracking-[-0.02em]"))}
+                className={cn("inline-block", seg.accent && cn(s.accent, "font-light tracking-[-0.04em]"))}
               >
                 {w}
               </motion.span>
@@ -98,7 +98,7 @@ export function Chapter({ no, label, className }: { no: string; label: string; c
         className
       )}
     >
-      <span className="text-[#ff3b3b]">{no}</span>
+      <span className="text-[color:var(--p2-red,#ff3b3b)]">{no}</span>
       <span className="h-px w-10 bg-white/20" />
       <span>{label}</span>
     </div>

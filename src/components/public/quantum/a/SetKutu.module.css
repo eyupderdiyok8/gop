@@ -1,0 +1,50 @@
+/* Set bölümü: yalnızca efektler (renk/yerleşim Tailwind ile) */
+
+/* İşaretler 1→6 sırayla kısa bir halka atar: hangi sırayla bakılacağını gösterir.
+   Döngü 6,3 sn = 6 işaret × 0,9 sn + bir adımlık ara (sıra başa dönmeden önce kısa nefes). */
+.ping {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 1.5px solid #22d3ee;
+  opacity: 0;
+  pointer-events: none;
+  animation: setPing var(--dur, 6.3s) cubic-bezier(0.2, 0.6, 0.35, 1) var(--d, 0s) infinite;
+}
+
+@keyframes setPing {
+  0% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  14%,
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+/* "Kutuyu açın" çekme dilinin davet nabzı */
+.tabPulse {
+  opacity: 0;
+  animation: setTab 2.6s cubic-bezier(0.2, 0.6, 0.35, 1) 0.8s infinite;
+}
+
+@keyframes setTab {
+  0% {
+    transform: scale(1);
+    opacity: 0.75;
+  }
+  60%,
+  100% {
+    transform: scale(1.12, 1.45);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ping,
+  .tabPulse {
+    animation: none !important;
+  }
+}

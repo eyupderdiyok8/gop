@@ -1,0 +1,76 @@
+/* Pantech (klasik koyu sürüm) — Prada iskeletinin üzerine LED ekrandan gelen elektrik mavisi tema */
+
+.theme {
+  --p2-red: #3ea6ff;
+  --p2-accent-from: #3ea6ff;
+  --p2-accent-to: #9be7ff;
+  --pt-blue: #3ea6ff;
+  --pt-cyan: #7fe0ff;
+  background: #000;
+}
+
+.wordmark {
+  background-image: linear-gradient(180deg, rgba(62, 166, 255, 0.5) 0%, rgba(62, 166, 255, 0.16) 45%, rgba(62, 166, 255, 0) 85%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Yedi segment benzeri LED rakamları */
+.led {
+  font-family: var(--font-p2-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  color: #eaf7ff;
+  text-shadow: 0 0 12px rgba(127, 224, 255, 0.9), 0 0 32px rgba(62, 166, 255, 0.6);
+}
+
+/* Filtreler arası akan su çizgisi */
+.flow {
+  stroke-dasharray: 6 10;
+  animation: flow 1.4s linear infinite;
+}
+
+@keyframes flow {
+  to {
+    stroke-dashoffset: -32;
+  }
+}
+
+/* Dokunmatik tuş nabzı */
+.glow {
+  box-shadow: 0 0 0 1px rgba(127, 224, 255, 0.6), 0 0 24px rgba(62, 166, 255, 0.7);
+}
+
+/* Tanklı sistemdeki tankın sönerek kaybolması */
+.tankFade {
+  animation: tankFade 4.5s ease-in-out infinite;
+}
+
+@keyframes tankFade {
+  0%,
+  25% {
+    opacity: 1;
+    transform: none;
+  }
+  55%,
+  85% {
+    opacity: 0.08;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.paused .flow,
+.paused .tankFade {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow,
+  .tankFade {
+    animation: none !important;
+  }
+}

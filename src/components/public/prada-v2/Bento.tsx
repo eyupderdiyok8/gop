@@ -283,7 +283,7 @@ function TankScene() {
         ))}
       </svg>
       <div className="text-left">
-        <p className={cn(s.serif, "text-[64px] italic leading-none text-white lg:text-[80px]")}>3.2</p>
+        <p className="text-[64px] font-light leading-none tracking-[-0.05em] text-white lg:text-[80px]">3.2</p>
         <p className={cn(s.mono, "mt-2 text-[10.5px] uppercase tracking-[0.24em] text-white/55")}>Galon · Metal</p>
       </div>
     </div>

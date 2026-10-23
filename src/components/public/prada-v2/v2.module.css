@@ -51,7 +51,8 @@
 }
 
 .accent {
-  background-image: linear-gradient(100deg, #ff3b3b 10%, #ff8f70 90%);
+  /* Renkler sayfa temasından değiştirilebilir (Pantech mavi kullanır) */
+  background-image: linear-gradient(100deg, var(--p2-accent-from, #ff3b3b) 10%, var(--p2-accent-to, #ff8f70) 90%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;

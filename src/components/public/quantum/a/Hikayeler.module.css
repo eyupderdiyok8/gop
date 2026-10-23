@@ -1,0 +1,427 @@
+/* Hikâyeler · ilerleme çubuğu ve sahne döngüleri (yalnızca transform / opacity).
+   Duraklatma: üst kapsayıcıya theme.module.css içindeki .paused verilir. */
+
+/* LED ilerleme çubuğu: soldan dolar, bitince sonraki hikâye */
+.fill {
+  transform-origin: 0 50%;
+  animation: hkFill var(--dur, 4.5s) linear both;
+}
+
+@keyframes hkFill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* SVG dönüşüm kutuları */
+.box {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+
+.top {
+  transform-box: fill-box;
+  transform-origin: 50% 0%;
+}
+
+.bottom {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+
+/* ───────── 1 · Kaçak: damla oluşur, düşer, sıçrar, yayılır ───────── */
+
+.dropForm {
+  animation: hkForm 0.6s cubic-bezier(0.2, 0.7, 0.3, 1) var(--d, 0s) both;
+}
+
+@keyframes hkForm {
+  from {
+    transform: scale(0.15);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.dropFall {
+  animation: hkFall 0.62s cubic-bezier(0.55, 0, 1, 0.45) var(--d, 0s) both;
+}
+
+@keyframes hkFall {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  94% {
+    transform: translateY(var(--fy, 180px));
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(var(--fy, 180px));
+    opacity: 0;
+  }
+}
+
+.splash {
+  animation: hkSplash 0.6s ease-out var(--d, 0s) both;
+}
+
+@keyframes hkSplash {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+.spread {
+  animation: hkSpread 1s cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0s) both;
+}
+
+@keyframes hkSpread {
+  from {
+    transform: scaleX(0.08);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* Kaçak sensörü (mekanik): akış durur, pamuk şişer, mandal atar, kapak su yolunu kapatır */
+.flow {
+  animation: hkFlow 0.8s linear infinite;
+}
+
+@keyframes hkFlow {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(18px);
+  }
+}
+
+.swell {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: hkSwell 0.6s cubic-bezier(0.3, 0.7, 0.4, 1) var(--d, 0s) both;
+}
+
+@keyframes hkSwell {
+  from {
+    transform: none;
+  }
+  to {
+    transform: scale(1.35, 1.6);
+  }
+}
+
+/* mandal: pim etrafında döner (--ox/--oy viewBox birimi, px) */
+.trip {
+  transform-box: view-box;
+  transform-origin: var(--ox, 0px) var(--oy, 0px);
+  animation: hkTrip 0.2s cubic-bezier(0.5, 0, 0.75, 0) var(--d, 0s) both;
+}
+
+@keyframes hkTrip {
+  from {
+    transform: none;
+  }
+  to {
+    transform: rotate(var(--rot, 24deg));
+  }
+}
+
+/* kapak: yay etkisiyle hafif taşarak yukarı */
+.gate {
+  animation: hkGate 0.24s cubic-bezier(0.2, 1.5, 0.4, 1) var(--d, 0s) both;
+}
+
+@keyframes hkGate {
+  from {
+    transform: none;
+  }
+  to {
+    transform: translateY(var(--gy, -18px));
+  }
+}
+
+/* ───────── 2 · Musluk: ağır çekim damla döngüsü ───────── */
+
+.drip {
+  animation: hkDrip 3.2s linear var(--d, 0s) infinite both;
+}
+
+@keyframes hkDrip {
+  0%,
+  46% {
+    transform: translateY(0);
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
+  }
+  62% {
+    transform: translateY(var(--fy, 120px));
+    opacity: 1;
+  }
+  63%,
+  100% {
+    transform: translateY(var(--fy, 120px));
+    opacity: 0;
+  }
+}
+
+.dripForm {
+  animation: hkDripForm 3.2s cubic-bezier(0.3, 0, 0.3, 1) var(--d, 0s) infinite both;
+}
+
+@keyframes hkDripForm {
+  0% {
+    transform: scale(0.1);
+  }
+  44%,
+  100% {
+    transform: none;
+  }
+}
+
+.ripple {
+  animation: hkRipple 3.2s ease-out var(--d, 0s) infinite both;
+}
+
+@keyframes hkRipple {
+  0%,
+  61% {
+    transform: scale(0.2);
+    opacity: 0;
+  }
+  63% {
+    transform: scale(0.25);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.twinkle {
+  animation: hkTwinkle 2.6s ease-in-out var(--d, 0s) infinite both;
+}
+
+@keyframes hkTwinkle {
+  0%,
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  35% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  65% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+/* ───────── 3 · Dokunmatik: parmak iki tuş arasında ───────── */
+
+.finger {
+  animation: hkFinger 2.8s cubic-bezier(0.45, 0, 0.2, 1) var(--d, 0s) infinite both;
+}
+
+@keyframes hkFinger {
+  0% {
+    transform: translate(0, -20px);
+    opacity: 0;
+  }
+  6% {
+    opacity: 1;
+  }
+  12% {
+    transform: translate(0, -20px);
+  }
+  16% {
+    transform: translate(0, 0) scale(0.94);
+  }
+  24% {
+    transform: translate(0, -20px);
+  }
+  50%,
+  62% {
+    transform: translate(var(--fx, 128px), -20px);
+  }
+  66% {
+    transform: translate(var(--fx, 128px), 0) scale(0.94);
+  }
+  74% {
+    transform: translate(var(--fx, 128px), -20px);
+    opacity: 1;
+  }
+  90%,
+  100% {
+    transform: translate(var(--fx, 128px), -20px);
+    opacity: 0;
+  }
+}
+
+.tapA,
+.tapB {
+  animation: hkTapA 2.8s ease-out var(--d, 0s) infinite both;
+}
+
+.tapB {
+  animation-name: hkTapB;
+}
+
+@keyframes hkTapA {
+  0%,
+  15% {
+    transform: scale(1);
+    opacity: 0;
+  }
+  16% {
+    opacity: 0.95;
+  }
+  42%,
+  100% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+}
+
+@keyframes hkTapB {
+  0%,
+  65% {
+    transform: scale(1);
+    opacity: 0;
+  }
+  66% {
+    opacity: 0.95;
+  }
+  92%,
+  100% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+}
+
+.litA,
+.litB {
+  animation: hkLitA 2.8s ease-out var(--d, 0s) infinite both;
+}
+
+.litB {
+  animation-name: hkLitB;
+}
+
+@keyframes hkLitA {
+  0%,
+  14% {
+    opacity: 0;
+  }
+  17% {
+    opacity: 1;
+  }
+  40%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes hkLitB {
+  0%,
+  64% {
+    opacity: 0;
+  }
+  67% {
+    opacity: 1;
+  }
+  90%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ───────── 5 · Filtre takip: tarama çizgisi ───────── */
+
+.scan {
+  animation: hkScan 1.9s linear var(--d, 0s) both;
+}
+
+@keyframes hkScan {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  8%,
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(var(--sx, 280px));
+    opacity: 0;
+  }
+}
+
+/* Hareket azaltılınca: döngü yok, son durumlar görünür, geçici parçalar gizli */
+@media (prefers-reduced-motion: reduce) {
+  .fill,
+  .dropForm,
+  .dropFall,
+  .splash,
+  .spread,
+  .drip,
+  .dripForm,
+  .ripple,
+  .twinkle,
+  .finger,
+  .tapA,
+  .tapB,
+  .litA,
+  .litB,
+  .scan {
+    animation: none !important;
+  }
+  .dropFall,
+  .splash,
+  .ripple,
+  .twinkle,
+  .tapA,
+  .tapB,
+  .litA,
+  .litB,
+  .scan {
+    opacity: 0 !important;
+  }
+  /* kaçak sahnesi son durumda: pamuk şişmiş, mandal atmış, su yolu kapalı */
+  .flow,
+  .swell,
+  .trip,
+  .gate {
+    animation: none !important;
+  }
+  .swell {
+    transform: scale(1.35, 1.6) !important;
+  }
+  .trip {
+    transform: rotate(var(--rot, 24deg)) !important;
+  }
+  .gate {
+    transform: translateY(var(--gy, -18px)) !important;
+  }
+}
