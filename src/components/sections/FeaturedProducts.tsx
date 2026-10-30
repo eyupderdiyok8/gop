@@ -34,7 +34,12 @@ const FEATURED_PRODUCTS: FeaturedProduct[] = [
     image: "/images/urunler/quantum-plus.webp",
     href: "/quantum-plus-su-aritma-cihazi",
   },
-  { title: "Yeni Ürün", subtitle: "Tanıtım sayfası hazırlanıyor" },
+  {
+    title: "Headon",
+    subtitle: "Mat beyaz kasa · 5 aşama · 2.2 G tank",
+    image: "/images/urunler/headon.webp",
+    href: "/headon-su-aritma-cihazi",
+  },
 ];
 
 function ProductCard({ product }: { product: FeaturedProduct }) {

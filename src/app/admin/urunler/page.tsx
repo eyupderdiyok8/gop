@@ -13,10 +13,13 @@ import {
   Filter,
   Image as ImageIcon,
   CheckCircle2,
-  XCircle
+  XCircle,
+  Tags
 } from "lucide-react";
 import Link from "next/link";
 import { ProductFormModal } from "@/components/admin/urunler/ProductFormModal";
+import { CategoryManagerModal } from "@/components/admin/urunler/CategoryManagerModal";
+import { categoryWithDescendants, flattenCategoryTree } from "@/lib/products/categoryTree";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
 
@@ -27,6 +30,7 @@ export default function AdminUrunlerPage() {
   const [search, setSearch] = useState("");
   const [selectedCat, setSelectedCat] = useState<string>("all");
   const [formModal, setFormModal] = useState<{ open: boolean; item?: Product | null }>({ open: false });
+  const [catModal, setCatModal] = useState(false);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -61,7 +65,7 @@ export default function AdminUrunlerPage() {
   const filtered = products.filter(p => {
     const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase()) || 
                          (p.tagline ?? "").toLowerCase().includes(search.toLowerCase());
-    const matchesCat = selectedCat === "all" || p.category_id === selectedCat;
+    const matchesCat = selectedCat === "all" || (p.category_id !== null && categoryWithDescendants(categories, selectedCat).has(p.category_id));
     return matchesSearch && matchesCat;
   });
 
@@ -73,12 +77,20 @@ export default function AdminUrunlerPage() {
           <h1 className="text-2xl font-heading font-bold text-slate-900">Ürün Yönetimi</h1>
           <p className="text-slate-500 text-sm mt-1">{products.length} ürün kataloğunuzda aktif</p>
         </div>
-        <button
-          onClick={() => setFormModal({ open: true, item: null })}
-          className="flex items-center gap-2 px-4 py-2.5 bg-brand-aqua hover:bg-brand-aqua text-slate-900 rounded-xl text-sm font-medium transition-colors"
-        >
-          <Plus className="w-4 h-4" /> Yeni Ürün Ekle
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setCatModal(true)}
+            className="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 hover:border-brand-aqua/50 text-slate-700 rounded-xl text-sm font-medium transition-colors"
+          >
+            <Tags className="w-4 h-4" /> Kategoriler
+          </button>
+          <button
+            onClick={() => setFormModal({ open: true, item: null })}
+            className="flex items-center gap-2 px-4 py-2.5 bg-brand-aqua hover:bg-brand-aqua text-slate-900 rounded-xl text-sm font-medium transition-colors"
+          >
+            <Plus className="w-4 h-4" /> Yeni Ürün Ekle
+          </button>
+        </div>
       </div>
 
       {/* Filters */}
@@ -104,7 +116,7 @@ export default function AdminUrunlerPage() {
           >
             Tümü
           </button>
-          {categories.map(cat => (
+          {flattenCategoryTree(categories).map(cat => (
             <button
               key={cat.id}
               onClick={() => setSelectedCat(cat.id)}
@@ -114,7 +126,7 @@ export default function AdminUrunlerPage() {
                 : "bg-white border-white/10 text-slate-500 hover:text-slate-900"
               }`}
             >
-              {cat.name}
+              {cat.depth > 0 ? "↳ " : ""}{cat.name}
             </button>
           ))}
         </div>
@@ -217,6 +229,15 @@ export default function AdminUrunlerPage() {
             </div>
           ))}
         </div>
+      )}
+
+      {catModal && (
+        <CategoryManagerModal
+          categories={categories}
+          products={products}
+          onClose={() => setCatModal(false)}
+          onChanged={fetchData}
+        />
       )}
 
       {formModal.open && (

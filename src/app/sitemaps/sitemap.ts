@@ -42,6 +42,7 @@ function staticEntries(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/3-2-prada-su-aritma-cihazi`, changeFrequency: 'monthly', priority: 0.9 },
     { url: `${baseUrl}/pantech-su-aritma-cihazi`, changeFrequency: 'monthly', priority: 0.9 },
     { url: `${baseUrl}/quantum-plus-su-aritma-cihazi`, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${baseUrl}/headon-su-aritma-cihazi`, changeFrequency: 'monthly', priority: 0.9 },
     { url: `${baseUrl}/blog`, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${baseUrl}/iletisim`, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${baseUrl}/gizlilik-politikasi`, changeFrequency: 'yearly', priority: 0.3 },

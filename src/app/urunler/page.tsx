@@ -16,7 +16,8 @@ export const metadata: Metadata = {
 // Sayfanın periyodik olarak güncellenmesini sağla (1 saat)
 export const revalidate = 3600;
 
-export default async function UrunlerPage() {
+export default async function UrunlerPage({ searchParams }: { searchParams: Promise<{ kategori?: string }> }) {
+  const { kategori } = await searchParams;
   const supabase = await createClient();
   
   const { data: categories } = await supabase
@@ -46,9 +47,11 @@ export default async function UrunlerPage() {
             Sultangazi ve İstanbul Avrupa Yakası&apos;nda ihtiyacınıza uygun cihaz seçimi, profesyonel montaj ve periyodik bakım desteği.
           </p>
           
-          <ProductListClient 
+          <ProductListClient
+            key={kategori ?? "all"}
             initialProducts={(products || []) as (Product & { category: ProductCategory | null })[]}
             categories={(categories || []) as ProductCategory[]}
+            initialCategorySlug={kategori}
           />
         </div>
       </section>

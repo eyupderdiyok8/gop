@@ -45,7 +45,7 @@ const productMenuItems: MenuItem[] = [
     href: "/urunler",
     children: [
       { label: "Prada Su Arıtma", href: "/3-2-prada-su-aritma-cihazi" },
-      { label: "Headon Su Arıtma", href: "/urunler/22-evsel-su-aritma-cihazi" },
+      { label: "Headon Su Arıtma", href: "/headon-su-aritma-cihazi" },
     ],
   },
   {
@@ -78,10 +78,11 @@ const productMenuItems: MenuItem[] = [
       },
     ],
   },
-  { label: "Filtreler", href: "/urunler/su-aritma-cihazi-filtre-cesitleri" },
-  { label: "Tanklar", href: "/urunler/su-aritma-cihazi-tank-cesitleri" },
-  { label: "Musluklar", href: "/urunler/su-aritma-musluk-cesitleri-paslanmaz-krom-3-yollu" },
-  { label: "Yedek Parça", href: "/urunler" },
+  // Ayrı kategorileri açılınca ?kategori= değerini o kategorinin adresine çevirin
+  { label: "Filtreler", href: "/urunler?kategori=aksesuarlar" },
+  { label: "Tanklar", href: "/urunler?kategori=aksesuarlar" },
+  { label: "Musluklar", href: "/urunler?kategori=aksesuarlar" },
+  { label: "Yedek Parça", href: "/urunler?kategori=aksesuarlar" },
 ];
 
 const navLinks: { href: string; label: string; icon: typeof Home; mega?: boolean; menu?: { all: string; items: MenuItem[] } }[] = [

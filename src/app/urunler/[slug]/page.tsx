@@ -1,272 +1,306 @@
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
-import { Product } from "@/lib/types";
+import { Product, ProductCategory } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-   Check,
-   ChevronLeft,
-   ShieldCheck,
-   Zap,
-   Droplets,
-   Settings,
-   Truck,
-   ArrowRight,
-   type LucideIcon,
-} from "lucide-react";
+import { Check, ShieldCheck, Zap, Droplets, Settings, ArrowRight, Phone, type LucideIcon } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CtaBand } from "@/components/sections/CtaBand";
+import { BreadcrumbNav } from "@/components/seo/BreadcrumbNav";
 import { ProductImageGallery } from "@/components/public/urunler/ProductImageGallery";
 import { formatTechnicalText } from "@/lib/products/formatTechnicalText";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.suaritmaservis34.com";
+const PHONE = "0553 114 27 34";
+const TEL = "tel:+905531142734";
+const waLink = (productName: string) =>
+  "https://wa.me/905531142734?text=" + encodeURIComponent(`Merhaba, ${productName} ürünü hakkında bilgi almak istiyorum.`);
+
+interface ProductPageProps {
+  params: Promise<{ slug: string }>;
+}
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
   const supabase = await createClient();
   const { data: product } = await supabase
     .from("products")
-    .select("name, tagline, description, main_image, category:product_categories(name)")
+    .select("name, tagline, description, main_image, meta_title, meta_description, category:product_categories(name)")
     .eq("slug", slug)
     .single();
 
   if (!product) return { title: "Ürün Bulunamadı" };
 
   const category = product.category as { name: string } | { name: string }[] | null;
-  const categoryName = category
-    ? (Array.isArray(category) ? category[0]?.name : category.name)
-    : undefined;
+  const categoryName = category ? (Array.isArray(category) ? category[0]?.name : category.name) : undefined;
   const productName = formatTechnicalText(product.name);
+  // Panelde girilen SEO başlığı ve açıklaması öncelikli
+  const title = product.meta_title || `${productName} – ${categoryName || "Su Arıtma Cihazı"}`;
+  const description =
+    product.meta_description ||
+    product.tagline ||
+    product.description?.slice(0, 160) ||
+    `${productName} su arıtma cihazı. Sultangazi merkezli montaj ve servis desteği.`;
 
   return {
-    title: `${productName} – ${categoryName || "Su Arıtma Cihazı"}`,
-    description: product.tagline || product.description?.slice(0, 160) || `${productName} su arıtma cihazı. Sultangazi merkezli montaj ve servis desteği.`,
+    title,
+    description,
     openGraph: {
       title: `${productName} – SuArıtmaServis34`,
-      description: product.tagline || product.description?.slice(0, 160) || "",
+      description,
       images: product.main_image ? [{ url: product.main_image, width: 1200, height: 1200, alt: productName }] : [],
     },
-    alternates: {
-      canonical: `/urunler/${slug}`,
-    },
+    alternates: { canonical: `/urunler/${slug}` },
   };
 }
 
-interface ProductPageProps {
-   params: Promise<{ slug: string }>;
-}
-
 const iconMap: Record<string, LucideIcon> = {
-   zap: Zap,
-   shield: ShieldCheck,
-   droplet: Droplets,
-   settings: Settings,
+  zap: Zap,
+  shield: ShieldCheck,
+  droplet: Droplets,
+  settings: Settings,
 };
+
+/** "Etiket: değer" biçimindeki teknik satırı ikiye ayırır */
+function splitSpec(spec: string) {
+  const text = formatTechnicalText(spec);
+  const i = text.indexOf(":");
+  return i === -1 ? { label: text, value: "" } : { label: text.slice(0, i).trim(), value: text.slice(i + 1).trim() };
+}
 
 // Sayfanın periyodik olarak güncellenmesini sağla (1 saat)
 export const revalidate = 3600;
 
 export default async function ProductDetailPage({ params }: ProductPageProps) {
-   const { slug } = await params;
-   const supabase = await createClient();
-   const { data: product } = await supabase
-      .from("products")
-      .select("*, category:product_categories(*)")
-      .eq("slug", slug)
-      .single();
+  const { slug } = await params;
+  const supabase = await createClient();
+  const { data } = await supabase.from("products").select("*, category:product_categories(*)").eq("slug", slug).single();
+  if (!data) notFound();
+  const product = data as Product & { category: ProductCategory | null };
 
-   if (!product) notFound();
+  // Aynı kategoriden diğer ürünler (iç bağlantı)
+  const { data: relatedData } = product.category_id
+    ? await supabase
+        .from("products")
+        .select("id, slug, name, tagline, main_image")
+        .eq("category_id", product.category_id)
+        .eq("is_active", true)
+        .neq("id", product.id)
+        .limit(4)
+    : { data: [] };
+  const related = (relatedData ?? []) as Pick<Product, "id" | "slug" | "name" | "tagline" | "main_image">[];
 
-   const features = product.features || [];
-   const gallery = [product.main_image, ...(product.gallery || [])].filter(Boolean);
-   const productName = formatTechnicalText(product.name);
+  const features = product.features || [];
+  const specs = product.specs || [];
+  const gallery = [product.main_image, ...(product.gallery || [])].filter(Boolean) as string[];
+  const productName = formatTechnicalText(product.name);
+  const highlights = specs.slice(0, 6).map(splitSpec);
 
-   return (
-      <div className="bg-background min-h-screen">
-         {/* Top Navigation / Breadcrumb */}
-         <div className="pt-24 pb-4 px-4 sm:px-6 lg:px-8 border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-40">
-            <div className="max-w-7xl mx-auto flex items-center justify-between">
-               <Link href="/urunler" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-brand-aqua transition-colors">
-                  <ChevronLeft className="w-4 h-4" /> Tüm Ürünler
-               </Link>
-               <div className="hidden sm:flex items-center gap-4">
-                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{product.category?.name}</span>
-                  <div className="h-4 w-px bg-border" />
-                  <span className="text-xs font-bold text-brand-navy truncate max-w-[200px]">{productName}</span>
-               </div>
-               <Button asChild size="sm" className="gradient-teal text-white border-0 hover:opacity-90">
-                  <a href={`https://wa.me/905531142734?text=Merhaba, ${productName} ürünü hakkında bilgi almak istiyorum.`}>
-                     Hızlı Teklif
-                  </a>
-               </Button>
-            </div>
-         </div>
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: productName,
+    description: product.meta_description || product.tagline || product.description?.slice(0, 300) || undefined,
+    image: gallery.length ? gallery : undefined,
+    category: product.category?.name,
+    url: `${SITE_URL}/urunler/${product.slug}`,
+    brand: { "@type": "Brand", name: "SuArıtmaServis34" },
+    ...(product.price
+      ? {
+          offers: {
+            "@type": "Offer",
+            price: product.price,
+            priceCurrency: "TRY",
+            availability: "https://schema.org/InStock",
+            url: `${SITE_URL}/urunler/${product.slug}`,
+          },
+        }
+      : {}),
+  };
 
-         <main className="py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-               <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+  return (
+    <div className="bg-background min-h-screen">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
 
-                  {/* Left: Gallery */}
-                  <div className="space-y-6">
-                     <ProductImageGallery product={product} gallery={gallery} />
-
-                     <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-muted/30 p-4 rounded-2xl border border-border flex items-center gap-3">
-                           <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm">
-                              <Truck className="w-5 h-5 text-brand-aqua" />
-                           </div>
-                           <div>
-                              <p className="text-xs font-bold text-brand-navy">Ücretsiz Montaj</p>
-                              <p className="text-[10px] text-muted-foreground leading-none mt-0.5">Tüm İstanbul</p>
-                           </div>
-                        </div>
-                        <div className="bg-muted/30 p-4 rounded-2xl border border-border flex items-center gap-3">
-                           <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm">
-                              <ShieldCheck className="w-5 h-5 text-brand-aqua" />
-                           </div>
-                           <div>
-                              <p className="text-xs font-bold text-brand-navy">2 Yıl Garanti</p>
-                              <p className="text-[10px] text-muted-foreground leading-none mt-0.5">Yerinde Servis Destekli</p>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-
-                  {/* Right: Info */}
-                  <div className="flex flex-col">
-                     <div className="mb-8">
-                        <span className="text-xs font-black text-brand-aqua uppercase tracking-[0.3em] mb-3 block">
-                           {product.category?.name}
-                        </span>
-                        <h1 className="text-4xl sm:text-5xl font-heading font-extrabold text-brand-navy mb-4 tracking-tight leading-tight">
-                           {productName}
-                        </h1>
-                        <p className="text-xl text-muted-foreground italic leading-relaxed">
-                           {product.tagline}
-                        </p>
-
-                        <div className="flex items-center gap-2 mt-6 text-sm font-medium text-brand-navy">
-                           <ShieldCheck className="h-4 w-4 text-brand-aqua" />
-                           Sultangazi merkezli montaj ve servis desteği
-                        </div>
-                     </div>
-
-                     <div className="p-8 rounded-[2.5rem] bg-brand-navy text-white mb-10 relative overflow-hidden shadow-2xl">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-brand-aqua/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-
-                        <div className="relative z-10">
-                           <div className="flex items-baseline gap-3 mb-6">
-                              <span className="text-4xl font-black">
-                                 {product.price ? `₺${product.price.toLocaleString('tr-TR')}` : 'Teklif Al'}
-                              </span>
-                              {product.old_price && (
-                                 <span className="text-xl text-white/30 line-through">₺{product.old_price.toLocaleString('tr-TR')}</span>
-                              )}
-                           </div>
-
-                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                              <Button asChild size="lg" className="w-full bg-brand-aqua hover:bg-brand-aqua/80 text-white border-0 h-14 rounded-2xl font-bold transition-colors">
-                                 <a href={`https://wa.me/905531142734?text=Merhaba, ${productName} ürünü hakkında bilgi almak istiyorum.`}>
-                                     <WhatsAppIcon className="w-5 h-5 mr-2" /> WhatsApp&apos;tan Sor
-                                 </a>
-                              </Button>
-                              <Button asChild size="lg" className="w-full border border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white h-14 rounded-2xl font-bold shadow-none">
-                                 <Link href="/iletisim">Fiyat Teklifi İste</Link>
-                              </Button>
-                           </div>
-
-                           <p className="text-[10px] text-white/40 text-center mt-6 uppercase tracking-widest font-bold">
-                              Kredi Kartına 9 Taksit İmkanı • Ücretsiz Kurulum Dahil
-                           </p>
-                        </div>
-                     </div>
-
-                     <div className="space-y-6">
-                        <h4 className="text-sm font-bold text-brand-navy uppercase tracking-widest flex items-center gap-2">
-                           <div className="w-2 h-2 rounded-full bg-brand-aqua" /> Öne Çıkan Özellikler
-                        </h4>
-                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
-                           {product.specs?.map((spec: string, i: number) => (
-                              <li key={i} className="flex items-center gap-3 text-sm text-muted-foreground font-medium">
-                                 <div className="w-5 h-5 rounded-lg bg-brand-aqua/10 flex items-center justify-center flex-shrink-0">
-                                    <Check className="w-3 h-3 text-brand-aqua" />
-                                 </div>
-                                 {formatTechnicalText(spec)}
-                              </li>
-                           ))}
-                        </ul>
-                     </div>
-                  </div>
-               </div>
-
-               {/* Detailed Features Cards */}
-               {features.length > 0 && (
-                  <section className="py-24 border-t border-border mt-24">
-                     <div className="text-center mb-16">
-                        <Badge variant="outline" className="mb-4 text-brand-aqua border-brand-aqua/20">Teknoloji & Konfor</Badge>
-                        <h2 className="text-3xl font-heading font-extrabold text-brand-navy">Neden {productName}?</h2>
-                     </div>
-                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {features.map((f: Product["features"][number], i: number) => {
-                           const Icon = iconMap[f.icon] || Droplets;
-                           return (
-                              <div key={i} className="p-8 rounded-[2rem] bg-muted/30 border border-border group hover:bg-white hover:shadow-xl hover:border-brand-aqua/20 transition-all duration-500">
-                                 <div className="w-14 h-14 rounded-2xl gradient-teal text-white flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform">
-                                    <Icon className="w-8 h-8" />
-                                 </div>
-                                 <h4 className="text-xl font-heading font-black text-brand-navy mb-3">{f.title}</h4>
-                                 <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
-                              </div>
-                           );
-                        })}
-                     </div>
-                  </section>
-               )}
-
-               {/* Description & Specs Table */}
-               <section className="py-24 border-t border-border">
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
-                     <div className="lg:col-span-2 space-y-8">
-                        <h3 className="text-2xl font-heading font-extrabold text-brand-navy">Ürün Hakkında Detaylı Bilgi</h3>
-                        <div className="prose prose-slate max-w-none text-muted-foreground leading-relaxed">
-                           {product.description?.split('\n').map((line: string, i: number) => (
-                              <p key={i} className="mb-4">{line}</p>
-                           ))}
-                        </div>
-                     </div>
-
-                     <div className="space-y-8">
-                        <div className="p-8 rounded-[2rem] bg-brand-navy text-white">
-                           <h3 className="text-xl font-heading font-bold mb-6">Teknik Tablo</h3>
-                           <div className="space-y-4">
-                              {product.specs?.map((spec: string, i: number) => {
-                                 const formattedSpec = formatTechnicalText(spec);
-                                 const [label, val] = formattedSpec.includes(':') ? formattedSpec.split(':') : [formattedSpec, ''];
-                                 return (
-                                    <div key={i} className="flex flex-col pb-3 border-b border-white/10 last:border-0 last:pb-0">
-                                       <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">{label}</span>
-                                       <span className="text-sm font-medium mt-1">{val || '✓'}</span>
-                                    </div>
-                                 )
-                              })}
-                           </div>
-                        </div>
-
-                        <div className="p-8 rounded-[2rem] border border-dashed border-border text-center">
-                           <Droplets className="w-10 h-10 text-brand-aqua mx-auto mb-4" />
-                           <h4 className="font-bold text-brand-navy mb-2 text-sm">Destek Lazım mı?</h4>
-                           <p className="text-xs text-muted-foreground mb-6">Hangi cihazın size uygun olduğuna karar veremediyseniz uzman ekibimizden yardım alabilirsiniz.</p>
-                           <Button asChild variant="link" className="text-brand-aqua font-black">
-                              <Link href="/iletisim">Bize Danışın <ArrowRight className="ml-2 w-4 h-4" /></Link>
-                           </Button>
-                        </div>
-                     </div>
-                  </div>
-               </section>
-            </div>
-         </main>
-
-         <CtaBand />
+      {/* Sabit menünün altında içerik haritası */}
+      <div className="pt-20 lg:pt-24">
+        <BreadcrumbNav items={[{ name: "Ürünler", url: "/urunler" }, { name: productName, url: `/urunler/${product.slug}` }]} />
       </div>
-   );
+
+      <main className="px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+        <div className="mx-auto max-w-6xl">
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16">
+            {/* Görseller */}
+            <ProductImageGallery product={product} gallery={gallery} />
+
+            {/* Bilgi ve iletişim */}
+            <div className="flex flex-col">
+              {product.category?.name && (
+                <span className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-brand-aqua">{product.category.name}</span>
+              )}
+              <h1 className="font-heading text-3xl font-extrabold leading-tight tracking-tight text-brand-navy sm:text-4xl lg:text-5xl">
+                {productName}
+              </h1>
+              {product.tagline && <p className="mt-4 text-lg leading-relaxed text-muted-foreground">{product.tagline}</p>}
+
+              {highlights.length > 0 && (
+                <ul className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  {highlights.map((h, i) => (
+                    <li key={i} className="flex items-start gap-3 text-sm text-foreground/80">
+                      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-brand-aqua/10">
+                        <Check className="h-3 w-3 text-brand-aqua" />
+                      </span>
+                      <span>
+                        {h.value ? (
+                          <>
+                            <span className="text-muted-foreground">{h.label}:</span> <span className="font-medium">{h.value}</span>
+                          </>
+                        ) : (
+                          h.label
+                        )}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              <div className="mt-8 rounded-[2rem] bg-brand-navy p-6 text-white shadow-xl sm:p-8">
+                <div className="flex items-baseline gap-3">
+                  {product.price ? (
+                    <>
+                      <span className="text-3xl font-black sm:text-4xl">₺{product.price.toLocaleString("tr-TR")}</span>
+                      {product.old_price && (
+                        <span className="text-lg text-white/40 line-through">₺{product.old_price.toLocaleString("tr-TR")}</span>
+                      )}
+                    </>
+                  ) : (
+                    <span className="text-2xl font-bold sm:text-3xl">Fiyat bilgisi için arayın</span>
+                  )}
+                </div>
+                <p className="mt-2 flex items-center gap-2 text-sm text-white/60">
+                  <ShieldCheck className="h-4 w-4 text-brand-aqua" /> Sultangazi merkezli montaj ve servis desteği
+                </p>
+
+                <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <Button asChild size="lg" className="h-13 w-full rounded-2xl border-0 bg-brand-aqua font-bold text-white hover:bg-brand-aqua/85">
+                    <a href={waLink(productName)} target="_blank" rel="noopener noreferrer">
+                      <WhatsAppIcon className="mr-2 h-5 w-5" /> WhatsApp&apos;tan Sor
+                    </a>
+                  </Button>
+                  <Button
+                    asChild
+                    size="lg"
+                    className="h-13 w-full rounded-2xl border border-white/20 bg-transparent font-bold text-white shadow-none hover:bg-white/10 hover:text-white"
+                  >
+                    <a href={TEL}>
+                      <Phone className="mr-2 h-4 w-4" /> {PHONE}
+                    </a>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Öne çıkan özellik kartları */}
+          {features.length > 0 && (
+            <section className="mt-20 border-t border-border pt-16">
+              <div className="mb-12 text-center">
+                <Badge variant="outline" className="mb-4 border-brand-aqua/20 text-brand-aqua">
+                  Teknoloji & Konfor
+                </Badge>
+                <h2 className="font-heading text-3xl font-extrabold text-brand-navy">Neden {productName}?</h2>
+              </div>
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+                {features.map((f, i) => {
+                  const Icon = iconMap[f.icon] || Droplets;
+                  return (
+                    <div key={i} className="rounded-[2rem] border border-border bg-muted/30 p-7">
+                      <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl gradient-teal text-white shadow-lg">
+                        <Icon className="h-6 w-6" />
+                      </div>
+                      <h3 className="mb-2 font-heading text-lg font-bold text-brand-navy">{f.title}</h3>
+                      <p className="text-sm leading-relaxed text-muted-foreground">{f.desc}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+
+          {/* Açıklama ve teknik özellikler */}
+          {(product.description || specs.length > 0) && (
+            <section className="mt-20 grid grid-cols-1 gap-12 border-t border-border pt-16 lg:grid-cols-3">
+              {product.description && (
+                <div className={specs.length > 0 ? "lg:col-span-2" : "lg:col-span-3"}>
+                  <h2 className="mb-6 font-heading text-2xl font-extrabold text-brand-navy">Ürün Hakkında</h2>
+                  <div className="space-y-4 leading-relaxed text-muted-foreground">
+                    {product.description
+                      .split("\n")
+                      .filter((line) => line.trim())
+                      .map((line, i) => (
+                        <p key={i}>{line}</p>
+                      ))}
+                  </div>
+                </div>
+              )}
+
+              {specs.length > 0 && (
+                <div className={product.description ? "" : "lg:col-span-3"}>
+                  <h2 className="mb-6 font-heading text-2xl font-extrabold text-brand-navy">Teknik Özellikler</h2>
+                  <dl className="divide-y divide-border overflow-hidden rounded-2xl border border-border">
+                    {specs.map(splitSpec).map((s, i) => (
+                      <div key={i} className="flex items-start justify-between gap-4 px-5 py-3 text-sm odd:bg-muted/30">
+                        <dt className="text-muted-foreground">{s.label}</dt>
+                        <dd className="text-right font-medium text-brand-navy">{s.value || <Check className="ml-auto h-4 w-4 text-brand-aqua" />}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+              )}
+            </section>
+          )}
+
+          {/* Benzer ürünler */}
+          {related.length > 0 && (
+            <section className="mt-20 border-t border-border pt-16">
+              <div className="mb-8 flex items-end justify-between gap-4">
+                <h2 className="font-heading text-2xl font-extrabold text-brand-navy">Benzer Ürünler</h2>
+                <Link href="/urunler" className="flex items-center gap-1 text-sm font-semibold text-brand-aqua hover:underline">
+                  Tüm ürünler <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                {related.map((r) => (
+                  <Link
+                    key={r.id}
+                    href={`/urunler/${r.slug}`}
+                    className="group flex flex-col overflow-hidden rounded-[1.5rem] border border-border bg-card transition hover:-translate-y-1 hover:shadow-xl"
+                  >
+                    <div className="aspect-square bg-white">
+                      {r.main_image ? (
+                        // eslint-disable-next-line @next/next/no-img-element -- ürün görselleri Supabase'ten, optimize edilmeden sunuluyor
+                        <img src={r.main_image} alt={formatTechnicalText(r.name)} loading="lazy" className="h-full w-full object-contain p-5" />
+                      ) : (
+                        <div className="flex h-full items-center justify-center text-muted-foreground/20">
+                          <Droplets className="h-10 w-10" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-4">
+                      <h3 className="line-clamp-2 text-sm font-bold text-brand-navy group-hover:text-brand-aqua">{formatTechnicalText(r.name)}</h3>
+                      {r.tagline && <p className="mt-1 line-clamp-1 text-xs text-muted-foreground">{r.tagline}</p>}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
+      </main>
+
+      <CtaBand />
+    </div>
+  );
 }

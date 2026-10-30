@@ -18,6 +18,7 @@ import {
 import { createClient } from "@/lib/supabase/client";
 import { Product, ProductCategory } from "@/lib/types";
 import { ImageUpload } from "./ImageUpload";
+import { flattenCategoryTree } from "@/lib/products/categoryTree";
 
 const productSchema = z.object({
   name: z.string().min(2, "Ürün adı en az 2 karakter olmalıdır"),
@@ -220,8 +221,8 @@ export function ProductFormModal({ item, categories, onClose, onSaved }: Product
                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-aqua/40 outline-none transition appearance-none"
                     >
                       <option value="" className="bg-[#14222c]">Kategori Seçin</option>
-                      {categories.map(cat => (
-                        <option key={cat.id} value={cat.id} className="bg-[#14222c]">{cat.name}</option>
+                      {flattenCategoryTree(categories).map(cat => (
+                        <option key={cat.id} value={cat.id} className="bg-[#14222c]">{"— ".repeat(cat.depth)}{cat.name}</option>
                       ))}
                     </select>
                  </div>

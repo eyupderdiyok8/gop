@@ -6,18 +6,32 @@ import { Badge } from "@/components/ui/badge";
 import { Check, ArrowRight, Droplets } from "lucide-react";
 import Link from "next/link";
 import { formatTechnicalText } from "@/lib/products/formatTechnicalText";
+import { categoryWithDescendants } from "@/lib/products/categoryTree";
 
 interface ProductListClientProps {
   initialProducts: (Product & { category: ProductCategory | null })[];
   categories: ProductCategory[];
+  /** ?kategori=<slug> ile açılışta seçili gelecek kategori */
+  initialCategorySlug?: string;
 }
 
-export function ProductListClient({ initialProducts, categories }: ProductListClientProps) {
-  const [activeTab, setActiveTab] = useState<string>("all");
+export function ProductListClient({ initialProducts, categories, initialCategorySlug }: ProductListClientProps) {
+  const [activeTab, setActiveTab] = useState<string>(
+    () => categories.find((c) => c.slug === initialCategorySlug)?.id ?? "all"
+  );
 
-  const filteredProducts = activeTab === "all" 
-    ? initialProducts 
-    : initialProducts.filter(p => p.category_id === activeTab);
+  // Ana kategori seçilince alt kategorilerindeki ürünler de listelenir
+  const inTab = activeTab === "all" ? null : categoryWithDescendants(categories, activeTab);
+  const filteredProducts = inTab
+    ? initialProducts.filter((p) => p.category_id !== null && inTab.has(p.category_id))
+    : initialProducts;
+
+  const byOrder = [...categories].sort((a, b) => a.display_order - b.display_order);
+  const roots = byOrder.filter((c) => !c.parent_id || !categories.some((x) => x.id === c.parent_id));
+  const active = categories.find((c) => c.id === activeTab);
+  // Seçili sekmenin ana kategorisi ve onun alt kategorileri (ikinci satır)
+  const activeRoot = active?.parent_id ? categories.find((c) => c.id === active.parent_id) ?? active : active;
+  const subTabs = activeRoot ? byOrder.filter((c) => c.parent_id === activeRoot.id) : [];
 
   return (
     <>
@@ -33,12 +47,12 @@ export function ProductListClient({ initialProducts, categories }: ProductListCl
          >
            Tüm Ürünler
          </button>
-         {categories.map(cat => (
+         {roots.map(cat => (
            <button
              key={cat.id}
              onClick={() => setActiveTab(cat.id)}
              className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all border ${
-               activeTab === cat.id 
+               activeRoot?.id === cat.id 
                ? "bg-brand-aqua text-white border-brand-aqua" 
                : "bg-white/5 border-white/10 text-white/60 hover:text-white"
              }`}
@@ -47,6 +61,25 @@ export function ProductListClient({ initialProducts, categories }: ProductListCl
            </button>
          ))}
       </div>
+
+      {/* Alt kategoriler */}
+      {activeRoot && subTabs.length > 0 && (
+        <div className="mt-4 flex flex-wrap justify-center gap-2">
+          {[activeRoot, ...subTabs].map((cat, i) => (
+            <button
+              key={cat.id}
+              onClick={() => setActiveTab(cat.id)}
+              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all border ${
+                activeTab === cat.id
+                  ? "bg-white text-brand-navy border-white"
+                  : "bg-white/5 border-white/10 text-white/60 hover:text-white"
+              }`}
+            >
+              {i === 0 ? `Tümü` : cat.name}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Product Grid */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 bg-background relative overflow-hidden">

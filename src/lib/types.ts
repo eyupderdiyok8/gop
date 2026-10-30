@@ -127,6 +127,8 @@ export interface ProductCategory {
   slug: string;
   description: string | null;
   display_order: number;
+  /** Alt kategoriyse ana kategorinin id'si (030 migration) */
+  parent_id?: string | null;
 }
 
 export interface Product {
