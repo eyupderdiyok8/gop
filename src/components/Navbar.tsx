@@ -31,15 +31,15 @@ const socialLinks = [
   { href: "https://x.com/suaritmateknik", label: "X", icon: XIcon },
 ];
 
-type MenuItem = { label: string; href?: string; soon?: boolean; children?: MenuItem[] };
+import type { MenuItem } from "@/lib/navigation/menuTypes";
 
 const serviceMenuItems: MenuItem[] = Object.values(SERVICES_DATA).map((s) => ({
   href: `/hizmetler/${s.slug}`,
   label: s.title,
 }));
 
-// Ürün menüsü: ana gruplar ve altındaki ürünler. Sayfası olmayan gruplar şimdilik /urunler'e gider.
-const productMenuItems: MenuItem[] = [
+// Yedek ürün menüsü: panelde kategori yapısı kurulana kadar (bkz. lib/navigation/productMenu.ts) bu liste kullanılır.
+const fallbackProductMenu: MenuItem[] = [
   {
     label: "Evsel Su Arıtma Sistemleri",
     href: "/urunler",
@@ -85,17 +85,17 @@ const productMenuItems: MenuItem[] = [
   { label: "Yedek Parça", href: "/urunler?kategori=aksesuarlar" },
 ];
 
-const navLinks: { href: string; label: string; icon: typeof Home; mega?: boolean; menu?: { all: string; items: MenuItem[] } }[] = [
+type NavLink = { href: string; label: string; icon: typeof Home; mega?: boolean; menu?: { all: string; items: MenuItem[] } };
+
+const buildNavLinks = (productItems: MenuItem[]): NavLink[] => [
   { href: "/", label: "Ana Sayfa", icon: Home },
-  { href: "/urunler", label: "Ürünler", icon: Package, mega: true, menu: { all: "Tüm Ürünler", items: productMenuItems } },
+  { href: "/urunler", label: "Ürünler", icon: Package, mega: true, menu: { all: "Tüm Ürünler", items: productItems } },
   { href: "/hizmetler", label: "Hizmetler", icon: Wrench, menu: { all: "Tüm Hizmetler", items: serviceMenuItems } },
   { href: "/cihaz-yenileme", label: "Cihaz Yenileme", icon: RefreshCw },
   { href: "/hakkimizda", label: "Hakkımızda", icon: Info },
   { href: "/blog", label: "Blog", icon: FileText },
   { href: "/iletisim", label: "İletişim", icon: MessageSquare },
 ];
-
-type NavLink = (typeof navLinks)[number];
 
 /** Menü satırı: alt öğesi olan grup başlığı, normal bağlantı ya da "yakında" etiketi */
 function MenuRows({ items, pathname, onPick, variant, depth = 0 }: { items: MenuItem[]; pathname: string; onPick: () => void; variant: "desktop" | "mobile"; depth?: number }) {
@@ -189,9 +189,10 @@ function NavItemMega({ link, pathname }: { link: NavLink; pathname: string }) {
   const [open, setOpen] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const items = link.menu!.items;
+  const leaves = items.filter((i) => !i.children?.length);
   const columns: MenuItem[] = [
     ...items.filter((i) => i.children?.length),
-    { label: "Filtre & Yedek Parça", children: items.filter((i) => !i.children?.length) },
+    ...(leaves.length ? [{ label: "Filtre & Yedek Parça", children: leaves }] : []),
   ];
   const close = () => setOpen(false);
   const leaf = (item: MenuItem) =>
@@ -314,7 +315,8 @@ function MobileNavItemWithDropdown({ link, pathname, setOpen }: { link: NavLink;
   );
 }
 
-export function Navbar() {
+export function Navbar({ productMenu }: { productMenu?: MenuItem[] | null }) {
+  const navLinks = buildNavLinks(productMenu?.length ? productMenu : fallbackProductMenu);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();

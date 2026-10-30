@@ -3,6 +3,7 @@ import { Features } from "@/components/sections/Features";
 import { Services } from "@/components/sections/Services";
 import { FeaturedProducts } from "@/components/sections/FeaturedProducts";
 import { Testimonials } from "@/components/sections/Testimonials";
+import { LocationMap } from "@/components/sections/LocationMap";
 import { BlogPreview } from "@/components/sections/BlogPreview";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { SavingsCalculator } from "@/components/sections/SavingsCalculator";
@@ -30,8 +31,8 @@ const organizationSchema = {
   },
   "geo": {
     "@type": "GeoCoordinates",
-    "latitude": 41.0796,
-    "longitude": 28.9092
+    "latitude": 41.0918729,
+    "longitude": 28.8640545
   },
   "openingHoursSpecification": [
     {
@@ -83,6 +84,7 @@ export default function HomePage() {
       <Testimonials />
       <BlogPreview />
       <ServiceAreaLinks />
+      <LocationMap />
       <CtaBand />
     </>
   );

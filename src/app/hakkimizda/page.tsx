@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Award, Users, MapPin, Heart } from "lucide-react";
 import Link from "next/link";
 import { CtaBand } from "@/components/sections/CtaBand";
+import { Testimonials } from "@/components/sections/Testimonials";
 
 export const metadata: Metadata = {
   title: "Hakkımızda | SuArıtmaServis34 Sultangazi",
@@ -120,6 +121,8 @@ export default function HakkimizdaPage() {
           </div>
         </div>
       </section>
+
+      <Testimonials />
 
       <CtaBand />
     </>

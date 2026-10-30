@@ -62,7 +62,7 @@ export function Hero() {
                 className="gradient-teal text-white border-0 hover:opacity-90 shadow-lg font-semibold h-12 px-6"
               >
                 <Link href="/#randevu">
-                  Randevu Al
+                  Bize Ulaşın
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </Link>
               </Button>

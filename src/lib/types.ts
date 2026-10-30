@@ -150,6 +150,8 @@ export interface Product {
   is_highlight: boolean;
   meta_title: string | null;
   meta_description: string | null;
+  /** Özel tanıtım sayfası adresi; doluysa ürün bağlantıları buraya gider (031 migration) */
+  page_url?: string | null;
   created_at: string;
   updated_at: string;
   category?: ProductCategory;

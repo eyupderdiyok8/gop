@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "./globals.css";
 import { SiteShell } from "@/components/SiteShell";
+import { getProductMenu } from "@/lib/navigation/productMenu";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -72,15 +73,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Ürünler menüsü panelde kurulan kategori ve ürünlerden gelir (5 dk önbellek)
+  const productMenu = await getProductMenu().catch(() => null);
   return (
     <html lang="tr" className={`${inter.variable} ${plusJakarta.variable}`} suppressHydrationWarning data-scroll-behavior="smooth">
       <body className="min-h-screen flex flex-col" suppressHydrationWarning>
-        <SiteShell>{children}</SiteShell>
+        <SiteShell productMenu={productMenu}>{children}</SiteShell>
       </body>
     </html>
   );

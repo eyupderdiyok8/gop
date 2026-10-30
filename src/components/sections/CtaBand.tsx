@@ -39,8 +39,8 @@ export function CtaBand() {
               size="lg"
               className="bg-white text-brand-aqua hover:bg-white/90 shadow-lg font-semibold h-12 px-8"
             >
-              <Link href="/#randevu">
-                Randevu Al
+              <Link href="/iletisim">
+                Bize Ulaşın
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Link>
             </Button>

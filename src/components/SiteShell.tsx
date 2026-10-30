@@ -3,11 +3,12 @@
 import { usePathname } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import type { MenuItem } from "@/lib/navigation/menuTypes";
 
 // Ürün tanıtım sayfaları (kendi header/footer'ları var). Yeni ürün sayfası eklenince buraya da ekleyin.
 const LANDING_PAGES = ["/3-2-prada-su-aritma-cihazi", "/pantech-su-aritma-cihazi", "/quantum-plus-su-aritma-cihazi", "/headon-su-aritma-cihazi"];
 
-export function SiteShell({ children }: { children: React.ReactNode }) {
+export function SiteShell({ children, productMenu }: { children: React.ReactNode; productMenu?: MenuItem[] | null }) {
   const pathname = usePathname();
   const isAdmin = pathname.startsWith("/admin");
   const isRandevu = pathname.startsWith("/randevu");
@@ -30,7 +31,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Navbar />
+      <Navbar productMenu={productMenu} />
       <main className="flex-1">{children}</main>
       <Footer />
     </>

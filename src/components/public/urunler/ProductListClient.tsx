@@ -96,7 +96,7 @@ export function ProductListClient({ initialProducts, categories, initialCategory
               {filteredProducts.map((product) => (
                 <Link
                   key={product.id}
-                  href={`/urunler/${product.slug}`}
+                  href={product.page_url || `/urunler/${product.slug}`}
                   className={`group relative flex flex-col rounded-[2.5rem] border overflow-hidden transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 ${
                     product.is_highlight ? "border-brand-aqua/30 bg-brand-aqua/[0.02]" : "border-border bg-card"
                   }`}

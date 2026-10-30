@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import { Badge } from "@/components/ui/badge";
 import { Phone, MapPin, Clock } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
-import { MultiStepRandevuForm } from "@/components/public/MultiStepRandevuForm";
+import { HeroHelpMenu } from "@/components/public/HeroHelpMenu";
+import { BUSINESS_LOCATION } from "@/lib/business";
 
 export const metadata: Metadata = {
-  title: "İletişim ve Servis Randevusu | SuArıtmaServis34 Sultangazi",
+  title: "İletişim | SuArıtmaServis34 Sultangazi Su Arıtma Servisi",
   description:
-    "Sultangazi ve İstanbul Avrupa Yakası'nda su arıtma servisi için telefon, WhatsApp veya online randevu formuyla bize ulaşın. Pzt-Cmt 08:00-19:00.",
+    "Sultangazi ve İstanbul Avrupa Yakası'nda su arıtma servisi, filtre değişimi ve yeni cihaz için telefon veya WhatsApp'tan bize ulaşın.",
   openGraph: {
     title: "İletişim – SuArıtmaServis34 Sultangazi",
     description:
@@ -53,14 +54,14 @@ export default function IletisimPage() {
         <div className="absolute inset-0 bg-dots opacity-20 pointer-events-none" />
         <div className="relative max-w-4xl mx-auto text-center">
           <Badge className="mb-6 bg-white/10 text-white border-white/20 px-4 py-1.5 text-xs tracking-wide">
-            ✦ Fiyat Teklifi & Randevu
+            ✦ Fiyat Teklifi & Servis
           </Badge>
           <h1 className="font-heading font-extrabold text-4xl sm:text-5xl text-white mb-5">
             İletişim
           </h1>
           <p className="text-white/70 text-lg leading-relaxed">
-            Sultangazi ve İstanbul Avrupa Yakası&apos;nda su arıtma hizmetleri için randevu alın,
-            24 saat içinde dönüş yapıyoruz.
+            Sultangazi ve İstanbul Avrupa Yakası&apos;nda su arıtma hizmetleri için bize telefon veya
+            WhatsApp&apos;tan ulaşın.
           </p>
         </div>
       </section>
@@ -103,29 +104,25 @@ export default function IletisimPage() {
               ))}
             </div>
 
-            {/* Map embed */}
-            <div className="rounded-2xl overflow-hidden border border-border h-56">
-              <iframe
-                src="https://www.google.com/maps?q=Sultançiftliği%20Mah.%20Eski%20Edirne%20Asfaltı%20Cad.%20No%3A461%2034265%20Sultangazi%2Fİstanbul&output=embed"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="SuArıtmaServis34 Konumu"
-              />
-            </div>
           </div>
 
-          {/* Randevu Formu – Sağ */}
+          {/* Yardım menüsü – Sağ (ana sayfa hero'sundaki ile aynı) */}
           <div className="lg:col-span-3">
-            <p className="text-sm text-muted-foreground mb-6">
-              Aşağıdaki formu kullanarak hızlıca randevu oluşturabilirsiniz.
-              E-posta ve telefon numaranıza doğrulama kodu gönderilecektir.
-            </p>
-            <MultiStepRandevuForm />
+            <HeroHelpMenu />
           </div>
+        </div>
+        {/* Harita: tam genişlikte, ince yatay şerit */}
+        <div className="max-w-6xl mx-auto mt-12 overflow-hidden rounded-2xl border border-border h-64 sm:h-80">
+          <iframe
+            src={BUSINESS_LOCATION.mapEmbedUrl}
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
+            title="Su Arıtma Teknik Servis 34 konumu"
+          />
         </div>
       </section>
     </>

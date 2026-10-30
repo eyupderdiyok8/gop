@@ -42,6 +42,7 @@ const productSchema = z.object({
   })).default([]),
   meta_title: z.string().optional().nullable().or(z.literal("")),
   meta_description: z.string().optional().nullable().or(z.literal("")),
+  page_url: z.string().optional().nullable().or(z.literal("")),
 });
 
 type ProductFormValues = z.infer<typeof productSchema>;
@@ -83,6 +84,7 @@ export function ProductFormModal({ item, categories, onClose, onSaved }: Product
       features: item?.features ?? [],
       meta_title: item?.meta_title ?? "",
       meta_description: item?.meta_description ?? "",
+      page_url: item?.page_url ?? "",
     },
   });
 
@@ -100,8 +102,11 @@ export function ProductFormModal({ item, categories, onClose, onSaved }: Product
     setLoading(true);
     const supabase = createClient();
     
+    // Özel sayfa adresi "/" ile başlamalı; boşsa null
+    const pageUrl = values.page_url?.trim();
     const payload = {
       ...values,
+      page_url: pageUrl ? (pageUrl.startsWith("/") || pageUrl.startsWith("http") ? pageUrl : `/${pageUrl}`) : null,
       updated_at: new Date().toISOString()
     };
 
@@ -414,6 +419,15 @@ export function ProductFormModal({ item, categories, onClose, onSaved }: Product
                         <label className="text-xs font-bold text-white/50 uppercase ml-1">Meta Açıklama</label>
                         <textarea {...form.register("meta_description")} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white h-24" />
                     </div>
+                 </div>
+                 <div className="space-y-2">
+                    <label className="text-xs font-bold text-white/50 uppercase ml-1">Özel Sayfa Adresi (isteğe bağlı)</label>
+                    <input
+                      {...form.register("page_url")}
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-aqua/40 outline-none transition"
+                      placeholder="/headon-su-aritma-cihazi"
+                    />
+                    <p className="text-[11px] text-white/40 ml-1">Ürünün kendi tanıtım sayfası varsa yazın; menü ve ürün kartları oraya gider.</p>
                  </div>
               </div>
             </div>

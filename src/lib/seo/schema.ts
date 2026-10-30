@@ -26,8 +26,8 @@ export function generateLocalBusinessSchema(areaServed: string) {
     },
     "geo": {
       "@type": "GeoCoordinates",
-      "latitude": 41.0796,
-      "longitude": 28.9092
+      "latitude": 41.0918729,
+      "longitude": 28.8640545
     },
     "areaServed": {
       "@type": "Place",

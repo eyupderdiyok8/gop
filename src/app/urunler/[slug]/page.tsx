@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Check, ShieldCheck, Zap, Droplets, Settings, ArrowRight, Phone, type LucideIcon } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { BreadcrumbNav } from "@/components/seo/BreadcrumbNav";
 import { ProductImageGallery } from "@/components/public/urunler/ProductImageGallery";
@@ -79,18 +79,20 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   const { data } = await supabase.from("products").select("*, category:product_categories(*)").eq("slug", slug).single();
   if (!data) notFound();
   const product = data as Product & { category: ProductCategory | null };
+  // Kendi tanıtım sayfası olan ürün oraya yönlenir (aynı içeriğin iki adresi olmasın)
+  if (product.page_url?.startsWith("/")) redirect(product.page_url);
 
   // Aynı kategoriden diğer ürünler (iç bağlantı)
   const { data: relatedData } = product.category_id
     ? await supabase
         .from("products")
-        .select("id, slug, name, tagline, main_image")
+        .select("*")
         .eq("category_id", product.category_id)
         .eq("is_active", true)
         .neq("id", product.id)
         .limit(4)
     : { data: [] };
-  const related = (relatedData ?? []) as Pick<Product, "id" | "slug" | "name" | "tagline" | "main_image">[];
+  const related = (relatedData ?? []) as Product[];
 
   const features = product.features || [];
   const specs = product.specs || [];
@@ -275,7 +277,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 {related.map((r) => (
                   <Link
                     key={r.id}
-                    href={`/urunler/${r.slug}`}
+                    href={r.page_url || `/urunler/${r.slug}`}
                     className="group flex flex-col overflow-hidden rounded-[1.5rem] border border-border bg-card transition hover:-translate-y-1 hover:shadow-xl"
                   >
                     <div className="aspect-square bg-white">
