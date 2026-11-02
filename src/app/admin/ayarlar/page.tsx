@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { Technician } from "@/lib/types";
 import { Plus, Trash2, Edit2, Loader2, Save, X } from "lucide-react";
+import { UsdRateCard } from "@/components/admin/ayarlar/UsdRateCard";
 
 export default function AyarlarPage() {
   const [technicians, setTechnicians] = useState<Technician[]>([]);
@@ -137,6 +138,8 @@ export default function AyarlarPage() {
           </div>
         </div>
       </div>
+
+      <UsdRateCard />
 
       <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
         <div className="px-6 py-5 border-b border-slate-100 bg-slate-50/50">

@@ -139,6 +139,8 @@ export interface Product {
   tagline: string | null;
   price: number | null;
   old_price: number | null;
+  price_usd?: number | null;
+  old_price_usd?: number | null;
   description: string | null;
   badge: string | null;
   badge_color: string | null;

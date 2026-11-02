@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -19,6 +19,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Product, ProductCategory } from "@/lib/types";
 import { ImageUpload } from "./ImageUpload";
 import { flattenCategoryTree } from "@/lib/products/categoryTree";
+import { usdToTry } from "@/lib/pricing/usdPricing";
 
 const productSchema = z.object({
   name: z.string().min(2, "Ürün adı en az 2 karakter olmalıdır"),
@@ -27,6 +28,8 @@ const productSchema = z.object({
   category_id: z.string().min(1, "Kategori seçiniz"),
   price: z.number().optional().nullable(),
   old_price: z.number().optional().nullable(),
+  price_usd: z.number().optional().nullable(),
+  old_price_usd: z.number().optional().nullable(),
   description: z.string().optional().nullable().or(z.literal("")),
   badge: z.string().optional().nullable().or(z.literal("")),
   badge_color: z.string().optional().nullable().or(z.literal("")),
@@ -73,6 +76,8 @@ export function ProductFormModal({ item, categories, onClose, onSaved }: Product
       category_id: item?.category_id ?? "",
       price: item?.price ?? null,
       old_price: item?.old_price ?? null,
+      price_usd: item?.price_usd ?? null,
+      old_price_usd: item?.old_price_usd ?? null,
       description: item?.description ?? "",
       badge: item?.badge ?? "",
       badge_color: item?.badge_color ?? "bg-brand-aqua text-white",
@@ -87,6 +92,22 @@ export function ProductFormModal({ item, categories, onClose, onSaved }: Product
       page_url: item?.page_url ?? "",
     },
   });
+
+  // Dolar kuru (033 SQL çalışmadıysa null: dolar alanları gizlenir)
+  const [usdRate, setUsdRate] = useState<number | null>(null);
+  useEffect(() => {
+    createClient()
+      .from("site_settings")
+      .select("value")
+      .eq("key", "usd_try_rate")
+      .maybeSingle()
+      .then(({ data }) => setUsdRate(data ? Number(data.value) : null));
+  }, []);
+
+  const priceUsd = form.watch("price_usd");
+  const oldPriceUsd = form.watch("old_price_usd");
+  const usdActive = usdRate !== null && priceUsd != null;
+  const optionalNumber = { setValueAs: (v: string) => (v === "" || v == null ? null : Number(v)) };
 
   const { fields: specFields, append: appendSpec, remove: removeSpec } = useFieldArray({
     control: form.control,
@@ -104,8 +125,19 @@ export function ProductFormModal({ item, categories, onClose, onSaved }: Product
     
     // Özel sayfa adresi "/" ile başlamalı; boşsa null
     const pageUrl = values.page_url?.trim();
+    const { price_usd, old_price_usd, ...rest } = values;
+    // Dolar fiyatı varsa TL fiyat güncel kurla hesaplanır
+    const usdFields = usdRate === null ? {} : {
+      price_usd: price_usd ?? null,
+      old_price_usd: price_usd != null ? old_price_usd ?? null : null,
+      ...(price_usd != null && usdRate > 0 ? {
+        price: usdToTry(price_usd, usdRate),
+        old_price: old_price_usd != null ? usdToTry(old_price_usd, usdRate) : null,
+      } : {}),
+    };
     const payload = {
-      ...values,
+      ...rest,
+      ...usdFields,
       page_url: pageUrl ? (pageUrl.startsWith("/") || pageUrl.startsWith("http") ? pageUrl : `/${pageUrl}`) : null,
       updated_at: new Date().toISOString()
     };
@@ -123,7 +155,7 @@ export function ProductFormModal({ item, categories, onClose, onSaved }: Product
         await supabase.from("inventory").upsert({
           urun_adi: values.name,
           kategori: "Su Arıtma Cihazı",
-          birim_fiyat: values.price || 0,
+          birim_fiyat: payload.price || 0,
           marka: "SuArıtmaServis34"
         }, { onConflict: 'urun_adi' });
         
@@ -145,7 +177,7 @@ export function ProductFormModal({ item, categories, onClose, onSaved }: Product
           kategori: "Su Arıtma Cihazı",
           adet: 0,
           min_stok_esigi: 5,
-          birim_fiyat: values.price || 0,
+          birim_fiyat: payload.price || 0,
           marka: "SuArıtmaServis34"
         });
 
@@ -249,14 +281,56 @@ export function ProductFormModal({ item, categories, onClose, onSaved }: Product
                 <span className="w-6 h-6 rounded-lg bg-brand-aqua/10 flex items-center justify-center text-[10px]">02</span>
                 Fiyat ve Durum
               </h3>
+              {usdRate !== null && (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-white/50 uppercase ml-1">Fiyat ($)</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      {...form.register("price_usd", optionalNumber)}
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-aqua/40 outline-none transition"
+                      placeholder="450"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-white/50 uppercase ml-1">Eski Fiyat ($)</label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      {...form.register("old_price_usd", optionalNumber)}
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-aqua/40 outline-none transition"
+                      placeholder="520"
+                    />
+                  </div>
+                  <div className="flex flex-col justify-center text-xs text-white/50 leading-relaxed">
+                    {usdRate > 0 ? (
+                      <>
+                        <span>Kur: <strong className="text-white">{usdRate.toLocaleString("tr-TR")} ₺</strong></span>
+                        {priceUsd != null ? (
+                          <span>
+                            ≈ <strong className="text-brand-aqua">{usdToTry(priceUsd, usdRate).toLocaleString("tr-TR")} ₺</strong>
+                            {oldPriceUsd != null && <> (eski {usdToTry(oldPriceUsd, usdRate).toLocaleString("tr-TR")} ₺)</>}
+                          </span>
+                        ) : (
+                          <span>Dolar girerseniz TL fiyat her ay kurla güncellenir.</span>
+                        )}
+                      </>
+                    ) : (
+                      <span>Kur henüz çekilmedi. Ayarlar sayfasından &quot;TCMB&apos;den güncelle&quot;ye basın.</span>
+                    )}
+                  </div>
+                </div>
+              )}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-white/50 uppercase ml-1">Fiyat (₺)</label>
+                  <label className="text-xs font-bold text-white/50 uppercase ml-1">Fiyat (₺){usdActive && " · kurdan"}</label>
                   <input 
                     type="number"
                     step="0.01"
-                    {...form.register("price", { valueAsNumber: true })}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-aqua/40 outline-none transition"
+                    readOnly={usdActive}
+                    {...form.register("price", optionalNumber)}
+                    className="read-only:opacity-50 w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-aqua/40 outline-none transition"
                     placeholder="4200"
                   />
                 </div>
@@ -265,8 +339,9 @@ export function ProductFormModal({ item, categories, onClose, onSaved }: Product
                   <input 
                     type="number"
                     step="0.01"
-                    {...form.register("old_price", { valueAsNumber: true })}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-aqua/40 outline-none transition"
+                    readOnly={usdActive}
+                    {...form.register("old_price", optionalNumber)}
+                    className="read-only:opacity-50 w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-brand-aqua/40 outline-none transition"
                     placeholder="5100"
                   />
                 </div>
