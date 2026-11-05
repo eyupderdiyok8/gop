@@ -2,10 +2,11 @@
 
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, Play, X, ArrowUpRight } from "lucide-react";
-import { useState } from "react";
+import { Star, Play, X, ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { GOOGLE_PROFILE } from "@/lib/business";
+import { fallbackInstallations, type InstallationMedia } from "@/lib/installations/media";
 
 type Review = {
   name: string;
@@ -66,13 +67,6 @@ const reviews: Review[] = [
   },
 ];
 
-/** Kurulumlarımızdan fotoğraf ve video */
-const media: { type: "image" | "video"; src: string; thumb: string; label: string; vertical?: boolean }[] = [
-  { type: "image", src: "/testimonials/su-aritma-servisi-musteri-yorumlari1.jpeg", thumb: "/testimonials/su-aritma-servisi-musteri-yorumlari1.jpeg", label: "Tezgah altı su arıtma kurulumu" },
-  { type: "video", src: "https://www.youtube.com/embed/zjKagH_Oygg", thumb: "/testimonials/su-aritma-servisi-musteri-yorumlari2.jpeg", label: "Kurulum videosu", vertical: true },
-  { type: "image", src: "/testimonials/su-aritma-servisi-musteri-yorumlari3.jpeg", thumb: "/testimonials/su-aritma-servisi-musteri-yorumlari3.jpeg", label: "Mutfak dolabına su arıtma montajı" },
-];
-
 function GoogleG({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" aria-hidden>
@@ -84,8 +78,7 @@ function GoogleG({ className }: { className?: string }) {
   );
 }
 
-export function Testimonials() {
-  const [lightbox, setLightbox] = useState<{ src: string; type: "image" | "video"; vertical?: boolean } | null>(null);
+export function Testimonials({ installations = fallbackInstallations }: { installations?: InstallationMedia[] }) {
   return (
     <section className="section-padding bg-muted/40">
       <div className="container-tight">
@@ -171,84 +164,144 @@ export function Testimonials() {
           </motion.a>
         </div>
 
-        {/* Kurulumlarımızdan */}
-        <p className="text-center text-sm font-semibold uppercase tracking-widest text-brand-navy/60 mb-5">Kurulumlarımızdan</p>
-        <div className="grid grid-cols-3 gap-3 sm:gap-5">
-          {media.map((m) => (
-            <button
-              key={m.src}
-              onClick={() => setLightbox({ src: m.src, type: m.type, vertical: m.vertical })}
-              className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-muted/70 group"
-              aria-label={`${m.label}: büyüt`}
-            >
-              <Image
-                src={m.thumb}
-                alt={m.label}
-                fill
-                sizes="(max-width: 768px) 33vw, 360px"
-                loading="lazy"
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-              {m.type === "video" && (
-                <div className="absolute inset-0 bg-black/35 flex items-center justify-center">
-                  <div className="w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                    <Play className="w-5 h-5 text-brand-aqua fill-brand-aqua ml-0.5" />
-                  </div>
-                </div>
-              )}
+        <InstallationsSlider media={installations} />
+      </div>
+    </section>
+  );
+}
+
+/** Kurulumlarımızdan: admin panelinden yüklenen fotoğraf ve videolar, kaydırmalı şerit + büyük görünüm */
+function InstallationsSlider({ media }: { media: InstallationMedia[] }) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState<number | null>(null);
+  const current = open !== null ? media[open] : null;
+
+  const scroll = (dir: 1 | -1) => {
+    const track = trackRef.current;
+    if (!track) return;
+    track.scrollBy({ left: dir * track.clientWidth * 0.8, behavior: "smooth" });
+  };
+  const step = (dir: 1 | -1) => setOpen((i) => (i === null ? i : (i + dir + media.length) % media.length));
+
+  if (!media.length) return null;
+
+  return (
+    <>
+      <div className="mb-5 flex items-center justify-between gap-4">
+        <p className="text-sm font-semibold uppercase tracking-widest text-brand-navy/60">Kurulumlarımızdan</p>
+        {media.length > 3 && (
+          <div className="flex gap-2">
+            <button onClick={() => scroll(-1)} aria-label="Önceki kurulumlar" className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-brand-navy transition hover:border-brand-aqua/50">
+              <ChevronLeft className="h-4 w-4" />
             </button>
-          ))}
-        </div>
+            <button onClick={() => scroll(1)} aria-label="Sonraki kurulumlar" className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-brand-navy transition hover:border-brand-aqua/50">
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div
+        ref={trackRef}
+        className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-4 pb-2 sm:gap-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {media.map((m, i) => (
+          <button
+            key={m.id}
+            onClick={() => setOpen(i)}
+            className="group relative aspect-[4/5] w-[70%] shrink-0 snap-start overflow-hidden rounded-2xl bg-muted/70 sm:w-[calc((100%-2.5rem)/3)]"
+            aria-label={`${m.caption}: büyüt`}
+          >
+            <Image
+              src={m.thumb}
+              alt={m.caption}
+              fill
+              sizes="(max-width: 640px) 70vw, 360px"
+              loading="lazy"
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+            {m.kind === "video" && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/35">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 shadow-lg transition-transform group-hover:scale-110">
+                  <Play className="ml-0.5 h-5 w-5 fill-brand-aqua text-brand-aqua" />
+                </div>
+              </div>
+            )}
+            <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-4 pb-3 pt-10 text-left text-sm font-medium text-white">
+              {m.caption}
+            </span>
+          </button>
+        ))}
       </div>
 
       {/* Büyük görünüm */}
       <AnimatePresence>
-        {lightbox && (
+        {current && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
-            onClick={() => setLightbox(null)}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+            onClick={() => setOpen(null)}
           >
             <button
-              className="absolute top-4 right-4 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-2 transition"
-              onClick={() => setLightbox(null)}
+              className="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white/70 transition hover:bg-white/20 hover:text-white"
+              onClick={() => setOpen(null)}
               aria-label="Kapat"
             >
-              <X className="w-6 h-6" />
+              <X className="h-6 w-6" />
             </button>
+            {media.length > 1 && (
+              <>
+                <button
+                  className="absolute left-3 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white/80 transition hover:bg-white/20"
+                  onClick={(e) => { e.stopPropagation(); step(-1); }}
+                  aria-label="Önceki"
+                >
+                  <ChevronLeft className="h-6 w-6" />
+                </button>
+                <button
+                  className="absolute right-3 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white/80 transition hover:bg-white/20"
+                  onClick={(e) => { e.stopPropagation(); step(1); }}
+                  aria-label="Sonraki"
+                >
+                  <ChevronRight className="h-6 w-6" />
+                </button>
+              </>
+            )}
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
+              key={current.id}
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className={cn("flex items-center justify-center w-full", lightbox.vertical ? "max-w-sm" : "max-w-4xl")}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className={cn("flex w-full flex-col items-center justify-center gap-3", current.vertical ? "max-w-sm" : "max-w-4xl")}
               onClick={(e) => e.stopPropagation()}
             >
-              {lightbox.type === "image" ? (
+              {current.kind === "image" ? (
                 <Image
-                  src={lightbox.src}
-                  alt="Su arıtma kurulumu"
+                  src={current.src}
+                  alt={current.caption}
                   width={1200}
                   height={1600}
                   sizes="100vw"
-                  className="w-auto max-w-full h-auto max-h-[85vh] object-contain rounded-xl shadow-2xl"
+                  className="h-auto max-h-[80vh] w-auto max-w-full rounded-xl object-contain shadow-2xl"
                 />
               ) : (
-                <div className="relative w-full" style={{ paddingTop: lightbox.vertical ? "177.78%" : "56.25%" }}>
+                <div className="relative w-full" style={{ paddingTop: current.vertical ? "177.78%" : "56.25%" }}>
                   <iframe
-                    src={lightbox.src + "?autoplay=1"}
-                    className="absolute inset-0 w-full h-full rounded-2xl"
+                    src={current.src + "?autoplay=1"}
+                    className="absolute inset-0 h-full w-full rounded-2xl"
                     allow="autoplay; fullscreen"
                     allowFullScreen
-                    title="Kurulum videosu"
+                    title={current.caption}
                   />
                 </div>
               )}
+              <p className="text-center text-sm text-white/80">{current.caption}</p>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </section>
+    </>
   );
 }

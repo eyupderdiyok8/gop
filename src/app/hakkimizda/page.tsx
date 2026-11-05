@@ -5,6 +5,7 @@ import { ArrowRight, Award, Users, MapPin, Heart } from "lucide-react";
 import Link from "next/link";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { Testimonials } from "@/components/sections/Testimonials";
+import { getInstallations } from "@/lib/installations/getInstallations";
 
 export const metadata: Metadata = {
   title: "Hakkımızda | SuArıtmaServis34 Sultangazi",
@@ -38,7 +39,8 @@ const values = [
   },
 ];
 
-export default function HakkimizdaPage() {
+export default async function HakkimizdaPage() {
+  const installations = await getInstallations().catch(() => undefined);
   return (
     <>
       {/* Hero */}
@@ -122,7 +124,7 @@ export default function HakkimizdaPage() {
         </div>
       </section>
 
-      <Testimonials />
+      <Testimonials installations={installations} />
 
       <CtaBand />
     </>

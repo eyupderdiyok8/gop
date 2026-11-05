@@ -3,6 +3,7 @@ import { Features } from "@/components/sections/Features";
 import { Services } from "@/components/sections/Services";
 import { FeaturedProducts } from "@/components/sections/FeaturedProducts";
 import { Testimonials } from "@/components/sections/Testimonials";
+import { getInstallations } from "@/lib/installations/getInstallations";
 import { LocationMap } from "@/components/sections/LocationMap";
 import { BlogPreview } from "@/components/sections/BlogPreview";
 import { CtaBand } from "@/components/sections/CtaBand";
@@ -67,7 +68,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  const installations = await getInstallations().catch(() => undefined);
   return (
     <>
       <script
@@ -81,7 +83,7 @@ export default function HomePage() {
       <DeviceRenewal />
       <FeaturedProducts />
       <SavingsCalculator />
-      <Testimonials />
+      <Testimonials installations={installations} />
       <BlogPreview />
       <ServiceAreaLinks />
       <LocationMap />
