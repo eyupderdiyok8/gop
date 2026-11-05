@@ -1,2 +1,2 @@
 /** Menü satırı: alt öğesi olan grup başlığı, normal bağlantı ya da "yakında" etiketi */
-export type MenuItem = { label: string; href?: string; soon?: boolean; children?: MenuItem[] };
+export type MenuItem = { label: string; href?: string; soon?: boolean; more?: boolean; children?: MenuItem[] };

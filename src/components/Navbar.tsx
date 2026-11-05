@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Phone, Home, Wrench, Package, Info, FileText, MessageSquare, ChevronDown, RefreshCw } from "lucide-react";
+import { Menu, Phone, Home, Wrench, Package, Info, FileText, MessageSquare, ChevronDown, ChevronRight, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SERVICES_DATA } from "@/lib/constants/services";
 import { YouTubeIcon } from "@/components/icons/YouTubeIcon";
@@ -105,6 +105,9 @@ function MenuRows({ items, pathname, onPick, variant, depth = 0 }: { items: Menu
       {items.map((item) => {
         const active = item.href !== undefined && item.href !== "/urunler" && pathname === item.href;
         const isGroup = Boolean(item.children?.length);
+        if (variant === "mobile" && isGroup) {
+          return <MobileMenuGroup key={item.label} item={item} pathname={pathname} onPick={onPick} depth={depth} />;
+        }
         return (
           <div key={item.label}>
             {item.soon || !item.href ? (
@@ -119,7 +122,7 @@ function MenuRows({ items, pathname, onPick, variant, depth = 0 }: { items: Menu
                 className={cn(
                   row,
                   "transition-colors hover:bg-white/10",
-                  isGroup || depth === 0 ? "font-semibold text-white" : active ? "font-semibold text-brand-aqua" : variant === "desktop" ? "text-white/80" : "text-white/60"
+                  item.more ? "font-semibold text-brand-aqua" : isGroup || depth === 0 ? "font-semibold text-white" : active ? "font-semibold text-brand-aqua" : variant === "desktop" ? "text-white/80" : "text-white/60"
                 )}
               >
                 {item.label}
@@ -134,6 +137,38 @@ function MenuRows({ items, pathname, onPick, variant, depth = 0 }: { items: Menu
         );
       })}
     </>
+  );
+}
+
+/** Mobil menüde alt kategori: başlığa dokununca kategoriye gider, ok ile içi açılır */
+function MobileMenuGroup({ item, pathname, onPick, depth }: { item: MenuItem; pathname: string; onPick: () => void; depth: number }) {
+  const [expanded, setExpanded] = useState(false);
+  return (
+    <div>
+      <div className="flex items-center">
+        {item.href ? (
+          <Link href={item.href} onClick={onPick} className={cn("flex-1 block py-2.5 px-3 text-sm rounded-lg font-semibold transition-colors hover:bg-white/10", depth === 0 ? "text-white" : "text-white/80")}>
+            {item.label}
+          </Link>
+        ) : (
+          <span className="flex-1 py-2.5 px-3 text-sm font-semibold text-white">{item.label}</span>
+        )}
+        <button
+          type="button"
+          onClick={() => setExpanded(!expanded)}
+          aria-expanded={expanded}
+          aria-label={`${item.label} alt menüsünü aç`}
+          className="p-2.5 text-white/40 hover:text-white transition-colors"
+        >
+          <ChevronDown className={cn("w-4 h-4 transition-transform duration-200", expanded && "rotate-180")} />
+        </button>
+      </div>
+      {expanded && (
+        <div className="ml-3 mb-1 border-l border-white/10">
+          <MenuRows items={item.children!} pathname={pathname} onPick={onPick} variant="mobile" depth={depth + 1} />
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -184,17 +219,20 @@ function NavItemWithDropdown({ link, isSolid, pathname }: { link: NavLink; isSol
   );
 }
 
-/** Masaüstü ürün mega menüsü: alt grubu olan her başlık bir sütun, tekil kalemler son sütunda toplanır */
+/**
+ * Masaüstü ürün mega menüsü: solda ana kategoriler, sağda üzerine gelinen kategorinin
+ * alt kategorileri ve ürünleri. Panel ekran yüksekliğiyle sınırlı, taşarsa kendi içinde kayar.
+ */
 function NavItemMega({ link, pathname }: { link: NavLink; pathname: string }) {
   const [open, setOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const items = link.menu!.items;
-  const leaves = items.filter((i) => !i.children?.length);
-  const columns: MenuItem[] = [
-    ...items.filter((i) => i.children?.length),
-    ...(leaves.length ? [{ label: "Filtre & Yedek Parça", children: leaves }] : []),
-  ];
+  const roots = link.menu!.items;
+  const active = roots[Math.min(activeIndex, roots.length - 1)];
+  const groups = active?.children?.filter((i) => i.children?.length) ?? [];
+  const products = active?.children?.filter((i) => !i.children?.length) ?? [];
   const close = () => setOpen(false);
+
   const leaf = (item: MenuItem) =>
     item.href ? (
       <Link
@@ -203,7 +241,11 @@ function NavItemMega({ link, pathname }: { link: NavLink; pathname: string }) {
         onClick={close}
         className={cn(
           "block rounded-md px-2 py-1.5 text-sm transition-colors hover:bg-white/10 hover:text-white",
-          item.href !== "/urunler" && pathname === item.href ? "font-semibold text-brand-aqua" : "text-white/70"
+          item.more
+            ? "font-semibold text-brand-aqua"
+            : item.href !== "/urunler" && pathname === item.href
+              ? "font-semibold text-brand-aqua"
+              : "text-white/70"
         )}
       >
         {item.label}
@@ -229,35 +271,71 @@ function NavItemMega({ link, pathname }: { link: NavLink; pathname: string }) {
         <ChevronDown className={cn("w-3.5 h-3.5 transition-transform duration-200", open && "rotate-180")} />
       </Link>
 
-      {open && (
+      {open && active && (
         <div className="absolute left-1/2 top-[calc(100%-2.5rem)] z-50 w-[min(94vw,1040px)] -translate-x-1/2 pt-[calc(2.5rem+4px)]">
-          <div className="rounded-2xl border border-white/10 bg-brand-navy/95 p-6 shadow-2xl backdrop-blur-lg animate-in fade-in-0 slide-in-from-top-2 duration-200">
-            <div className="grid grid-cols-4 gap-6">
-              {columns.map((col) => (
-                <div key={col.label}>
-                  {col.href ? (
-                    <Link href={col.href} onClick={close} className="mb-2 block px-2 text-xs font-bold uppercase tracking-wider text-brand-aqua hover:text-brand-aqua-light">
-                      {col.label}
-                    </Link>
-                  ) : (
-                    <p className="mb-2 px-2 text-xs font-bold uppercase tracking-wider text-brand-aqua">{col.label}</p>
-                  )}
-                  <div className="space-y-0.5">
-                    {col.children!.map((item) =>
-                      item.children?.length ? (
-                        <div key={item.label} className="pt-1">
-                          <p className="px-2 pb-0.5 pt-1 text-[13px] font-semibold text-white">{item.label}</p>
-                          <div className="ml-2 border-l border-white/10 pl-1">{item.children.map(leaf)}</div>
-                        </div>
-                      ) : (
-                        leaf(item)
-                      )
+          <div className="overflow-hidden rounded-2xl border border-white/10 bg-brand-navy/95 shadow-2xl backdrop-blur-lg animate-in fade-in-0 slide-in-from-top-2 duration-200">
+            <div className="grid max-h-[min(70vh,560px)] grid-cols-[250px_1fr]">
+              {/* Ana kategoriler */}
+              <nav className="overflow-y-auto border-r border-white/10 bg-white/[0.03] p-3">
+                {roots.map((root, i) => (
+                  <Link
+                    key={root.label}
+                    href={root.href ?? link.href}
+                    onClick={close}
+                    onMouseEnter={() => setActiveIndex(i)}
+                    onFocus={() => setActiveIndex(i)}
+                    className={cn(
+                      "flex items-center justify-between gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                      root === active ? "bg-white/10 text-white" : "text-white/70 hover:text-white"
                     )}
-                  </div>
+                  >
+                    <span>{root.label}</span>
+                    {root.children?.length ? <ChevronRight className={cn("h-4 w-4 shrink-0", root === active ? "text-brand-aqua" : "text-white/30")} /> : null}
+                  </Link>
+                ))}
+              </nav>
+
+              {/* Seçili kategorinin içeriği */}
+              <div className="overflow-y-auto p-6">
+                <div className="mb-4 flex items-baseline justify-between gap-4">
+                  <p className="text-xs font-bold uppercase tracking-wider text-brand-aqua">{active.label}</p>
+                  {active.href && (
+                    <Link href={active.href} onClick={close} className="shrink-0 text-sm font-semibold text-brand-aqua hover:text-brand-aqua-light">
+                      Tümünü gör →
+                    </Link>
+                  )}
                 </div>
-              ))}
+                {products.length > 0 && (
+                  <div className={cn("grid grid-cols-2 gap-x-6 gap-y-0.5", groups.length > 0 && "mb-6")}>{products.map(leaf)}</div>
+                )}
+                {groups.length > 0 && (
+                  <div className="grid grid-cols-3 gap-x-6 gap-y-5">
+                    {groups.map((group) => (
+                      <div key={group.label}>
+                        {group.href ? (
+                          <Link href={group.href} onClick={close} className="block px-2 pb-1 text-[13px] font-semibold text-white hover:text-brand-aqua-light">
+                            {group.label}
+                          </Link>
+                        ) : (
+                          <p className="px-2 pb-1 text-[13px] font-semibold text-white">{group.label}</p>
+                        )}
+                        <div className="ml-2 border-l border-white/10 pl-1">
+                          {group.children!.map((item) =>
+                            item.children?.length ? leaf({ label: item.label, href: item.href }) : leaf(item)
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {!products.length && !groups.length && active.href && (
+                  <Link href={active.href} onClick={close} className="text-sm text-white/70 hover:text-white">
+                    Bu kategorideki ürünleri görüntüleyin →
+                  </Link>
+                )}
+              </div>
             </div>
-            <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-4">
+            <div className="flex items-center justify-between border-t border-white/10 px-6 py-3">
               <p className="text-sm text-white/50">Ev, ofis ve iş yerleri için su arıtma çözümleri</p>
               <Link href={link.href} onClick={close} className="text-sm font-semibold text-brand-aqua hover:text-brand-aqua-light">
                 {link.menu!.all} →
