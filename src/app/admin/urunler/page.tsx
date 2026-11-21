@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { refreshSiteData } from "@/lib/admin/refreshSite";
 import { Product, ProductCategory } from "@/lib/types";
 import { 
   Plus, 
@@ -60,6 +61,7 @@ export default function AdminUrunlerPage() {
     const supabase = createClient();
     await supabase.from("products").delete().eq("id", id);
     fetchData();
+    refreshSiteData("product-menu");
   };
 
   const filtered = products.filter(p => {
@@ -236,7 +238,7 @@ export default function AdminUrunlerPage() {
           categories={categories}
           products={products}
           onClose={() => setCatModal(false)}
-          onChanged={fetchData}
+          onChanged={() => { fetchData(); refreshSiteData("product-menu"); }}
         />
       )}
 
@@ -245,7 +247,7 @@ export default function AdminUrunlerPage() {
           item={formModal.item}
           categories={categories}
           onClose={() => setFormModal({ open: false })}
-          onSaved={() => { setFormModal({ open: false }); fetchData(); }}
+          onSaved={() => { setFormModal({ open: false }); fetchData(); refreshSiteData("product-menu"); }}
         />
       )}
     </div>

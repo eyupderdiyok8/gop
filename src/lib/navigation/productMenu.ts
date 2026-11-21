@@ -64,5 +64,8 @@ async function buildProductMenu(): Promise<MenuItem[] | null> {
   return menu.length ? menu : null;
 }
 
-/** 5 dakikada bir yenilenir; panelde yapılan değişiklikler en geç bu sürede menüye yansır */
-export const getProductMenu = unstable_cache(buildProductMenu, ["product-menu-v2"], { revalidate: 300, tags: ["product-menu"] });
+/**
+ * Günde bir yenilenir. Menü her sayfada kullanıldığı için kısa süre bütün sayfaları sık sık yeniden
+ * ürettirir (Vercel kullanım sınırı). Panelde kayıt yapılınca refreshSiteData("product-menu") ile hemen yenilenir.
+ */
+export const getProductMenu = unstable_cache(buildProductMenu, ["product-menu-v2"], { revalidate: 86400, tags: ["product-menu"] });

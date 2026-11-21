@@ -6,6 +6,7 @@ import { getSeoFileName } from "@/lib/slugify";
 import { parseYouTube, toInstallationMedia, type InstallationRow } from "@/lib/installations/media";
 import { ArrowDown, ArrowUp, Eye, EyeOff, Loader2, Play, Plus, Trash2, Upload } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { refreshSiteData } from "@/lib/admin/refreshSite";
 
 type Row = InstallationRow & { display_order: number; is_active: boolean };
 
@@ -21,8 +22,8 @@ async function fetchRows(): Promise<Row[] | null> {
   return error ? null : (data as Row[]);
 }
 
-/** Sitedeki sayfaları yeniler; hata olursa en geç 5 dakikada kendiliğinden yenilenir */
-const refreshSite = () => fetch("/api/admin/kurulumlar/yenile", { method: "POST" }).catch(() => {});
+/** Sitedeki kurulum şeridini yeniler; istek başarısız olursa en geç 1 günde kendiliğinden yenilenir */
+const refreshSite = () => refreshSiteData("installation-media");
 
 export default function KurulumlarPage() {
   const [rows, setRows] = useState<Row[]>([]);

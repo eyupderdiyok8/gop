@@ -18,5 +18,5 @@ async function fetchInstallations(): Promise<InstallationMedia[]> {
   return media.length ? media : fallbackInstallations;
 }
 
-/** 5 dakikada bir yenilenir; panelden kaydedince sayfalar ayrıca hemen yenilenir */
-export const getInstallations = unstable_cache(fetchInstallations, ["installation-media"], { revalidate: 300, tags: ["installation-media"] });
+/** Günde bir yenilenir; panelden kaydedince refreshSiteData("installation-media") ile hemen yenilenir */
+export const getInstallations = unstable_cache(fetchInstallations, ["installation-media"], { revalidate: 86400, tags: ["installation-media"] });
