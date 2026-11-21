@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 // Sayfanın periyodik olarak güncellenmesini sağla (1 saat)
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 export default async function UrunlerPage({ searchParams }: { searchParams: Promise<{ kategori?: string }> }) {
   const { kategori } = await searchParams;

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
+import Link from "@/components/AppLink";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, RefreshCw, ShieldCheck, Banknote, Truck } from "lucide-react";
 

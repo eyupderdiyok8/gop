@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Phone, Droplets } from "lucide-react";
-import Link from "next/link";
+import Link from "@/components/AppLink";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { SERVICES_DATA } from "@/lib/constants/services";
 

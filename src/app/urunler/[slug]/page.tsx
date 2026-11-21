@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Check, ShieldCheck, Zap, Droplets, Settings, ArrowRight, Phone, type LucideIcon } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
-import Link from "next/link";
+import Link from "@/components/AppLink";
 import { notFound, redirect } from "next/navigation";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { BreadcrumbNav } from "@/components/seo/BreadcrumbNav";
@@ -71,7 +71,7 @@ function splitSpec(spec: string) {
 }
 
 // Sayfanın periyodik olarak güncellenmesini sağla (1 saat)
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 export default async function ProductDetailPage({ params }: ProductPageProps) {
   const { slug } = await params;

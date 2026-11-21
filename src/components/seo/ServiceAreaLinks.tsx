@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/AppLink";
 import { MapPin } from "lucide-react";
 import { SERVICE_DISTRICTS, districtUrl } from "@/lib/seo/serviceAreas";
 import { isCoreService } from "@/lib/seo/indexPolicy";

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Product, ProductCategory } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { Check, ArrowRight, Droplets } from "lucide-react";
-import Link from "next/link";
+import Link from "@/components/AppLink";
 import { formatTechnicalText } from "@/lib/products/formatTechnicalText";
 import { categoryWithDescendants } from "@/lib/products/categoryTree";
 

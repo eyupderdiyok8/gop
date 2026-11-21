@@ -6,11 +6,11 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, ArrowLeft, ArrowRight, MapPin, MessageCircle } from "lucide-react";
-import Link from "next/link";
+import Link from "@/components/AppLink";
 import type { Metadata } from "next";
 import { ShareButton } from "@/components/public/blog/ShareButton";
 
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 interface Props {
   params: Promise<{ slug: string }>;

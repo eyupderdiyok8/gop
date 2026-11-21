@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { ArrowDown, Droplets, ChevronRight, Home } from "lucide-react";
-import Link from "next/link";
+import Link from "@/components/AppLink";
 
 interface BreadcrumbItem {
   name: string;

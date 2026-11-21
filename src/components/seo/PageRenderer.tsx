@@ -8,7 +8,7 @@ import { LocalServicesLinks, type ServiceLink } from "@/components/seo/LocalServ
 import { ServiceDetails } from "@/components/seo/ServiceDetails";
 import { SERVICES_DATA } from "@/lib/constants/services";
 import { isCoreService, isIndexablePage } from "@/lib/seo/indexPolicy";
-import Link from "next/link";
+import Link from "@/components/AppLink";
 import { generateLocalBusinessSchema, generateServiceSchema } from "@/lib/seo/schema";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { formatLocationName } from "@/lib/seo/locationNames";

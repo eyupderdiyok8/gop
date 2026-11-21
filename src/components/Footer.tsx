@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/AppLink";
 import { Phone, MapPin, Clock } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";

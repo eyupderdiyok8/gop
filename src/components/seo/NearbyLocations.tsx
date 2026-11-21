@@ -1,7 +1,7 @@
 "use client";
 
 import { MapPin, ArrowRight } from "lucide-react";
-import Link from "next/link";
+import Link from "@/components/AppLink";
 import { motion } from "framer-motion";
 import { formatLocationName } from "@/lib/seo/locationNames";
 

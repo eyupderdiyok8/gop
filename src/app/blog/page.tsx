@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Calendar } from "lucide-react";
-import Link from "next/link";
+import Link from "@/components/AppLink";
 import { createClient } from "@/lib/supabase/server";
 import { format } from "date-fns";
 import { tr } from "date-fns/locale";
@@ -25,7 +25,7 @@ const categoryColors: Record<string, string> = {
   "Yerel": "bg-brand-aqua/10 text-brand-aqua border-brand-aqua",
 };
 
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 export default async function BlogPage() {
   const supabase = await createClient();

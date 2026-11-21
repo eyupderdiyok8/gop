@@ -18,7 +18,7 @@ import {
   Eye,
   EyeOff
 } from "lucide-react";
-import Link from "next/link";
+import Link from "@/components/AppLink";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");

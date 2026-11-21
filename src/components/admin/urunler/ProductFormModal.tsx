@@ -20,6 +20,7 @@ import { Product, ProductCategory } from "@/lib/types";
 import { ImageUpload } from "./ImageUpload";
 import { flattenCategoryTree } from "@/lib/products/categoryTree";
 import { usdToTry } from "@/lib/pricing/usdPricing";
+import { refreshSitePaths } from "@/lib/admin/refreshSite";
 
 const productSchema = z.object({
   name: z.string().min(2, "Ürün adı en az 2 karakter olmalıdır"),
@@ -158,7 +159,9 @@ export function ProductFormModal({ item, categories, onClose, onSaved }: Product
           birim_fiyat: payload.price || 0,
           marka: "SuArıtmaServis34"
         }, { onConflict: 'urun_adi' });
-        
+
+        // Ürün sayfaları günde bir yenilenir; kaydedilen ürün hemen güncellensin
+        refreshSitePaths(["/urunler", `/urunler/${values.slug}`, ...(item.slug !== values.slug ? [`/urunler/${item.slug}`] : [])]);
         onSaved();
       }
     } else {

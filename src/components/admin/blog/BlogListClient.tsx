@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { refreshSitePaths } from "@/lib/admin/refreshSite";
 import { 
   FileText, 
   Eye, 
@@ -40,6 +41,8 @@ export function BlogListClient({ initialBlogs }: Props) {
 
       if (error) throw error;
 
+      const deleted = blogs.find((blog) => blog.id === id);
+      refreshSitePaths(["/blog", ...(deleted?.slug ? [`/blog/${deleted.slug}`] : [])]);
       setBlogs(blogs.filter((blog) => blog.id !== id));
       router.refresh();
     } catch (err: any) {

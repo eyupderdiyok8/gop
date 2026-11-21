@@ -11,7 +11,7 @@ import {
   ShieldCheck
 } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
-import Link from "next/link";
+import Link from "@/components/AppLink";
 import { FAQSection } from "@/components/seo/FAQSection";
 import { ServiceAreaLinks } from "@/components/seo/ServiceAreaLinks";
 import { CtaBand } from "@/components/sections/CtaBand";

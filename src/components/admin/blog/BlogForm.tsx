@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { refreshSitePaths } from "@/lib/admin/refreshSite";
 import { TiptapEditor } from "./TiptapEditor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -119,7 +120,11 @@ export function BlogForm({ initialData }: BlogFormProps) {
       }
 
       if (error) throw error;
-      
+
+      // Blog sayfaları günde bir yenilenir; kaydedilen yazı ve liste hemen güncellensin
+      const slugs = [payload.slug, initialData?.slug].filter(Boolean);
+      refreshSitePaths(["/blog", ...slugs.map((s) => `/blog/${s}`)]);
+
       router.push("/admin/blog");
       router.refresh();
     } catch (err: any) {

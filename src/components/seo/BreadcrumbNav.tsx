@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/AppLink";
 import Script from "next/script";
 import { ChevronRight, Home } from "lucide-react";
 
