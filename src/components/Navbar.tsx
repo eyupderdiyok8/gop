@@ -538,7 +538,7 @@ export function Navbar({ productMenu }: { productMenu?: MenuItem[] | null }) {
                   </div>
 
                   <div className="text-center mt-2">
-                    <p className="text-[10px] text-white/20 font-medium">© 2026 SuArıtmaServis34 • Tüm Hakları Saklıdır.</p>
+                    <p className="text-[10px] text-white/20 font-medium">© 2026 Su Arıtma Teknik Servis 34 • Tüm Hakları Saklıdır.</p>
                   </div>
                 </div>
               </div>

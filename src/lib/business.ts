@@ -1,8 +1,15 @@
 // İşletmenin Google profili ve konumu: yorum sayısı değiştikçe yalnızca burayı güncelleyin.
 
+/** Google İşletme Profili'ndeki ad; site, şema ve başlıklarda aynısı kullanılır (NAP tutarlılığı) */
+export const BUSINESS_NAME = "Su Arıtma Teknik Servis 34";
+/** Alan adından gelen kısa marka */
+export const BUSINESS_SHORT_NAME = "SuArıtmaServis34";
+/** Google Haritalar işletme kaydı (şemada sameAs) */
+export const GOOGLE_MAPS_CID_URL = "https://maps.google.com/?cid=1358941334007473239";
+
 export const GOOGLE_PROFILE = {
   rating: "5,0",
-  reviewCount: 77,
+  reviewCount: 84,
   /** Google Haritalar'da işletme sayfası (yorumlar dahil) */
   url: "https://www.google.com/maps/place/Su+Ar%C4%B1tma+Teknik+Servis+34/@41.0918729,28.8640545,17z/data=!4m8!3m7!1s0x14cab17296a7aa09:0x12dbedf17c1c6457!8m2!3d41.0918729!4d28.8640545!9m1!1b1!16s%2Fg%2F11zdcn1j6j?hl=tr",
   /** Yol tarifi */

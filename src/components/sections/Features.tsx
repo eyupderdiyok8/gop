@@ -48,7 +48,7 @@ export function Features() {
           className="text-center mb-14"
         >
           <p className="text-brand-aqua font-semibold text-sm uppercase tracking-widest mb-3">
-            Neden SuArıtmaServis34?
+            Neden Su Arıtma Teknik Servis 34?
           </p>
           <h2 className="font-heading font-bold text-3xl sm:text-4xl text-brand-navy mb-4">
             Fark Yaratanlar

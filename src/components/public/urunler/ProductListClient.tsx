@@ -5,6 +5,7 @@ import { Product, ProductCategory } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { Check, ArrowRight, Droplets } from "lucide-react";
 import Link from "@/components/AppLink";
+import { productHref } from "@/lib/products/pageUrl";
 import { formatTechnicalText } from "@/lib/products/formatTechnicalText";
 import { categoryWithDescendants } from "@/lib/products/categoryTree";
 
@@ -96,7 +97,7 @@ export function ProductListClient({ initialProducts, categories, initialCategory
               {filteredProducts.map((product) => (
                 <Link
                   key={product.id}
-                  href={product.page_url || `/urunler/${product.slug}`}
+                  href={productHref(product)}
                   className={`group relative flex flex-col rounded-[2.5rem] border overflow-hidden transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 ${
                     product.is_highlight ? "border-brand-aqua/30 bg-brand-aqua/[0.02]" : "border-border bg-card"
                   }`}

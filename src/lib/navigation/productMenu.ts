@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import type { ProductCategory } from "@/lib/types";
 import { formatTechnicalText } from "@/lib/products/formatTechnicalText";
 import type { MenuItem } from "./menuTypes";
+import { productHref, productPagePath } from "@/lib/products/pageUrl";
 
 /** Menüde gösterilecek en fazla ürün; fazlası "Tümü (n) →" bağlantısıyla kategoriye gider.
  *  Ana kategoride biraz daha fazla, alt kategoride az ürün gösterilir ki menü taşmasın. */
@@ -11,7 +12,6 @@ const MAX_IN_SUB = 4;
 
 type MenuProduct = { name: string; slug: string; category_id: string | null; page_url: string | null };
 
-const productHref = (p: MenuProduct) => p.page_url || `/urunler/${p.slug}`;
 const categoryHref = (c: ProductCategory) => `/urunler?kategori=${c.slug}`;
 
 /**
@@ -34,14 +34,14 @@ async function buildProductMenu(): Promise<MenuItem[] | null> {
 
   const categories = cats as ProductCategory[];
   const products = prods as MenuProduct[];
-  if (!products.some((p) => p.page_url)) return null;
+  if (!products.some((p) => productPagePath(p.page_url))) return null;
 
   const byOrder = [...categories].sort((a, b) => a.display_order - b.display_order);
   const ids = new Set(categories.map((c) => c.id));
   const childrenOf = (id: string) => byOrder.filter((c) => c.parent_id === id);
   // Özel sayfası olan ürünler (tanıtım sayfaları) önce gelir
   const productsOf = (id: string) =>
-    products.filter((p) => p.category_id === id).sort((a, b) => Number(!!b.page_url) - Number(!!a.page_url));
+    products.filter((p) => p.category_id === id).sort((a, b) => Number(!!productPagePath(b.page_url)) - Number(!!productPagePath(a.page_url)));
 
   const productLinks = (c: ProductCategory, max: number): MenuItem[] => {
     const list = productsOf(c.id);

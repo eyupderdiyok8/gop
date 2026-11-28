@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Gizlilik Politikası | SuArıtmaServis34",
+  title: "Gizlilik Politikası",
   description: "SuArıtmaServis34 olarak kişisel verilerinizin güvenliği hususuna azami hassasiyet göstermekteyiz. KVKK uyumlu gizlilik politikamız.",
   alternates: {
     canonical: "/gizlilik-politikasi",

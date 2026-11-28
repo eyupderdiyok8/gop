@@ -1,3 +1,5 @@
+import { LandingProductJsonLd } from "@/components/seo/LandingProductJsonLd";
+import { BUSINESS_NAME } from "@/lib/business";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Header } from "@/components/public/prada-v2/Header";
@@ -35,7 +37,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "tr_TR",
-    siteName: "SuArıtmaServis34",
+    siteName: BUSINESS_NAME,
     title: "3.2 Prada Su Arıtma Cihazı",
     description: DESCRIPTION,
     images: [{ url: "/images/prada-v2/og.jpg", width: 1200, height: 630, alt: "3.2 Prada su arıtma cihazı" }],
@@ -51,6 +53,7 @@ export const metadata: Metadata = {
 export default function PradaPage() {
   return (
     <div className={`${sans.variable} ${mono.variable} ${s.root}`}>
+      <LandingProductJsonLd name="3.2 Prada Su Arıtma Cihazı" description={DESCRIPTION} path="/3-2-prada-su-aritma-cihazi" image="/images/prada-v2/og.jpg" />
       <MotionRoot>
         <Header />
         <Hero />

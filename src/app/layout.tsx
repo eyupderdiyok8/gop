@@ -1,3 +1,4 @@
+import { BUSINESS_NAME } from "@/lib/business";
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "./globals.css";
@@ -26,8 +27,8 @@ export const metadata: Metadata = {
     apple: "/images/logo/apple-icon-180.png",
   },
   title: {
-    default: "SuArıtmaServis34 | Sultangazi Su Arıtma Servisi",
-    template: "%s | SuArıtmaServis34",
+    default: `${BUSINESS_NAME} | Sultangazi Su Arıtma Servisi`,
+    template: `%s | ${BUSINESS_NAME}`,
   },
   description:
     "Sultangazi merkezli su arıtma cihazı satışı, montaj, filtre değişimi ve teknik servis. İstanbul Avrupa Yakası'nda yerinde servis desteği.",
@@ -48,8 +49,8 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "tr_TR",
-    siteName: "SuArıtmaServis34",
-    title: "SuArıtmaServis34 | Sultangazi Su Arıtma Servisi",
+    siteName: BUSINESS_NAME,
+    title: `${BUSINESS_NAME} | Sultangazi Su Arıtma Servisi`,
     description:
       "Sultangazi ve İstanbul Avrupa Yakası'nda su arıtma cihazı satışı, montaj, filtre değişimi ve teknik servis.",
     images: [
@@ -57,13 +58,13 @@ export const metadata: Metadata = {
         url: "https://www.suaritmaservis34.com/images/su-aritma-servis34.webp",
         width: 1200,
         height: 630,
-        alt: "SuArıtmaServis34 Su Arıtma Sistemleri",
+        alt: `${BUSINESS_NAME} Su Arıtma Sistemleri`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "SuArıtmaServis34 | Sultangazi Su Arıtma Servisi",
+    title: `${BUSINESS_NAME} | Sultangazi Su Arıtma Servisi`,
     description: "Sultangazi merkezli su arıtma cihazı, montaj, bakım ve teknik servis hizmetleri.",
     images: ["/images/su-aritma-servis34.webp"],
   },

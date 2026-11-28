@@ -1,3 +1,4 @@
+import { BUSINESS_NAME } from "@/lib/business";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { Product, ProductCategory } from "@/lib/types";
@@ -6,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Check, ShieldCheck, Zap, Droplets, Settings, ArrowRight, Phone, type LucideIcon } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import Link from "@/components/AppLink";
-import { notFound, redirect } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
+import { productHref, productPagePath } from "@/lib/products/pageUrl";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { BreadcrumbNav } from "@/components/seo/BreadcrumbNav";
 import { ProductImageGallery } from "@/components/public/urunler/ProductImageGallery";
@@ -48,7 +50,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     title,
     description,
     openGraph: {
-      title: `${productName} – SuArıtmaServis34`,
+      title: `${productName} – ${BUSINESS_NAME}`,
       description,
       images: product.main_image ? [{ url: product.main_image, width: 1200, height: 1200, alt: productName }] : [],
     },
@@ -80,7 +82,8 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   if (!data) notFound();
   const product = data as Product & { category: ProductCategory | null };
   // Kendi tanıtım sayfası olan ürün oraya yönlenir (aynı içeriğin iki adresi olmasın)
-  if (product.page_url?.startsWith("/")) redirect(product.page_url);
+  const pagePath = productPagePath(product.page_url);
+  if (pagePath) permanentRedirect(pagePath);
 
   // Aynı kategoriden diğer ürünler (iç bağlantı)
   const { data: relatedData } = product.category_id
@@ -108,7 +111,6 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
     image: gallery.length ? gallery : undefined,
     category: product.category?.name,
     url: `${SITE_URL}/urunler/${product.slug}`,
-    brand: { "@type": "Brand", name: "SuArıtmaServis34" },
     ...(product.price
       ? {
           offers: {
@@ -277,7 +279,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 {related.map((r) => (
                   <Link
                     key={r.id}
-                    href={r.page_url || `/urunler/${r.slug}`}
+                    href={productHref(r)}
                     className="group flex flex-col overflow-hidden rounded-[1.5rem] border border-border bg-card transition hover:-translate-y-1 hover:shadow-xl"
                   >
                     <div className="aspect-square bg-white">

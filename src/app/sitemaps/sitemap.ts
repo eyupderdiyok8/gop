@@ -1,6 +1,8 @@
 import { MetadataRoute } from 'next';
 import { getActiveLocations, getActiveServices } from '@/lib/seo/db';
 import { isIndexablePage } from '@/lib/seo/indexPolicy';
+import { productPagePath } from '@/lib/products/pageUrl';
+import { SERVICES_DATA } from '@/lib/constants/services';
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.suaritmaservis34.com';
 
@@ -10,8 +12,9 @@ const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.suaritmaservis3
 const SITEMAP_IDS = ['sayfalar', 'blog', 'urunler', 'bolgeler'];
 
 type BlogRow = { slug: string; published_at: string | null; updated_at: string | null; featured_image: string | null };
-type ProductRow = { slug: string; updated_at: string | null; main_image: string | null; gallery: unknown };
+type ProductRow = { slug: string; updated_at: string | null; main_image: string | null; gallery: unknown; page_url: string | null };
 type LocationRow = {
+  id: string;
   slug: string;
   ilce: string | null;
   mahalle: string | null;
@@ -45,6 +48,9 @@ function staticEntries(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/headon-su-aritma-cihazi`, changeFrequency: 'monthly', priority: 0.9 },
     { url: `${baseUrl}/blog`, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${baseUrl}/iletisim`, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/hakkimizda`, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${baseUrl}/cihaz-yenileme`, changeFrequency: 'monthly', priority: 0.7 },
+    ...Object.values(SERVICES_DATA).map((s) => ({ url: `${baseUrl}/hizmetler/${s.slug}`, changeFrequency: 'monthly' as const, priority: 0.8 })),
     { url: `${baseUrl}/gizlilik-politikasi`, changeFrequency: 'yearly', priority: 0.3 },
   ];
 }
@@ -69,10 +75,11 @@ async function productEntries(): Promise<MetadataRoute.Sitemap> {
   const supabase = await (await import('@/lib/supabase/server')).createClient();
   const { data: products } = await supabase
     .from('products')
-    .select('slug, updated_at, main_image, gallery')
+    .select('slug, updated_at, main_image, gallery, page_url')
     .eq('is_active', true);
 
-  return ((products as ProductRow[] | null) || []).map((product) => {
+  // Tanıtım sayfası olan ürünlerin /urunler adresi oraya yönlenir; sitemap'te yalnızca tanıtım sayfası (staticEntries) yer alır
+  return ((products as ProductRow[] | null) || []).filter((product) => !productPagePath(product.page_url)).map((product) => {
     const productImages: string[] = [];
     if (product.main_image) productImages.push(product.main_image);
     if (product.gallery && Array.isArray(product.gallery)) {
@@ -89,10 +96,10 @@ async function productEntries(): Promise<MetadataRoute.Sitemap> {
   });
 }
 
-// Sadece indekslenebilir bölge sayfaları: il, ilçe, ilçe × ana hizmet ve mahalle.
+// Sadece indekslenebilir bölge sayfaları: il, ilçe, ilçe × ana hizmet ve özel içerikli mahalleler.
 // Mahalle × hizmet ve düşük talepli hizmet kombinasyonları noindex olduğu için burada yer almaz.
 async function locationEntries(): Promise<MetadataRoute.Sitemap> {
-  const [locations, services] = await Promise.all([getActiveLocations(), getActiveServices()]);
+  const [locations, services, customIds] = await Promise.all([getActiveLocations(), getActiveServices(), locationsWithCustomContent()]);
   if (!locations || locations.length === 0) return [];
 
   const entries: MetadataRoute.Sitemap = [];
@@ -102,6 +109,7 @@ async function locationEntries(): Promise<MetadataRoute.Sitemap> {
   const sorted = [...(locations as LocationRow[])].sort((a, b) => Number(!!a.mahalle) - Number(!!b.mahalle));
 
   sorted.forEach((loc) => {
+    if (!isIndexablePage(loc, null, customIds.has(loc.id))) return; // şablon mahalle sayfaları noindex
     entries.push({
       url: `${baseUrl}/${loc.slug}`,
       lastModified: lastModified(loc),
@@ -121,4 +129,16 @@ async function locationEntries(): Promise<MetadataRoute.Sitemap> {
   });
 
   return entries;
+}
+
+/** Panelden özel içerik yazılmış (indekslenebilir) bölge sayfalarının konum kimlikleri */
+async function locationsWithCustomContent(): Promise<Set<string>> {
+  const supabase = await (await import('@/lib/supabase/server')).createClient();
+  const { data } = await supabase
+    .from('pages')
+    .select('location_id')
+    .is('service_id', null)
+    .eq('yayinda', true)
+    .not('ozel_icerik', 'is', null);
+  return new Set(((data as { location_id: string }[] | null) || []).map((p) => p.location_id));
 }

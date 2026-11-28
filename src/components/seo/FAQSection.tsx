@@ -8,11 +8,13 @@ interface FAQ {
 interface Props {
   faqs: FAQ[];
   locationName: string;
+  /** FAQPage işaretlemesi; şablon metinli bölge sayfalarında kapalı (her sayfada aynı sorular) */
+  withSchema?: boolean;
 }
 
 // Cevaplar <details> içinde HTML'de her zaman bulunur; böylece arama motorları kapalı
 // sorulardaki metni de görür ve FAQPage şeması görünür içerikle örtüşür.
-export function FAQSection({ faqs, locationName }: Props) {
+export function FAQSection({ faqs, locationName, withSchema = true }: Props) {
   if (!faqs || faqs.length === 0) return null;
 
   const faqSchema = {
@@ -30,10 +32,12 @@ export function FAQSection({ faqs, locationName }: Props) {
 
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8 bg-background">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      {withSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
 
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-12">

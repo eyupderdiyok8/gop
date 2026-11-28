@@ -59,7 +59,7 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-3">
                 <Clock className="w-4 h-4 text-brand-aqua flex-shrink-0" />
-                <span>Pzt–Cmt: 08:00–19:00</span>
+                <span>7/24 açık</span>
               </div>
             </div>
           </div>
@@ -186,7 +186,7 @@ export function Footer() {
         <Separator className="my-10 bg-white/10" />
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-white/40">
-          <p>© 2026 SuArıtmaServis34. Tüm hakları saklıdır.</p>
+          <p>© 2026 Su Arıtma Teknik Servis 34. Tüm hakları saklıdır.</p>
           <div className="flex gap-6">
             <Link href="/gizlilik-politikasi" className="hover:text-white/70 transition-colors">Gizlilik Politikası</Link>
             <Link href="/gizlilik-politikasi" className="hover:text-white/70 transition-colors">KVKK</Link>

@@ -1,3 +1,4 @@
+import { BUSINESS_NAME } from "@/lib/business";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { format } from "date-fns";
@@ -29,7 +30,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!blog) return { title: "Yazı Bulunamadı" };
 
   return {
-    title: blog.seo_title || `${blog.title} | SuArıtmaServis34 Blog`,
+    // Marka adını başlık şablonu (layout) ekler; panelde yazılmış eski marka ekleri ayıklanır
+    title: (blog.seo_title || blog.title).replace(/\s*[|–-]\s*SuArıtmaServis34.*$/i, ""),
     description: blog.seo_description || blog.excerpt,
     openGraph: {
       type: "article",
@@ -107,12 +109,12 @@ export default async function BlogPostPage({ params }: Props) {
     "dateModified": blog.updated_at,
     "author": {
       "@type": "Organization",
-      "name": "SuArıtmaServis34 Sultangazi",
+      "name": BUSINESS_NAME,
       "url": process.env.NEXT_PUBLIC_SITE_URL || "https://www.suaritmaservis34.com"
     },
     "publisher": {
       "@type": "Organization",
-      "name": "SuArıtmaServis34",
+      "name": BUSINESS_NAME,
       "logo": {
         "@type": "ImageObject",
         "url": `${process.env.NEXT_PUBLIC_SITE_URL || "https://www.suaritmaservis34.com"}/logo.png`

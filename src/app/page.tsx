@@ -1,3 +1,4 @@
+import { BUSINESS_NAME, BUSINESS_SHORT_NAME, GOOGLE_MAPS_CID_URL } from "@/lib/business";
 import { Hero } from "@/components/sections/Hero";
 import { Features } from "@/components/sections/Features";
 import { Services } from "@/components/sections/Services";
@@ -16,7 +17,8 @@ const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "@id": "https://www.suaritmaservis34.com/#localbusiness",
-  "name": "SuArıtmaServis34",
+  "name": BUSINESS_NAME,
+  "alternateName": BUSINESS_SHORT_NAME,
   "image": "https://www.suaritmaservis34.com/logo.png",
   "description": "Sultangazi merkezli su arıtma cihazı satışı, montajı, filtre değişimi ve teknik servis hizmetleri.",
   "url": "https://www.suaritmaservis34.com",
@@ -38,9 +40,9 @@ const organizationSchema = {
   "openingHoursSpecification": [
     {
       "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-      "opens": "08:00",
-      "closes": "19:00"
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      "opens": "00:00",
+      "closes": "23:59"
     }
   ],
   "areaServed": [
@@ -52,6 +54,7 @@ const organizationSchema = {
     "İstanbul Avrupa Yakası"
   ],
   "sameAs": [
+    GOOGLE_MAPS_CID_URL,
     "https://wa.me/905531142734",
     "https://www.instagram.com/suaritmateknikservis34",
     "https://www.facebook.com/suaritmaistabulavrupa",
@@ -60,7 +63,7 @@ const organizationSchema = {
 };
 
 export const metadata: Metadata = {
-  title: "Sultangazi Su Arıtma Servisi ve Cihazları | SuArıtmaServis34",
+  title: `Sultangazi Su Arıtma Servisi ve Cihazları | ${BUSINESS_NAME}`,
   description:
     "Sultangazi merkezli ekibimizle İstanbul Avrupa Yakası'nda su arıtma cihazı satışı, montaj, filtre değişimi ve teknik servis hizmetleri.",
   alternates: {

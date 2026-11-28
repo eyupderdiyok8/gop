@@ -30,7 +30,7 @@ export function CtaBand() {
           </p>
           <div className="inline-flex items-center gap-2 bg-white/15 rounded-full px-5 py-2 mb-8">
             <span className="text-amber-300 text-lg">⚡</span>
-            <span className="text-white text-sm font-semibold">Pazartesi-Cumartesi 08:00-19:00 saatlerinde hizmet</span>
+            <span className="text-white text-sm font-semibold">7/24 servis talebi alıyoruz</span>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

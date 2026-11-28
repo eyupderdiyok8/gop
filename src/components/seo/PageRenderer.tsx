@@ -152,7 +152,7 @@ export async function PageRenderer({ params }: Props) {
     },
     {
       q: `${locName} için aynı gün servis mümkün mü?`,
-      a: `Pazartesi-Cumartesi 08:00-19:00 saatlerinde gelen talepleri ekip ve rota uygunluğuna göre aynı güne planlayabiliyoruz. ${districtContext.serviceArea} servis güzergâhımız içinde yer alır.`
+      a: `Taleplerinizi 7/24 alıyoruz; ekip ve rota uygunluğuna göre aynı güne planlayabiliyoruz. ${districtContext.serviceArea} servis güzergâhımız içinde yer alır.`
     },
     {
       q: `${locName} için hangi su arıtma sistemi uygundur?`,
@@ -252,7 +252,7 @@ export async function PageRenderer({ params }: Props) {
 
       <NearbyLocations neighbors={neighbors} currentLocationName={locName} />
 
-      <FAQSection faqs={faqs} locationName={locName} />
+      <FAQSection faqs={faqs} locationName={locName} withSchema={false} />
 
       <CtaBand />
     </main>
@@ -305,9 +305,9 @@ export async function generateDynamicMetadata({ params }: Props): Promise<Metada
     : (location.ilce ? formatLocationName(location.ilce) : formatLocationName(location.il));
 
   const rawMetaTitle = customPage?.title || (service
-    ? `${locName} ${metadataServiceName} | SuArıtmaServis34`
-    : `${locName} Su Arıtma Servisi ve Cihazları | SuArıtmaServis34`);
-  const metaTitle = rawMetaTitle.replace(/\s*\|\s*SuArıtmaServis34\s*$/i, "");
+    ? `${locName} ${metadataServiceName}`
+    : `${locName} Su Arıtma Servisi ve Cihazları`);
+  const metaTitle = rawMetaTitle.replace(/\s*\|\s*(SuArıtmaServis34|Su Arıtma Teknik Servis 34)\s*$/i, "");
 
   const metaDesc = customPage?.meta_description ||
     `${locName} su arıtma servisi: cihaz satışı, montaj, filtre değişimi ve arıza tespiti. Sultangazi merkezli ekibimiz İstanbul Avrupa Yakası'nda hizmet verir.`;
@@ -321,7 +321,7 @@ export async function generateDynamicMetadata({ params }: Props): Promise<Metada
       canonical: canonicalUrl,
     },
     robots: {
-      index: isIndexablePage(location, hizmetSlug),
+      index: isIndexablePage(location, hizmetSlug, !!customPage?.ozel_icerik),
       follow: true,
       "max-image-preview": "large",
       "max-snippet": -1,

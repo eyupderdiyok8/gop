@@ -1,3 +1,5 @@
+import { BUSINESS_NAME, BUSINESS_SHORT_NAME, GOOGLE_MAPS_CID_URL } from "@/lib/business";
+
 const SITE_URL = "https://www.suaritmaservis34.com";
 const BUSINESS_ID = `${SITE_URL}/#localbusiness`;
 
@@ -10,7 +12,8 @@ export function generateLocalBusinessSchema(areaServed: string) {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "@id": BUSINESS_ID,
-    "name": "SuArıtmaServis34",
+    "name": BUSINESS_NAME,
+    "alternateName": BUSINESS_SHORT_NAME,
     "image": `${SITE_URL}/images/su-aritma-servis34.webp`,
     "description": "Sultangazi merkezli su arıtma cihazı satışı, montajı, filtre değişimi ve teknik servis. İstanbul Avrupa Yakası'nda yerinde servis desteği.",
     "url": SITE_URL,
@@ -35,18 +38,11 @@ export function generateLocalBusinessSchema(areaServed: string) {
     },
     "openingHoursSpecification": {
       "@type": "OpeningHoursSpecification",
-      "dayOfWeek": [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday"
-      ],
-      "opens": "08:00",
-      "closes": "19:00"
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      "opens": "00:00",
+      "closes": "23:59"
     },
-    "sameAs": ["https://wa.me/905531142734"]
+    "sameAs": [GOOGLE_MAPS_CID_URL, "https://wa.me/905531142734"]
   };
 }
 

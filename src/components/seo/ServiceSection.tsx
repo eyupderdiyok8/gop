@@ -62,7 +62,7 @@ export function ServiceSection({ locationName, serviceName, customContent, tdsVa
               { icon: Wrench, text: "Alanında uzman, sertifikalı teknik ekip" },
               { icon: Truck, text: `${locationName} için rota uygunluğuna göre aynı gün planlama` },
               { icon: ShieldCheck, text: "Cihaz modeline uygun filtre ve yedek parça seçenekleri" },
-              { icon: Clock, text: "Pazartesi-Cumartesi 08:00-19:00 servis desteği" },
+              { icon: Clock, text: "7/24 servis talebi" },
               { icon: Droplets, text: `TDS, su basıncı ve kullanım ihtiyacına göre filtrasyon seçimi${tdsValue ? ` (yaklaşık ${tdsValue} ppm TDS)` : ""}` },
             ].map((item, i) => (
               <div key={i} className="flex items-center gap-3 bg-muted/40 p-3 rounded-xl border border-border">

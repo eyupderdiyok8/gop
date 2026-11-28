@@ -1,3 +1,4 @@
+import { BUSINESS_NAME } from "@/lib/business";
 import type { Metadata } from "next";
 import { Badge } from "@/components/ui/badge";
 import { Phone, MapPin, Clock } from "lucide-react";
@@ -6,11 +7,11 @@ import { HeroHelpMenu } from "@/components/public/HeroHelpMenu";
 import { BUSINESS_LOCATION } from "@/lib/business";
 
 export const metadata: Metadata = {
-  title: "İletişim | SuArıtmaServis34 Sultangazi Su Arıtma Servisi",
+  title: "İletişim | Sultangazi Su Arıtma Servisi",
   description:
     "Sultangazi ve İstanbul Avrupa Yakası'nda su arıtma servisi, filtre değişimi ve yeni cihaz için telefon veya WhatsApp'tan bize ulaşın.",
   openGraph: {
-    title: "İletişim – SuArıtmaServis34 Sultangazi",
+    title: `İletişim – ${BUSINESS_NAME}`,
     description:
       "Su arıtma satış, montaj, bakım ve acil servis için bize ulaşın. Telefon ve WhatsApp üzerinden hızlı destek.",
   },
@@ -41,7 +42,7 @@ const contactItems = [
   {
     icon: Clock,
     label: "Çalışma Saatleri",
-    value: "Pzt–Cmt: 08:00–19:00",
+    value: "7/24 açık",
     href: null,
   },
 ];

@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!service) return { title: "Hizmet Bulunamadı" };
 
   return {
-    title: `${service.title} | SuArıtmaServis34 Sultangazi`,
+    title: `${service.title} | Sultangazi`,
     description: service.shortDesc,
     alternates: {
       canonical: `/hizmetler/${slug}`,
@@ -142,7 +142,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                 <div className="absolute top-0 right-0 w-32 h-32 bg-brand-aqua/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
                 <h3 className="text-xl font-heading font-bold mb-4 relative z-10">Bölge Servis Hattı</h3>
                 <p className="text-white/60 text-sm mb-8 relative z-10">
-                  Sultangazi ve İstanbul Avrupa Yakası için Pazartesi-Cumartesi 08:00-19:00 saatlerinde servis talebi oluşturun.
+                  Sultangazi ve İstanbul Avrupa Yakası için 7/24 servis talebi oluşturabilirsiniz.
                 </p>
                 <div className="space-y-4 relative z-10">
                   <a href="tel:+905531142734" className="flex items-center gap-4 p-4 bg-white/10 rounded-2xl hover:bg-brand-aqua transition-all group">

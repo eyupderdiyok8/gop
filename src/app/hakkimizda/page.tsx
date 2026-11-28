@@ -8,7 +8,7 @@ import { Testimonials } from "@/components/sections/Testimonials";
 import { getInstallations } from "@/lib/installations/getInstallations";
 
 export const metadata: Metadata = {
-  title: "Hakkımızda | SuArıtmaServis34 Sultangazi",
+  title: "Hakkımızda | Sultangazi Su Arıtma Servisi",
   description:
     "2016'dan beri Sultangazi ve İstanbul Avrupa Yakası'nda su arıtma cihazı, montaj, filtre değişimi ve teknik servis hizmetleri sunuyoruz.",
   alternates: {

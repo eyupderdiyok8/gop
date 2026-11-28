@@ -125,7 +125,8 @@ export function ProductFormModal({ item, categories, onClose, onSaved }: Product
     const supabase = createClient();
     
     // Özel sayfa adresi "/" ile başlamalı; boşsa null
-    const pageUrl = values.page_url?.trim();
+    // Kendi alan adımızla yazılmış tam adres de yola çevrilir: https://www.suaritmaservis34.com/x → /x
+    const pageUrl = values.page_url?.trim().replace(/^https?:\/\/(www\.)?suaritmaservis34\.com/i, "");
     const { price_usd, old_price_usd, ...rest } = values;
     // Dolar fiyatı varsa TL fiyat güncel kurla hesaplanır
     const usdFields = usdRate === null ? {} : {

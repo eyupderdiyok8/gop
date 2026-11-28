@@ -1,3 +1,5 @@
+import { LandingProductJsonLd } from "@/components/seo/LandingProductJsonLd";
+import { BUSINESS_NAME } from "@/lib/business";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Header } from "@/components/public/headon/Header";
@@ -35,7 +37,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "tr_TR",
-    siteName: "SuArıtmaServis34",
+    siteName: BUSINESS_NAME,
     title: "Headon Su Arıtma Cihazı",
     description: DESCRIPTION,
     images: [{ url: "/images/headon/headon-su-aritma-cihazi-og.jpg", width: 1200, height: 630, alt: "Headon su arıtma cihazı" }],
@@ -51,6 +53,7 @@ export const metadata: Metadata = {
 export default function HeadonPage() {
   return (
     <div className={`${sans.variable} ${mono.variable} ${s.root}`}>
+      <LandingProductJsonLd name="Headon Su Arıtma Cihazı" description={DESCRIPTION} path="/headon-su-aritma-cihazi" image="/images/headon/headon-su-aritma-cihazi-og.jpg" />
       <MotionRoot>
         <Header />
         <Hero />

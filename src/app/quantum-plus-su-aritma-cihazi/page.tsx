@@ -1,3 +1,5 @@
+import { LandingProductJsonLd } from "@/components/seo/LandingProductJsonLd";
+import { BUSINESS_NAME } from "@/lib/business";
 import type { Metadata } from "next";
 import { Geist_Mono, Inter_Tight, Unbounded } from "next/font/google";
 import { MotionRoot } from "@/components/public/prada-v2/MotionRoot";
@@ -38,7 +40,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "tr_TR",
-    siteName: "SuArıtmaServis34",
+    siteName: BUSINESS_NAME,
     title: TITLE,
     description: DESCRIPTION,
     images: [{ url: "/images/quantum/og.jpg", width: 1200, height: 630, alt: "Quantum Plus dijital su arıtma cihazı" }],
@@ -54,6 +56,7 @@ export const metadata: Metadata = {
 export default function QuantumPlusPage() {
   return (
     <div className={`${sans.variable} ${display.variable} ${mono.variable} ${s.root} bg-[#F4F8FD] text-[#0B0F17]`}>
+      <LandingProductJsonLd name="Quantum Plus Dijital Su Arıtma Cihazı" description={DESCRIPTION} path="/quantum-plus-su-aritma-cihazi" image="/images/quantum/og.jpg" />
       <MotionRoot>
         <Header />
         <GucAcik />

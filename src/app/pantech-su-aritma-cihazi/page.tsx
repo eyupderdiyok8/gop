@@ -1,3 +1,5 @@
+import { LandingProductJsonLd } from "@/components/seo/LandingProductJsonLd";
+import { BUSINESS_NAME } from "@/lib/business";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Header } from "@/components/public/pantech-klasik/Header";
@@ -28,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "tr_TR",
-    siteName: "SuArıtmaServis34",
+    siteName: BUSINESS_NAME,
     title: "Pantech Tanksız Su Arıtma Cihazı",
     description: DESCRIPTION,
     images: [{ url: "/images/pantech/og.jpg", width: 1200, height: 630, alt: "Pantech tanksız su arıtma cihazı" }],
@@ -44,6 +46,7 @@ export const metadata: Metadata = {
 export default function PantechKlasikPage() {
   return (
     <div className={`${sans.variable} ${mono.variable} ${s.root} ${p.theme}`}>
+      <LandingProductJsonLd name="Pantech Tanksız Su Arıtma Cihazı" description={DESCRIPTION} path="/pantech-su-aritma-cihazi" image="/images/pantech/og.jpg" />
       <MotionRoot>
         <Header />
         <Hero />

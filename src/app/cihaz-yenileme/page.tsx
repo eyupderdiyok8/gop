@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import CihazYenilemeClient from "@/components/public/cihaz-yenileme/CihazYenilemeClient";
 
 export const metadata: Metadata = {
-  title: "Cihaz Yenileme Kampanyası – Eski Cihazınızı Alalım, Yenisini Verelim | SuArıtmaServis34",
+  title: "Cihaz Yenileme Kampanyası – Eski Cihazınızı Alalım, Yenisini Verelim",
   description:
     "Eski su arıtma cihazınızı takas edin, indirimli fiyatla yepyeni bir cihaza sahip olun. Ücretsiz söküm, montaj ve 2 yıl garanti dahil. Hemen teklif alın!",
   openGraph: {
